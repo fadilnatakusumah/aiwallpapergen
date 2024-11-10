@@ -8,7 +8,6 @@ export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
 
   const session = await auth();
-  console.log("🚀 ~ Home ~ session:", session?.user)
 
   return (
     <HydrateClient>
@@ -57,15 +56,6 @@ export default async function Home() {
                 {session ? "Sign out" : "Sign in"}
               </Link>
               <pre>{JSON.stringify(session, null, 2)}</pre>
-              <pre>{JSON.stringify({env: {
-                NEXTAUTH_SECRET: env.NEXTAUTH_URL,
-                GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID,
-                GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET,
-                GITHUB_CLIENT_ID: env.GITHUB_CLIENT_ID,
-                GITHUB_CLIENT_SECRET: env.GITHUB_CLIENT_SECRET,
-                AUTH_SECRET: env.AUTH_SECRET,
-                DATABASE_URL: env.DATABASE_URL,
-              }}, null, 2)}</pre>
             </div>
           </div>
 

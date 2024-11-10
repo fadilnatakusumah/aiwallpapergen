@@ -1,15 +1,15 @@
 // app/dashboard/layout.tsx
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { type ReactNode } from "react";
 import { auth } from "~/server/auth";
 
 export default async function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const session = await auth();
-  
 
   // If there's no session, redirect to login
   if (!session) {

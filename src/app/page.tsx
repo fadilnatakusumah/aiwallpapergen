@@ -1,16 +1,12 @@
 import Link from "next/link";
 
-import { LatestPost } from "~/app/_components/post";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
-  const session = await auth();
 
-  if (session?.user) {
-    void api.post.getLatest.prefetch();
-  }
+  const session = await auth();
 
   return (
     <HydrateClient>
@@ -58,10 +54,11 @@ export default async function Home() {
               >
                 {session ? "Sign out" : "Sign in"}
               </Link>
+              <pre>{JSON.stringify(session, null, 2)}</pre>
             </div>
           </div>
 
-          {session?.user && <LatestPost />}
+          {session?.user && <Link href="/protected">Go to Dashboard</Link>}
         </div>
       </main>
     </HydrateClient>

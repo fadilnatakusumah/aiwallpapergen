@@ -6,24 +6,13 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    // provider = "postgresql"
+    provider = "sqlite"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
     url      = env("DATABASE_URL")
-}
-
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
 }
 
 // Necessary for Next auth
@@ -55,14 +44,82 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
+    id              String    @id @default(cuid())
+    name            String?
+    username        String
+    google_id       String?
+    github_id       String?
+    email           String?   @unique
+    email_verified  Boolean?
+    profile_picture String?
+    credits         Int       @default(0)
+    accounts        Account[]
+    sessions        Session[]
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+
+    wallpapers   Wallpaper[] // Relation to Wallpaper
+    likes        Like[] // Relation to Likes
+    favorites    Favorite[] // Relation to Favorites
+    transactions Transaction[] // Relation to Transactions
+}
+
+model Wallpaper {
+    id             String @id @default(cuid())
+    prompt         String
+    prompt_sent    String
+    refined_prompt String
+    user_id        String
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+    published  Boolean  @default(false)
+
+    user      User?      @relation(fields: [user_id], references: [id])
+    likes     Like[] // Relation to Likes
+    favorites Favorite[] // Relation to Favorites
+}
+
+model Like {
+    id           String   @id @default(uuid())
+    user_id      String
+    wallpaper_id String
+    created_at   DateTime @default(now())
+
+    user      User      @relation(fields: [user_id], references: [id])
+    wallpaper Wallpaper @relation(fields: [wallpaper_id], references: [id])
+
+    @@unique([user_id, wallpaper_id]) // Ensures a user can only like a wallpaper once
+}
+
+model Favorite {
+    id           String   @id @default(uuid())
+    user_id      String
+    wallpaper_id String
+    created_at   DateTime @default(now())
+
+    user      User      @relation(fields: [user_id], references: [id])
+    wallpaper Wallpaper @relation(fields: [wallpaper_id], references: [id])
+
+    @@unique([user_id, wallpaper_id]) // Ensures a user can only favorite a wallpaper once
+}
+
+model Transaction {
+    transaction_id        String   @id @default(uuid())
+    user_id               String
+    stripe_transaction_id String   @unique
+    credits_added         Int
+    amount_paid           Float
+    created_at            DateTime @default(now())
+
+    user User @relation(fields: [user_id], references: [id])
+}
+
+model Suggestion {
+    suggestion_id String @id @default(uuid())
+    title         String
+    image_url     String
+    description   String
 }
 
 model VerificationToken {

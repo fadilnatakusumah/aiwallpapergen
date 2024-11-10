@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { env } from "~/env";
 
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
@@ -7,6 +8,7 @@ export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
 
   const session = await auth();
+  console.log("🚀 ~ Home ~ session:", session?.user)
 
   return (
     <HydrateClient>
@@ -49,12 +51,21 @@ export default async function Home() {
                 {session && <span>Logged in as {session.user?.name}</span>}
               </p>
               <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
+                href={session?.user ? "/api/auth/signout" : "/api/auth/signin"}
                 className="rounded-full bg-white/10 px-10 py-3 font-semibold no-underline transition hover:bg-white/20"
               >
                 {session ? "Sign out" : "Sign in"}
               </Link>
               <pre>{JSON.stringify(session, null, 2)}</pre>
+              <pre>{JSON.stringify({env: {
+                NEXTAUTH_SECRET: env.NEXTAUTH_URL,
+                GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID,
+                GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET,
+                GITHUB_CLIENT_ID: env.GITHUB_CLIENT_ID,
+                GITHUB_CLIENT_SECRET: env.GITHUB_CLIENT_SECRET,
+                AUTH_SECRET: env.AUTH_SECRET,
+                DATABASE_URL: env.DATABASE_URL,
+              }}, null, 2)}</pre>
             </div>
           </div>
 

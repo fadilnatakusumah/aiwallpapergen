@@ -1,14 +1,11 @@
 // app/dashboard/layout.tsx
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { type ReactNode } from "react";
+import { type PropsWithChildren } from "react";
 import { auth } from "~/server/auth";
+import { HydrateClient } from "~/trpc/server";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default async function DashboardLayout({ children }: PropsWithChildren) {
   const session = await auth();
 
   // If there's no session, redirect to login
@@ -18,7 +15,7 @@ export default async function DashboardLayout({
 
   // Render the children (the page content)
   return (
-    <div>
+    <HydrateClient>
       <h1>Welcome to your dashboard, {session.user?.email}</h1>
       <div>{children}</div>
       <Link
@@ -27,6 +24,6 @@ export default async function DashboardLayout({
       >
         {session ? "Sign out" : "Sign in"}
       </Link>
-    </div>
+    </HydrateClient>
   );
 }

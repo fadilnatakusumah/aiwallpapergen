@@ -21,7 +21,7 @@ export default function Auth() {
           wallpaper.
         </p>
 
-        <div className="mt-10 text-xs text-center">
+        <div className="mt-10 text-center text-xs">
           This website is still in development 🔥
         </div>
       </div>

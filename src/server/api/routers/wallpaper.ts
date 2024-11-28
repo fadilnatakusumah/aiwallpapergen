@@ -6,7 +6,7 @@ import { env } from "~/env";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { uploadToS3 } from "~/server/utils/aws";
-import { openai } from "~/server/utils/openai";
+// import { openai } from "~/server/utils/openai";
 
 export const wallpaperRouter = createTRPCRouter({
   generateWallpaper: protectedProcedure
@@ -99,28 +99,29 @@ export const wallpaperRouter = createTRPCRouter({
                 ? WALLPAPERS_PROMPT[input.type](input.prompt)
                 : input.prompt;
 
-              const data = await openai.images.generate({
-                model: "dall-e-3",
-                prompt: sentPrompt,
-                n: 1,
-                size: "1792x1024",
-                response_format: "b64_json",
-              });
-              console.log("🚀 ~ .$transaction ~ data:", data);
+              // const data = await openai.images.generate({
+              //   model: "dall-e-3",
+              //   prompt: sentPrompt,
+              //   n: 1,
+              //   size: "1792x1024",
+              //   response_format: "b64_json",
+              // });
+              // console.log("🚀 ~ .$transaction ~ data:", data);
 
-              const urlWallpaper = await uploadToS3(
-                Buffer.from(data.data[0]!.b64_json!, "base64"),
-                sentPrompt,
-                ctx.session.user.id,
-              );
-              console.log("🚀 ~ .$transaction ~ urlWallpaper:", urlWallpaper);
+              // const urlWallpaper = await uploadToS3(
+              //   Buffer.from(data.data[0]!.b64_json!, "base64"),
+              //   sentPrompt,
+              //   ctx.session.user.id,
+              // );
+              // console.log("🚀 ~ .$transaction ~ urlWallpaper:", urlWallpaper);
 
               const addedPrompt = await prisma.prompt.create({
                 data: {
                   prompt: input.prompt,
                   prompt_sent: sentPrompt,
                   user_id: ctx.session.user.id,
-                  refined_prompt: data.data[0]!.revised_prompt!,
+                  refined_prompt: "",
+                  // data.data[0]!.revised_prompt!,
                   chat_id: input.chatId ?? currentChat?.id ?? "", // Added default value for chat_id
                 },
               });
@@ -129,7 +130,8 @@ export const wallpaperRouter = createTRPCRouter({
               const createWallpaper = await prisma.wallpaper.create({
                 data: {
                   user_id: ctx.session.user.id,
-                  url: urlWallpaper,
+                  // url: urlWallpaper,
+                  url: "",
                   chat_id: input.chatId ?? currentChat?.id ?? "",
                   prompt_id: addedPrompt.id,
                   type: input.type ?? "",

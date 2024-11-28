@@ -53,7 +53,8 @@ export const wallpaperRouter = createTRPCRouter({
                 },
               });
 
-              const isMocking = env.MOCK_API === "true";
+              // const isMocking = env.MOCK_API === "true";
+              const isMocking = "true";
 
               if (isMocking && currentChat?.id) {
                 const sentPrompt = input.type

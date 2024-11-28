@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "rhel-openssl-1.0.x"]
+    provider = "prisma-client-js"
+    // binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
@@ -20,7 +20,7 @@ datasource db {
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
-    userId                   String
+    userId                   String  @unique
     type                     String
     provider                 String
     providerAccountId        String
@@ -48,44 +48,76 @@ model Session {
 model User {
     id              String    @id @default(cuid())
     name            String?
-    username        String
+    username        String    @unique
     google_id       String?
     github_id       String?
     email           String?   @unique
-    email_verified  Boolean?
+    email_verified  DateTime?
     profile_picture String?
-    credits         Int       @default(0)
+    credits         Int       @default(5)
     accounts        Account[]
     sessions        Session[]
-    createdAt       DateTime  @default(now())
-    updatedAt       DateTime  @updatedAt
+    created_at      DateTime  @default(now())
+    updated_at      DateTime  @updatedAt
 
+    chats        Chat[] // Relation to Chat
     wallpapers   Wallpaper[] // Relation to Wallpaper
     likes        Like[] // Relation to Likes
     favorites    Favorite[] // Relation to Favorites
     transactions Transaction[] // Relation to Transactions
+
+    Prompt Prompt[]
 }
 
-model Wallpaper {
+model Chat {
+    id         String      @id @default(cuid())
+    user_id    String
+    title      String
+    created_at DateTime    @default(now())
+    updated_at DateTime    @updatedAt
+    user       User        @relation(fields: [user_id], references: [id])
+    prompts    Prompt[] // Relation to Prompts
+    wallpapers Wallpaper[]
+}
+
+model Prompt {
     id             String @id @default(cuid())
     prompt         String
     prompt_sent    String
     refined_prompt String
-    user_id        String
 
+    chat_id    String
+    user_id    String
     created_at DateTime @default(now())
-    updated_at DateTime @updatedAt
-    published  Boolean  @default(false)
 
-    user      User?      @relation(fields: [user_id], references: [id])
+    chat       Chat        @relation(fields: [chat_id], references: [id])
+    user       User        @relation(fields: [user_id], references: [id])
+    wallpapers Wallpaper[]
+}
+
+model Wallpaper {
+    id        String  @id @default(cuid())
+    url       String
+    user_id   String
+    chat_id   String
+    prompt_id String
+    type      String?
+
+    created_at   DateTime @default(now())
+    updated_at   DateTime @updatedAt
+    is_published Boolean  @default(false)
+
+    user      User       @relation(fields: [user_id], references: [id])
+    prompt    Prompt     @relation(fields: [prompt_id], references: [id])
+    chat      Chat       @relation(fields: [chat_id], references: [id])
     likes     Like[] // Relation to Likes
     favorites Favorite[] // Relation to Favorites
 }
 
 model Like {
     id           String   @id @default(uuid())
-    user_id      String
-    wallpaper_id String
+    user_id      String   @unique
+    wallpaper_id String   @unique
     created_at   DateTime @default(now())
 
     user      User      @relation(fields: [user_id], references: [id])
@@ -96,8 +128,8 @@ model Like {
 
 model Favorite {
     id           String   @id @default(uuid())
-    user_id      String
-    wallpaper_id String
+    user_id      String   @unique
+    wallpaper_id String   @unique
     created_at   DateTime @default(now())
 
     user      User      @relation(fields: [user_id], references: [id])
@@ -107,21 +139,22 @@ model Favorite {
 }
 
 model Transaction {
-    transaction_id        String   @id @default(uuid())
-    user_id               String
-    stripe_transaction_id String   @unique
-    credits_added         Int
-    amount_paid           Float
-    created_at            DateTime @default(now())
+    id                      String   @id @default(uuid())
+    user_id                 String
+    provider_transaction_id String   @unique
+    credits_added           Int
+    amount_paid             Float
+    created_at              DateTime @default(now())
 
     user User @relation(fields: [user_id], references: [id])
 }
 
 model Suggestion {
-    suggestion_id String @id @default(uuid())
-    title         String
-    image_url     String
-    description   String
+    id          String   @id @default(uuid())
+    title       String
+    image_url   String
+    description String
+    created_at  DateTime @default(now())
 }
 
 model VerificationToken {

@@ -1,5 +1,8 @@
 import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { wallpaperRouter } from "./routers/wallpaper";
+import { chatRouter } from "./routers/chat";
+import { promptRouter } from "./routers/prompt";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +11,9 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  wallpaper: wallpaperRouter,
+  chat: chatRouter,
+  prompt: promptRouter,
 });
 
 // export type definition of API

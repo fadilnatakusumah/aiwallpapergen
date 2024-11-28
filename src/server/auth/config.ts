@@ -16,6 +16,8 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      name: string;
+      email: string;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -75,11 +77,28 @@ export const authConfig = {
   // Optional: JWT callback to include user ID in session
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
+      if (user?.id) {
         // Ensure user.id is assigned to token only when user is defined
         token.id = user.id;
       }
       return token;
+    },
+
+    async session({ session, user, token }) {
+      // console.log("🚀 ~ session ~ session:", session);
+      // console.log("🚀 ~ session ~ rest:", rest);
+      // console.log("🚀 ~ session ~ session:", session);
+      // Ensure user is defined before accessing user.id
+      if (token?.id) {
+        session.user.id = token.id as string; // Add user id to the session
+      }
+      const userData = await db.user.findUnique({
+        where: { id: session.user.id },
+      });
+      if (userData) {
+        session.user.image = userData.profile_picture;
+      }
+      return session;
     },
 
     async signIn({ user, account, profile }) {
@@ -106,7 +125,6 @@ export const authConfig = {
               profile_picture: profile?.picture as string | undefined,
               name: profile!.name ?? user.email, // Can be modified to generate username
               username: user.email.split("@")[0]!, // Can be modified to generate username
-              // email_verified: profile?.email_verified ?? null,
             },
           });
         }
@@ -118,7 +136,6 @@ export const authConfig = {
         });
 
         if (existingUser && existingUser.github_id === "") {
-          console.log("161 🚀 ~ signIn ~ existingUser:", existingUser);
           await db.user.update({
             where: { id: existingUser.id },
             data: { github_id: profile.id as string | undefined },
@@ -140,14 +157,6 @@ export const authConfig = {
         }
       }
       return true; // Allow sign-in
-    },
-
-    async session({ session, user }) {
-      // Ensure user is defined before accessing user.id
-      if (user) {
-        session.user.id = user.id; // Add user id to the session
-      }
-      return session;
     },
   },
 

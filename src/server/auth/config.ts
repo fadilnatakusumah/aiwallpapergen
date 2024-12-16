@@ -18,6 +18,7 @@ declare module "next-auth" {
       id: string;
       name: string;
       email: string;
+      credits: number;
       // ...other properties
       // role: UserRole;
     } & DefaultSession["user"];
@@ -96,7 +97,13 @@ export const authConfig = {
         where: { id: session.user.id },
       });
       if (userData) {
-        session.user.image = userData.profile_picture;
+        session.user = {
+          ...session.user,
+          image: userData.profile_picture,
+          credits: userData.credits,
+        };
+        // session.user.image = userData.profile_picture;
+        // session.user.image = userData.profile_picture;
       }
       return session;
     },

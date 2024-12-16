@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import HeroInputPrompt from "~/components/HeroInputPromp";
 import HeroTypedAnimation from "~/components/HeroTypedAnimation";
 import { Input } from "~/components/ui/input";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
+import SigninButtons from "./_components/SigninButtons";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -57,14 +59,14 @@ export default async function Home() {
   // Create reference to store the DOM element containing the animation
 
   // If there's no session, redirect to login
-  if (!session) {
-    redirect("/status");
-  }
+  // if (!session) {
+  //   redirect("/status");
+  // }
 
   return (
     <HydrateClient>
       <main
-        className="container flex min-h-screen w-full flex-col items-center justify-center pr-7"
+        className="container flex h-screen w-full flex-col items-center justify-center overflow-y-auto pr-7"
         // bg-gradient-to-b from-[#2e026d] to-[#15162c]
       >
         <HeroTypedAnimation />

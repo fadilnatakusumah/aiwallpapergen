@@ -113,7 +113,7 @@ export function NavUser({
             <DropdownMenuSeparator /> */}
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => signOut().finally(() => redirect("/"))}
+              onClick={() => signOut().finally(() => redirect("/auth"))}
             >
               <LogOut />
               Log out

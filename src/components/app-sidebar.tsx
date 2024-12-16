@@ -19,10 +19,22 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarInset,
   SidebarRail,
+  SidebarTrigger,
   useSidebar,
 } from "~/components/ui/sidebar";
 import { WallpaperChats } from "~/components/WallpaperChats";
+import { Separator } from "./ui/separator";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./ui/breadcrumb";
+import Link from "next/link";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const session = useSession();
@@ -163,14 +175,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <div className="bold overflow-hidden text-ellipsis whitespace-nowrap px-2 text-lg">
-          AI{" "}
-          {ctx.state === "expanded" && (
-            <span>
-              <strong>Wallpaper</strong> Gen
-            </span>
-          )}
-        </div>
+        <Link href={"/"}>
+          <div className="bold overflow-hidden text-ellipsis whitespace-nowrap px-2 text-lg">
+            AI{" "}
+            {ctx.state === "expanded" && (
+              <span>
+                <strong>Wallpaper</strong> Gen
+              </span>
+            )}
+          </div>
+        </Link>
         {/* <TeamSwitcher teams={data.teams} /> */}
       </SidebarHeader>
       <SidebarContent>

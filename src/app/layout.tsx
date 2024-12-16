@@ -2,15 +2,27 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { SidebarProvider, SidebarTrigger } from "~/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "~/components/ui/sidebar";
 
 import { TRPCReactProvider } from "~/trpc/react";
 // import { AppSidebar } from "~/components/AppSidebar";
+import { Separator } from "@radix-ui/react-separator";
+import { Plus } from "lucide-react";
 import { SessionProvider } from "next-auth/react";
 import { AppSidebar } from "~/components/app-sidebar";
-import { ScrollArea } from "~/components/ui/scroll-area";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+} from "~/components/ui/breadcrumb";
+import { Button } from "~/components/ui/button";
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
+
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -24,7 +36,7 @@ export default async function RootLayout({
   const session = await auth();
 
   // If there's no session, redirect to login
-  // if (!session) {
+  // if (!session?.user.id) {
   //   redirect("/auth");
   // }
 
@@ -37,10 +49,33 @@ export default async function RootLayout({
               {!!session && (
                 <>
                   <AppSidebar />
-                  <SidebarTrigger />
+                  {/* <SidebarTrigger /> */}
+                  <SidebarInset className="h-screen">
+                    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+                      <SidebarTrigger className="-ml-1" />
+                      <Separator orientation="vertical" className="mr-2 h-4" />
+                      <Breadcrumb className="sticky">
+                        <BreadcrumbList>
+                          <BreadcrumbItem className="hidden items-center md:flex">
+                            Your credits{" "}
+                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-500 text-white">
+                              {session.user.credits}
+                            </span>
+                            <Button size={"icon"} variant={"outline"}>
+                              <Plus />
+                            </Button>
+                          </BreadcrumbItem>
+                          {/* <BreadcrumbSeparator className="hidden md:block" />
+                          <BreadcrumbItem>
+                            <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                          </BreadcrumbItem> */}
+                        </BreadcrumbList>
+                      </Breadcrumb>
+                    </header>
+                    {children}
+                  </SidebarInset>
                 </>
               )}
-              {children}
             </SidebarProvider>
           </SessionProvider>
         </TRPCReactProvider>

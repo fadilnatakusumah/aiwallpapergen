@@ -31,16 +31,16 @@ export function NavMain() {
       <SidebarMenu>
         <SidebarMenuItem>
           <SidebarMenuButton>
+            <Telescope />
+            <span>Explore</span>
+          </SidebarMenuButton>
+          <SidebarMenuButton>
             <LibraryBig />
             <span>My Collections</span>
           </SidebarMenuButton>
           <SidebarMenuButton>
             <Star />
             <span>Favorites</span>
-          </SidebarMenuButton>
-          <SidebarMenuButton>
-            <Telescope />
-            <span>Explore</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

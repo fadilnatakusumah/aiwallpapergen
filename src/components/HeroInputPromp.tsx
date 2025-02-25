@@ -54,7 +54,7 @@ export default function HeroInputPrompt({
       type: wallpaperType!,
     });
   }
-  
+
   return (
     <div className="w-full space-y-2">
       <div className="relative mb-6">
@@ -83,6 +83,7 @@ export default function HeroInputPrompt({
       {errorMessage && <Alert message={errorMessage} variant={"destructive"} />}
 
       <Label className="block">Select a preset type</Label>
+
       <div className="grid grid-cols-3 gap-4 lg:grid-cols-6">
         {Object.values(WALLPAPERS_TYPE).map((value, idx) => (
           <div
@@ -107,7 +108,7 @@ export default function HeroInputPrompt({
         ))}
       </div>
 
-      {data?.data?.url_wallpaper && (
+      {/* {data?.data?.url_wallpaper && (
         <div>
           <Image
             alt="result-of-ai"
@@ -116,7 +117,7 @@ export default function HeroInputPrompt({
             height={720}
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

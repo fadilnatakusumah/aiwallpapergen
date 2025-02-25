@@ -1,10 +1,16 @@
 export enum WALLPAPERS_TYPE {
-  FUTURISTIC = "Futuristic Cyberpunk Cityscape",
-  MYSTICAL = "Mystical Enchanted Forest",
-  MINIMALIST_ABSTRACT_ART = "Minimalist Abstract Art",
-  TROPICAL_ISLAND_PARADISE = "Tropical Island Paradise",
-  GALACTIC_SPACE_NEBULA = "Galactic Space Nebula",
-  VINTAGE_BOTANICAL_ILLUSTRATION = "Vintage Botanical Illustration",
+  FUTURISTIC = "Cyberpunk City",
+  MYSTICAL = "Enchanted Forest",
+  MINIMALIST_ABSTRACT_ART = "Abstract Minimalism",
+  TROPICAL_ISLAND_PARADISE = "Island Paradise",
+  GALACTIC_SPACE_NEBULA = "Space Nebula",
+  VINTAGE_BOTANICAL_ILLUSTRATION = "Botanical Vintage",
+  // FUTURISTIC = "Futuristic Cyberpunk Cityscape",
+  // MYSTICAL = "Mystical Enchanted Forest",
+  // MINIMALIST_ABSTRACT_ART = "Minimalist Abstract Art",
+  // TROPICAL_ISLAND_PARADISE = "Tropical Island Paradise",
+  // GALACTIC_SPACE_NEBULA = "Galactic Space Nebula",
+  // VINTAGE_BOTANICAL_ILLUSTRATION = "Vintage Botanical Illustration",
 }
 
 export const WALLPAPERS_PROMPT: Record<

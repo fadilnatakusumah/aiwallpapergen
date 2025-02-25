@@ -38,7 +38,7 @@ import Link from "next/link";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const session = useSession();
-  console.log("🚀 ~ session:", session);
+  // console.log("🚀 ~ session:", session);
 
   // This is sample data.
   const data = {
@@ -191,15 +191,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain />
         <WallpaperChats />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser
-          user={{
-            name: session?.data?.user.name ?? "",
-            email: session?.data?.user.email ?? "",
-            avatar: session?.data?.user.image ?? "",
-          }}
-        />
-      </SidebarFooter>
+      {session?.data && (
+        <SidebarFooter>
+          <NavUser
+            user={{
+              name: session?.data?.user.name ?? "",
+              email: session?.data?.user.email ?? "",
+              avatar: session?.data?.user.image ?? "",
+            }}
+          />
+        </SidebarFooter>
+      )}
       <SidebarRail />
     </Sidebar>
   );

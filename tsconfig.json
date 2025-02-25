@@ -37,6 +37,6 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts"
-  ],
+, "src/app/d", "src/app/(withLayout)/my-collections/test"  ],
   "exclude": ["node_modules"]
 }

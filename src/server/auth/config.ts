@@ -50,6 +50,7 @@ export const authConfig = {
         },
       },
       allowDangerousEmailAccountLinking: true,
+      // redirectProxyUrl
     }),
     GithubProvider({
       clientId: env.GITHUB_CLIENT_ID || "",

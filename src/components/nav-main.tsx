@@ -7,6 +7,7 @@ import {
   Telescope,
   type LucideIcon,
 } from "lucide-react";
+import Link from "next/link";
 
 import {
   Collapsible,
@@ -30,18 +31,24 @@ export function NavMain() {
     <SidebarGroup>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton>
-            <Telescope />
-            <span>Explore</span>
-          </SidebarMenuButton>
-          <SidebarMenuButton>
-            <LibraryBig />
-            <span>My Collections</span>
-          </SidebarMenuButton>
-          <SidebarMenuButton>
-            <Star />
-            <span>Favorites</span>
-          </SidebarMenuButton>
+          <Link href="/explore">
+            <SidebarMenuButton>
+              <Telescope />
+              <span>Explore</span>
+            </SidebarMenuButton>
+          </Link>
+          <Link href="/my-collections">
+            <SidebarMenuButton>
+              <LibraryBig />
+              <span>My Collections</span>
+            </SidebarMenuButton>
+          </Link>
+          <Link href="/favorites">
+            <SidebarMenuButton>
+              <Star />
+              <span>Favorites</span>
+            </SidebarMenuButton>
+          </Link>
         </SidebarMenuItem>
       </SidebarMenu>
       {/* <SidebarGroupLabel>Wallpapers</SidebarGroupLabel> */}

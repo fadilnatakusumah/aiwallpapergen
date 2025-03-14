@@ -3,23 +3,16 @@
 import {
   BadgeInfoIcon,
   Edit,
-  Folder,
-  Forward,
-  InfoIcon,
   MoreHorizontal,
-  PlusIcon,
   Search,
   SquarePen,
   Trash2,
-  type LucideIcon,
 } from "lucide-react";
-import {
-  type KeyboardEvent,
-  KeyboardEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import { useInView } from "react-intersection-observer";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -37,32 +30,31 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
+
 import { useInfiniteChats } from "~/hooks/chat";
-import { Skeleton } from "./ui/skeleton";
-import Link from "next/link";
 import { cn } from "~/lib/utils";
-import { useRouter, useParams } from "next/navigation";
-import { Input } from "./ui/input";
 import { api } from "~/trpc/react";
-import { useSession } from "next-auth/react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Skeleton } from "./ui/skeleton";
 import { Spinner } from "./ui/spinner";
 
 export function WallpaperChats() {
+  const session = useSession();
   const { isMobile } = useSidebar();
   const {
     data,
     isLoading,
-    fetchNextPage,
-
     hasNextPage,
     isFetchingNextPage,
+
+    fetchNextPage,
     refetch,
   } = useInfiniteChats();
+
   const [edittedID, setEdittedID] = useState("");
   const [edittedValue, setEdittedValue] = useState("");
   const [isLoadingUpdate, setLoadingUpdate] = useState("");
-  const session = useSession();
 
   const { ref, inView } = useInView();
   const params = useParams();
@@ -114,7 +106,7 @@ export function WallpaperChats() {
       document.getElementById(edittedID)?.focus();
     }
   }, [edittedID]);
-  
+
   return (
     <SidebarGroup className="h-full group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel className="flex justify-between">
@@ -134,13 +126,11 @@ export function WallpaperChats() {
         <SidebarMenu>
           {isLoading ? (
             <div className="mx-2.5 pt-2">
-              {/* {[...Array(5)].map((_, idx) => (
-                <Skeleton
-                  key={idx}
-                  className="mb-4 h-[20px] w-full rounded-full last:mb-0"
-                />
-              ))} */}
               <Spinner />
+            </div>
+          ) : !data?.pages[0]?.chats.length ? (
+            <div className="px-2 pt-4 text-center text-xs text-slate-500">
+              Create your wallpaper now
             </div>
           ) : (
             data?.pages.flatMap((page) =>
@@ -207,43 +197,7 @@ export function WallpaperChats() {
               )),
             )
           )}
-          {/* {projects.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
-              <a href={item.url}>
-                <item.icon />
-                <span>{item.name}</span>
-              </a>
-            </SidebarMenuButton>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuAction showOnHover>
-                  <MoreHorizontal />
-                  <span className="sr-only">More</span>
-                </SidebarMenuAction>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-48 rounded-lg"
-                side={isMobile ? "bottom" : "right"}
-                align={isMobile ? "end" : "start"}
-              >
-                <DropdownMenuItem>
-                  <Folder className="text-muted-foreground" />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Forward className="text-muted-foreground" />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Trash2 className="text-muted-foreground" />
-                  <span>Delete Project</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        ))} */}
+
           <div ref={ref}>
             {isFetchingNextPage ? (
               <p>Loading...</p>
@@ -251,12 +205,6 @@ export function WallpaperChats() {
               <p>Scroll to load more</p>
             ) : null}
           </div>
-          {/* <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem> */}
         </SidebarMenu>
       ) : (
         <div className="flex h-full items-center px-2 text-xs">

@@ -1,3 +1,4 @@
+import { Chat } from "@prisma/client";
 import { type inferProcedureOutput, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { WALLPAPERS_PROMPT, WALLPAPERS_TYPE } from "~/data/prompt";
@@ -13,7 +14,7 @@ export const wallpaperRouter = createTRPCRouter({
     .input(
       z.object({
         prompt: z.string(),
-        type: z.nativeEnum(WALLPAPERS_TYPE).optional(),
+        type: z.nativeEnum(WALLPAPERS_TYPE).optional().nullable(),
         chatId: z.string().optional(),
         amount: z.number().optional().default(1),
       }),
@@ -23,35 +24,50 @@ export const wallpaperRouter = createTRPCRouter({
         return ctx.db
           .$transaction(
             async (prisma) => {
-              // let currentChat;
-              return {...input}
+              if (input.amount > 4 || input.amount <= 0) {
+                throw new TRPCError({
+                  code: "BAD_REQUEST",
+                  message: "Invalid amount of wallpapers",
+                });
+              }
 
-              // if (!input.chatId) {
-              //   currentChat = await prisma.chat.create({
-              //     data: {
-              //       user_id: ctx.session.user.id,
-              //       title: input.prompt.substring(0, 10),
-              //     },
-              //   });
-              // } else {
-              //   currentChat = await prisma.chat.findFirst({
-              //     where: {
-              //       id: input.chatId,
-              //     },
-              //   });
-              // }
+              let currentChat: Chat | null;
 
-              // const userUpdateMany = await prisma.user.updateMany({
-              //   where: {
-              //     id: ctx.session.user.id,
-              //     credits: {
-              //       gte: input.amount,
-              //     },
-              //   },
-              //   data: {
-              //     credits: { decrement: input.amount },
-              //   },
-              // });
+              if (!input.chatId) {
+                currentChat = await prisma.chat.create({
+                  data: {
+                    user_id: ctx.session.user.id,
+                    title: input.prompt.substring(0, 24),
+                  },
+                });
+              } else {
+                currentChat = await prisma.chat.findFirst({
+                  where: {
+                    id: input.chatId,
+                  },
+                });
+              }
+
+              // update the credits while checking if it has enough credits
+              const userUpdateMany = await prisma.user.updateMany({
+                where: {
+                  id: ctx.session.user.id,
+                  credits: {
+                    gte: input.amount,
+                  },
+                },
+                data: {
+                  credits: { decrement: input.amount },
+                },
+              });
+
+              const { count } = userUpdateMany;
+              if (count <= 0) {
+                throw new TRPCError({
+                  code: "BAD_REQUEST",
+                  message: "You don't have enough credits",
+                });
+              }
 
               // const isMocking = env.MOCK_API === "true";
 
@@ -86,124 +102,98 @@ export const wallpaperRouter = createTRPCRouter({
               //   };
               // }
 
-              // const { count } = userUpdateMany;
-              // if (count <= 0) {
-              //   throw new TRPCError({
-              //     code: "BAD_REQUEST",
-              //     message: "You don't have enough credits",
-              //   });
-              // }
+              const sentPrompt = input.type
+                ? WALLPAPERS_PROMPT[input.type](input.prompt)
+                : input.prompt;
 
-              // const sentPrompt = input.type
-              //   ? WALLPAPERS_PROMPT[input.type](input.prompt)
-              //   : input.prompt;
+              const generatedImages = await Promise.all(
+                [...Array(input.amount)].map((_) => {
+                  const variation = ` with variation ${Math.random().toFixed(2)}`; // small random modifier
+                  const finalPrompt = sentPrompt + variation;
 
-              // const data = await Promise.all(
-              //   [...Array(input.amount)].map(() =>
-              //     openai.images.generate({
-              //       model: "dall-e-3",
-              //       prompt: sentPrompt,
-              //       n: 1,
-              //       // size: "1792x1024",
-              //       size: "1792x1024",
-              //       response_format: "b64_json",
-              //     }),
-              //   ),
-              // );
+                  return openai.images.generate({
+                    model: "dall-e-3",
+                    prompt: finalPrompt,
+                    n: 1,
+                    size: "1792x1024", // or 1792x1024",
+                    response_format: "b64_json",
+                  });
+                }),
+              );
 
-              // const compressedImages = await Promise.all(
-              //   data.map(async (item) =>
-              //     optimizeImage(Buffer.from(item.data[0]!.b64_json!, "base64")),
-              //   ),
-              //   // optimizeImage(Buffer.from(data.data[0]!.b64_json!, "base64")),
-              // );
-              // console.log("🚀 ~ compressedImage:", compressedImages);
-              // const urlWallpapers = await Promise.all(
-              //   compressedImages.map((compressedImage) =>
-              //     uploadToS3(compressedImage, sentPrompt, ctx.session.user.id),
-              //   ),
-              // );
-              // console.log("🚀 ~ urlWallpapers:", urlWallpapers);
-              // //  uploadToS3(
-              // //   compressedImage,
-              // //   sentPrompt,
-              // //   ctx.session.user.id,
-              // // );
+              const compressedImages = await Promise.all(
+                generatedImages.map(async (item) =>
+                  optimizeImage(Buffer.from(item.data[0]?.b64_json!, "base64")),
+                ),
+              );
 
-              // const addedPrompt = await prisma.prompt.createMany({
-              //   data: data.map((item) => ({
-              //     prompt: input.prompt,
-              //     prompt_sent: sentPrompt,
-              //     user_id: ctx.session.user.id,
-              //     refined_prompt: item.data[0]!.revised_prompt!,
-              //     chat_id: input.chatId ?? currentChat?.id ?? "", // Added default value for chat_id
-              //   })),
-              // });
-              // console.log("🚀 ~ .$transaction ~ addedPrompt:", addedPrompt);
+              const urlWallpapers = await Promise.all(
+                compressedImages.map((item) =>
+                  uploadToS3(
+                    // Buffer.from(item.data[0]?.b64_json!, "base64"),
+                    item,
+                    sentPrompt,
+                    ctx.session.user.id,
+                  ),
+                ),
+              );
 
-              // const createWallpaper = await prisma.wallpaper.create({
-              //   data: {
-              //     user_id: ctx.session.user.id,
-              //     url: urlWallpaper,
-              //     chat_id: input.chatId ?? currentChat?.id ?? "",
-              //     prompt_id: addedPrompt.id,
-              //     type: input.type ?? "",
-              //   },
-              // });
-              // console.log(
-              //   "🚀 ~ .$transaction ~ createWallpaper:",
-              //   createWallpaper,
-              // );
+              const addedPrompt = await prisma.prompt.create({
+                data: {
+                  prompt: input.prompt,
+                  prompt_sent: sentPrompt,
+                  user_id: ctx.session.user.id,
+                  refined_prompt:
+                    generatedImages[0]?.data?.[0]!.revised_prompt!,
+                  chat_id: input.chatId || currentChat?.id || "", // Added default value for chat_id
+                },
+              });
 
-              // return {
-              //   chat: currentChat,
-              //   wallpaper: createWallpaper,
-              //   addedPrompt: addedPrompt,
-              // };
+              const createWallpapers = await Promise.all(
+                urlWallpapers.map((urlWallpaper) => {
+                  return prisma.wallpaper.create({
+                    data: {
+                      user_id: ctx.session.user.id,
+                      url: urlWallpaper,
+                      chat_id: currentChat?.id ?? "",
+                      prompt_id: addedPrompt.id, // Added default value for prompt_id
+                      type: input.type ?? "",
+                    },
+                  });
+                }),
+              );
+
+              return {
+                chat: currentChat,
+                wallpapers: createWallpapers,
+                addedPrompt: addedPrompt,
+              };
             },
             {
               maxWait: 30000,
               timeout: 60000,
             },
           )
-          .then(({
-            //  chat, wallpaper, addedPrompt
-          ...rest  
-          }) => {
-            return rest
-            // return {
-            //   message: "success",
-            //   data: {
-            //     chat_id: chat?.id,
-            //     chat_title: chat?.title,
-            //     wallpaper_id: wallpaper?.id,
-            //     id: wallpaper.id,
-            //     created_at: wallpaper?.created_at,
-            //     prompt: addedPrompt?.prompt,
-            //     user_id: ctx.session.user.id,
-            //     url_wallpaper: wallpaper?.url,
-            //   },
-            // };
+          .then(({ chat, wallpapers, addedPrompt }) => {
+            return {
+              message: "success",
+              data: {
+                chat_id: chat?.id,
+                chat_title: chat?.title,
+                wallpapers: wallpapers,
+                created_at: chat?.created_at!,
+                prompt: addedPrompt?.prompt,
+                user_id: ctx.session.user.id,
+              },
+            };
           })
           .catch((err) => {
             throw err;
           });
       } catch (error) {
-        console.log("🚀 ~ .mutation ~ error:", error);
-        // ctx.db.$rollback();
-        // console.log("🚀 ~ .mutation ~ error:", error);
-        // throw new TRPCError({
-        //   code: "INTERNAL_SERVER_ERROR",
-        //   message: error as string,
-        // });
-        // console.error("Error during wallpaper generation:", error);
-
         if (error instanceof TRPCError) {
-          console.log("🚀 ~ .mutation ~ TRPCError:", error);
           throw error; // Re-throw TRPCErrors to ensure proper message propagation
         }
-
-        console.log("Unexpected error");
 
         // Handle any unexpected errors
         throw new TRPCError({
@@ -213,24 +203,25 @@ export const wallpaperRouter = createTRPCRouter({
       } finally {
         console.log("FINALLY");
       }
-      // const finalPrompt = ""
+    }),
 
-      // if(true)
-      // let result: Prisma.TransactionDelegate;
-      // try {
-      //    results = db.transaction([
-
-      //   ])
-      //   const imageBuffer = await someAIService.generateWallpaper(input.prompt); // OpenAI model output
-      // } catch (error) {
-      //   result.
-
-      // }finally {
-
-      //   return {
-      //     message: "",
-      //   };
-      // }
+  getAllMyWallpapers: protectedProcedure
+    .input(
+      z
+        .object({
+          limit: z.number().min(1).max(50).optional().default(10), // Items per page
+          cursor: z.string().optional(),
+        })
+        .optional(),
+    )
+    .query(async ({ ctx }) => {
+      const wallpapers = await ctx.db.wallpaper.findMany({
+        where: {
+          user_id: ctx.session.user.id,
+        },
+      });
+      console.log("🚀 ~ .query ~ wallpapers:", wallpapers);
+      return { wallpapers };
     }),
 });
 

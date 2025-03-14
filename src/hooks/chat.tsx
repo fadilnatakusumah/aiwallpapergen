@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import { api } from "~/trpc/react";
 
 export function useInfiniteChats() {

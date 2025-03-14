@@ -1,14 +1,16 @@
-import React from "react";
+"use client";
 import { api } from "~/trpc/react";
 
 export function useInfinitePrompt({ id }: { id: string }) {
   return api.prompt.getPrompts.useInfiniteQuery(
     {
-      limit: 50, // Number of chats per page
       id,
+      // cursor: null, // <-- optional you can pass an initialCursor
+      limit: 10,
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextCursor, // Use nextCursor for fetching more
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      // initialCursor: 1, // <-- optional you can pass an initialCursor
     },
   );
 }

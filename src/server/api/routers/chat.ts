@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  // protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 export const chatRouter = createTRPCRouter({
   myChats: protectedProcedure
@@ -57,36 +52,6 @@ export const chatRouter = createTRPCRouter({
         data: { title: name },
       });
       // Update the chat name here
-      console.log("🚀 ~ .mutation ~ updateChat:", updateChat);
       return updateChat;
     }),
-
-  // create: protectedProcedure
-  //   .input(z.object({ name: z.string().min(1) }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     return ctx.db.post.create({
-  //       data: {
-  //         name: input.name,
-  //         createdBy: { connect: { id: ctx.session.user.id } },
-  //       },
-  //     });
-  //   }),
-
-  // getLatest: protectedProcedure.query(async ({ ctx }) => {
-  //   const post = await ctx.db.post.findFirst({
-  //     orderBy: { createdAt: "desc" },
-  //     where: { createdBy: { id: ctx.session.user.id } },
-  //   });
-
-  //   return post ?? null;
-  // }),
-
-  // getSecretMessage: protectedProcedure.query(() => {
-  //   return "you can now see this secret message!";
-  // }),
 });
-
-
-// export type MyChat = inferProcedureOutput<
-//   (typeof wallpaperRouter)["generateWallpaper"]
-// >;

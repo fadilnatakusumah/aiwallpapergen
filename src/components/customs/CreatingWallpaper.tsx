@@ -2,22 +2,22 @@
 
 import { TRPCClientError } from "@trpc/client";
 import clsx from "clsx";
-import { BanIcon, Stars } from "lucide-react";
-import Image from "next/image";
-
+import { BanIcon, MessageSquareCode, Stars } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PhotoSlider } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
+import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
+import { ModalDialog } from "../Modal";
 import { SpinnerGenerateWallpaper } from "./Spinners";
 
-import "react-photo-view/dist/react-photo-view.css";
-import { toast } from "sonner";
 import { SUGGESTION_TYPE_URL, WALLPAPERS_TYPE } from "~/data/prompt";
 import { useInfinitePrompt } from "~/hooks/prompt";
 import { api } from "~/trpc/react";
@@ -37,12 +37,16 @@ export default function CreateWallpaper() {
 
   const [wallpaperType, setWallpaperType] = useState<WALLPAPERS_TYPE>();
   const [isShowPreview, setShowPreview] = useState(false);
+  const [isShowModalCreate, setShowModalCreate] = useState(false);
   const [index, setIndex] = useState(0);
 
   const generateWallpaperAPI = api.wallpaper.generateWallpaper.useMutation({
-    onSuccess(data) {
+    async onSuccess(data) {
       scrollToBottom();
+      await session.update();
+      setShowModalCreate(false);
       if (params?.id) {
+        setForm({ prompt: "", amount: 1 });
         refetch?.().catch(console.error);
       } else {
         router.push(`/c/${data.data.chat_id}`);
@@ -54,10 +58,6 @@ export default function CreateWallpaper() {
       } else {
         toast.error("An unexpected error occurred");
       }
-    },
-    async onSettled() {
-      await session.update();
-      setForm({ prompt: "", amount: 1 });
     },
   });
 
@@ -97,6 +97,222 @@ export default function CreateWallpaper() {
       ) || []
     );
   }, [data?.pages]);
+
+  function createForm() {
+    return (
+      <form onSubmit={(evt) => evt.preventDefault()}>
+        <div className="rounded-lg bg-slate-100 p-4">
+          <div className="mb-1 font-semibold">Prompt</div>
+          <Textarea
+            className="h-12 min-h-24 w-full bg-white pe-9"
+            placeholder="Create a neon-lit cyberpunk cityscape at dusk"
+            value={form.prompt}
+            disabled={isDisabled}
+            onChange={({ target }) =>
+              setForm((prev) => ({ ...prev, prompt: target.value }))
+            }
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                generate();
+              }
+            }}
+          />
+        </div>
+
+        <div className="mt-4 rounded-lg bg-slate-100 p-4">
+          <div className="mb-1">
+            <span className="font-semibold">Preset Styles</span>
+            <span className="text-xs">
+              {!!wallpaperType && ` (${wallpaperType})`}
+            </span>
+          </div>
+          <ScrollArea>
+            <div className="flex h-full min-h-28 flex-nowrap gap-6 overflow-hidden pb-4">
+              {/* <div>{JSON.stringify({ wallpaperType }, null, 2)}</div> */}
+              <div className="relative">
+                {wallpaperType === undefined && (
+                  <svg
+                    className="icon z-2 absolute left-0 top-0 flex-none opacity-100"
+                    width="65"
+                    height="65"
+                    viewBox="0 0 80 80"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clipPath="url(#clip0_7175_24042)">
+                      <path
+                        d="M1 16C1 7.71573 7.71573 1 16 1H64C72.2843 1 79 7.71573 79 16V64C79 72.2843 72.2843 79 64 79H16C7.71573 79 1 72.2843 1 64V16Z"
+                        stroke="url(#paint0_linear_7175_24042)"
+                        strokeWidth="2"
+                      ></path>
+                    </g>
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear_7175_24042"
+                        x1="8.57143"
+                        y1="40"
+                        x2="68.4265"
+                        y2="56.2848"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop stopColor="#DC4DFF"></stop>
+                        <stop offset="0.968876" stopColor="#5A42FF"></stop>
+                      </linearGradient>
+                      <clipPath id="clip0_7175_24042">
+                        <path
+                          d="M0 16C0 7.16344 7.16344 0 16 0H64C72.8366 0 80 7.16344 80 16V64C80 72.8366 72.8366 80 64 80H16C7.16344 80 0 72.8366 0 64V16Z"
+                          fill="white"
+                        ></path>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                )}
+
+                <div
+                  onClick={() => {
+                    if (!isDisabled || isSubmitting) return;
+                    setWallpaperType(undefined);
+                  }}
+                  className={clsx(
+                    "flex items-center justify-center",
+                    "h-16 w-16 cursor-pointer overflow-hidden rounded-xl border-[3px] bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border text-center",
+                    (!isAuthenticated || isSubmitting) &&
+                      "!cursor-not-allowed grayscale",
+                    isAuthenticated && "hover:border-transparent",
+                  )}
+                >
+                  <BanIcon size={50} opacity={0.3} />
+                </div>
+                <div className="mt-1 text-center text-xs">{"None"}</div>
+              </div>
+
+              {Object.values(WALLPAPERS_TYPE).map((value, idx) => (
+                <div className="relative" key={value}>
+                  {wallpaperType === value && isAuthenticated && (
+                    <div className="icon absolute left-0 top-0 z-20 flex-none opacity-100">
+                      <svg
+                        width="65"
+                        height="65"
+                        viewBox="0 0 80 80"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <g clipPath="url(#clip0_7175_24042)">
+                          <path
+                            d="M1 16C1 7.71573 7.71573 1 16 1H64C72.2843 1 79 7.71573 79 16V64C79 72.2843 72.2843 79 64 79H16C7.71573 79 1 72.2843 1 64V16Z"
+                            stroke="url(#paint0_linear_7175_24042)"
+                            strokeWidth="2"
+                          ></path>
+                        </g>
+                        <defs>
+                          <linearGradient
+                            id="paint0_linear_7175_24042"
+                            x1="8.57143"
+                            y1="40"
+                            x2="68.4265"
+                            y2="56.2848"
+                            gradientUnits="userSpaceOnUse"
+                          >
+                            <stop stopColor="#DC4DFF"></stop>
+                            <stop offset="0.968876" stopColor="#5A42FF"></stop>
+                          </linearGradient>
+                          <clipPath id="clip0_7175_24042">
+                            <path
+                              d="M0 16C0 7.16344 7.16344 0 16 0H64C72.8366 0 80 7.16344 80 16V64C80 72.8366 72.8366 80 64 80H16C7.16344 80 0 72.8366 0 64V16Z"
+                              fill="white"
+                            ></path>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                    </div>
+                  )}
+
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => {
+                      // if (!isAuthenticated || isSubmitting) return;
+                      setWallpaperType(
+                        wallpaperType === value ? undefined : value,
+                      );
+                    }}
+                  >
+                    <div
+                      className={clsx(
+                        // "border-8",
+                        "h-16 w-16 overflow-hidden rounded-xl border-[3px] bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border text-center",
+                        (!isAuthenticated || isSubmitting) &&
+                          "!cursor-not-allowed grayscale",
+                        isAuthenticated && "hover:border-transparent",
+                      )}
+                      key={value}
+                    >
+                      <Image
+                        alt={value}
+                        src={`/images/suggestions/${SUGGESTION_TYPE_URL[idx]}.png`}
+                        width={100}
+                        height={100}
+                        className="mx-auto h-full w-full rounded-sm object-cover object-center text-center"
+                      />
+                    </div>
+                    <div className="mt-1 text-center text-xs">{value}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+
+        <div className="mt-4 rounded-lg bg-slate-100 p-4">
+          <div className="mb-2 font-semibold">Generate Amount</div>
+          <div className={clsx("flex items-center gap-2")}>
+            {[...Array(4)].map((_, idx) => (
+              <div
+                key={idx}
+                onClick={() => {
+                  if (!isAuthenticated) return;
+                  setForm((prev) => ({ ...prev, amount: idx + 1 }));
+                }}
+                className={clsx(
+                  "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 text-center",
+                  (!isAuthenticated || isSubmitting) &&
+                    "!cursor-not-allowed grayscale",
+                  isAuthenticated && "hover:border-purple-300",
+                  form.amount === idx + 1 &&
+                    "bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border",
+                )}
+              >
+                {idx + 1}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-lg bg-slate-100 p-4">
+          <Button
+            className="w-full"
+            onClick={generate}
+            aria-label="Generate"
+            disabled={isDisabled}
+          >
+            {isSubmitting ? (
+              <Spinner className="text-white" />
+            ) : !isAuthenticated ? (
+              <span>Login to Generate</span>
+            ) : (
+              <>
+                <span>Generate</span>
+                <span className="ml-1 flex items-center gap-1 text-xs">
+                  <Stars size={8} />
+                  {`${session?.data?.user?.credits! > 1 ? session?.data?.user.credits || 0 + " credits" : session?.data?.user.credits || 0 + " credit"}`}
+                </span>
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
+    );
+  }
 
   return (
     <div className="relative flex h-full">
@@ -147,6 +363,7 @@ export default function CreateWallpaper() {
                   <SpinnerGenerateWallpaper />
                 </div>
               )}
+
               {data?.pages.flatMap((prompt) =>
                 prompt.prompts.map((promptChat, idx) => (
                   <div
@@ -156,12 +373,14 @@ export default function CreateWallpaper() {
                     {promptChat.wallpapers.length > 1 ? (
                       <div
                         style={{ scrollbarWidth: "thin" }}
-                        className="scrollbar scrollbar-h-[6px] scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-thumb-gradient-to-r scrollbar-thumb-from-primary/60 scrollbar-thumb-to-primary/80 hover:scrollbar-thumb-from-primary/70 hover:scrollbar-thumb-to-primary/90 dark:scrollbar-thumb-from-primary/40 dark:scrollbar-thumb-to-primary/60 dark:hover:scrollbar-thumb-from-primary/50 dark:hover:scrollbar-thumb-to-primary/70 flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-auto pb-4 transition-colors duration-200"
+                        className="flex gap-4 overflow-y-clip overflow-x-scroll overscroll-x-auto pb-4"
+                        // className="scrollbar scrollbar-h-[6px] scrollbar-track-transparent scrollbar-thumb-rounded-full scrollbar-thumb-gradient-to-r scrollbar-thumb-from-primary/60 scrollbar-thumb-to-primary/80 hover:scrollbar-thumb-from-primary/70 hover:scrollbar-thumb-to-primary/90 dark:scrollbar-thumb-from-primary/40 dark:scrollbar-thumb-to-primary/60 dark:hover:scrollbar-thumb-from-primary/50 dark:hover:scrollbar-thumb-to-primary/70 flex gap-4 overflow-x-auto overscroll-x-auto pb-4 transition-colors duration-200"
                       >
                         {promptChat.wallpapers.map((wallpaper) => (
                           <div
                             key={wallpaper.id}
-                            className="relative flex !w-full flex-none snap-start items-center gap-4 overflow-hidden rounded-lg border border-border/30 shadow-sm transition-shadow duration-300 hover:shadow-md"
+                            // className="relative h-full w-full flex-none overflow-hidden rounded-lg"
+                            className="relative flex h-full w-full flex-none snap-start items-center gap-4 overflow-hidden rounded-lg border border-border/30 shadow-sm transition-shadow duration-300 hover:shadow-md"
                           >
                             <Image
                               id={wallpaper.id}
@@ -224,7 +443,7 @@ export default function CreateWallpaper() {
                         ))}
                       </div>
                     ) : (
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 overflow-hidden rounded-lg">
                         <Image
                           id={promptChat.wallpapers[0]!.id}
                           width={500}
@@ -279,204 +498,26 @@ export default function CreateWallpaper() {
       )}
 
       <div className="sticky top-0 hidden h-fit max-w-96 p-5 lg:block">
-        <form onSubmit={(evt) => evt.preventDefault()}>
-          <div className="rounded-lg bg-slate-100 p-4">
-            <div className="mb-1 font-semibold">Prompt</div>
-            <Textarea
-              className="h-12 min-h-24 w-full bg-white pe-9"
-              placeholder="Create a neon-lit cyberpunk cityscape at dusk"
-              value={form.prompt}
-              disabled={isDisabled}
-              onChange={({ target }) =>
-                setForm((prev) => ({ ...prev, prompt: target.value }))
-              }
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  generate();
-                }
-              }}
-            />
-          </div>
-
-          <div className="mt-4 rounded-lg bg-slate-100 p-4">
-            <div className="mb-1 font-semibold">Preset Styles</div>
-            <ScrollArea>
-              <div className="flex h-full min-h-28 flex-nowrap gap-6 overflow-hidden pb-4">
-                <div className="relative">
-                  {wallpaperType === undefined && (
-                    <svg
-                      className="icon z-2 absolute left-0 top-0 flex-none opacity-100"
-                      width="65"
-                      height="65"
-                      viewBox="0 0 80 80"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <g clipPath="url(#clip0_7175_24042)">
-                        <path
-                          d="M1 16C1 7.71573 7.71573 1 16 1H64C72.2843 1 79 7.71573 79 16V64C79 72.2843 72.2843 79 64 79H16C7.71573 79 1 72.2843 1 64V16Z"
-                          stroke="url(#paint0_linear_7175_24042)"
-                          strokeWidth="2"
-                        ></path>
-                      </g>
-                      <defs>
-                        <linearGradient
-                          id="paint0_linear_7175_24042"
-                          x1="8.57143"
-                          y1="40"
-                          x2="68.4265"
-                          y2="56.2848"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stopColor="#DC4DFF"></stop>
-                          <stop offset="0.968876" stopColor="#5A42FF"></stop>
-                        </linearGradient>
-                        <clipPath id="clip0_7175_24042">
-                          <path
-                            d="M0 16C0 7.16344 7.16344 0 16 0H64C72.8366 0 80 7.16344 80 16V64C80 72.8366 72.8366 80 64 80H16C7.16344 80 0 72.8366 0 64V16Z"
-                            fill="white"
-                          ></path>
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  )}
-
-                  <div
-                    onClick={() => {
-                      if (!isDisabled) return;
-                      setWallpaperType(undefined);
-                    }}
-                    className={clsx(
-                      "flex items-center justify-center",
-                      "h-16 w-16 cursor-pointer overflow-hidden rounded-xl border-[3px] bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border text-center",
-                      !isAuthenticated && "cursor-not-allowed grayscale",
-                      isAuthenticated && "hover:border-transparent",
-                    )}
-                  >
-                    <BanIcon size={50} opacity={0.3} />
-                  </div>
-                  <div className="mt-1 text-center text-xs">{"None"}</div>
-                </div>
-
-                {Object.values(WALLPAPERS_TYPE).map((value, idx) => (
-                  <div className="relative" key={value}>
-                    {wallpaperType === value && isAuthenticated && (
-                      <svg
-                        className="icon z-2 absolute left-0 top-0 flex-none opacity-100"
-                        width="65"
-                        height="65"
-                        viewBox="0 0 80 80"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <g clipPath="url(#clip0_7175_24042)">
-                          <path
-                            d="M1 16C1 7.71573 7.71573 1 16 1H64C72.2843 1 79 7.71573 79 16V64C79 72.2843 72.2843 79 64 79H16C7.71573 79 1 72.2843 1 64V16Z"
-                            stroke="url(#paint0_linear_7175_24042)"
-                            strokeWidth="2"
-                          ></path>
-                        </g>
-                        <defs>
-                          <linearGradient
-                            id="paint0_linear_7175_24042"
-                            x1="8.57143"
-                            y1="40"
-                            x2="68.4265"
-                            y2="56.2848"
-                            gradientUnits="userSpaceOnUse"
-                          >
-                            <stop stopColor="#DC4DFF"></stop>
-                            <stop offset="0.968876" stopColor="#5A42FF"></stop>
-                          </linearGradient>
-                          <clipPath id="clip0_7175_24042">
-                            <path
-                              d="M0 16C0 7.16344 7.16344 0 16 0H64C72.8366 0 80 7.16344 80 16V64C80 72.8366 72.8366 80 64 80H16C7.16344 80 0 72.8366 0 64V16Z"
-                              fill="white"
-                            ></path>
-                          </clipPath>
-                        </defs>
-                      </svg>
-                    )}
-
-                    <div
-                      onClick={() => {
-                        if (!isAuthenticated) return;
-                        setWallpaperType(
-                          wallpaperType === value ? undefined : value,
-                        );
-                      }}
-                      className={clsx(
-                        "h-16 w-16 cursor-pointer overflow-hidden rounded-xl border-[3px] bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border text-center",
-                        !isAuthenticated && "cursor-not-allowed grayscale",
-                        isAuthenticated && "hover:border-transparent",
-                      )}
-                      key={value}
-                    >
-                      <Image
-                        alt={value}
-                        src={`/images/suggestions/${SUGGESTION_TYPE_URL[idx]}.png`}
-                        width={100}
-                        height={100}
-                        className="mx-auto h-full w-full rounded-sm object-cover object-center text-center"
-                      />
-                    </div>
-                    <div className="mt-1 text-center text-xs">{value}</div>
-                  </div>
-                ))}
-              </div>
-              <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-          </div>
-
-          <div className="mt-4 rounded-lg bg-slate-100 p-4">
-            <div className="mb-2 font-semibold">Generate Amount</div>
-            <div className={clsx("flex items-center gap-2")}>
-              {[...Array(4)].map((_, idx) => (
-                <div
-                  key={idx}
-                  onClick={() => {
-                    if (!isAuthenticated) return;
-                    setForm((prev) => ({ ...prev, amount: idx + 1 }));
-                  }}
-                  className={clsx(
-                    "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 text-center",
-                    !isAuthenticated && "cursor-not-allowed grayscale",
-                    isAuthenticated && "hover:border-purple-300",
-                    form.amount === idx + 1 &&
-                      "bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border",
-                  )}
-                >
-                  {idx + 1}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-4 rounded-lg bg-slate-100 p-4">
-            <Button
-              className="w-full"
-              onClick={generate}
-              // className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg border border-transparent text-muted-foreground/80 ring-offset-background transition-shadow hover:text-foreground focus-visible:border-ring focus-visible:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-              aria-label="Generate"
-              disabled={isDisabled}
-            >
-              {isSubmitting ? (
-                <Spinner className="text-white" />
-              ) : !isAuthenticated ? (
-                <span>Login to Generate</span>
-              ) : (
-                <>
-                  <span>Generate</span>
-                  <span className="ml-1 flex items-center gap-1 text-xs">
-                    <Stars size={8} />
-                    {`${session?.data?.user?.credits! > 1 ? session?.data?.user.credits || 0 + " credits" : session?.data?.user.credits || 0 + " credit"}`}
-                  </span>
-                </>
-              )}
-            </Button>
-          </div>
-        </form>
+        {createForm()}
       </div>
+
+      <div className="fixed bottom-5 right-5 lg:hidden">
+        <Button
+          className="rounded-full"
+          onClick={() => setShowModalCreate(true)}
+        >
+          <MessageSquareCode />
+          Create a wallpaper
+        </Button>
+      </div>
+
+      <ModalDialog
+        title="Create a wallpaper"
+        isOpen={isShowModalCreate}
+        onClose={() => setShowModalCreate(false)}
+      >
+        {createForm()}
+      </ModalDialog>
     </div>
   );
 }

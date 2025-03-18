@@ -29,14 +29,7 @@ export default async function Auth() {
             wallpaper.
           </p> */}
 
-          <div className="relative mx-auto mt-4 max-w-lg rounded-lg border bg-white p-4">
-            <div className="mb-3">
-              Sign in with your <b>Google</b> or <b>Github</b> account
-            </div>
-            <div className="flex flex-col gap-2">
-              <SigninButtons />
-            </div>
-          </div>
+          <SigninButtons />
         </div>
       </BackgroundLines>
     </div>

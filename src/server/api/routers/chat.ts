@@ -22,7 +22,12 @@ export const chatRouter = createTRPCRouter({
           created_at: "desc",
         },
         include: {
-          wallpapers: true,
+          wallpapers: {
+            include: {
+              prompt: true,
+              user: true,
+            },
+          },
         },
       });
 

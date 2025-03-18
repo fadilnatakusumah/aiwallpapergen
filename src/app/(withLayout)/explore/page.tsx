@@ -14,8 +14,11 @@ import { Spinner } from "~/components/ui/spinner";
 import { WallpaperModal } from "~/components/WallpaperModal";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
+import { pageview } from "~/lib/gtag";
 
 function ExplorePage() {
+  pageview("/explore");
+
   const session = useSession();
   const {
     data,

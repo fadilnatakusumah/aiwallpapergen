@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  LibraryBig,
-  Telescope
-} from "lucide-react";
+import { LibraryBig, Telescope } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -11,19 +8,20 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
+  useSidebar,
 } from "~/components/ui/sidebar";
-import { useIsMobile } from "~/hooks/use-mobile";
 
 export function NavMain() {
   const ctx = useSidebar();
-  const isMobile = useIsMobile();
 
   return (
     <SidebarGroup>
       <SidebarMenu>
         <SidebarMenuItem>
-          <Link href="/explore" onClick={() => isMobile && ctx.toggleSidebar()}>
+          <Link
+            href="/explore"
+            onClick={() => ctx.isMobile && ctx.toggleSidebar()}
+          >
             <SidebarMenuButton>
               <Telescope />
               <span>Explore</span>
@@ -31,7 +29,7 @@ export function NavMain() {
           </Link>
           <Link
             href="/my-collections"
-            onClick={() => isMobile && ctx.toggleSidebar()}
+            onClick={() => ctx.isMobile && ctx.toggleSidebar()}
           >
             <SidebarMenuButton>
               <LibraryBig />

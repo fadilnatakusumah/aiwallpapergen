@@ -5,6 +5,7 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
+import { event } from "~/lib/gtag";
 
 function SigninButtons() {
   const [isSignin, setIsSignin] = useState(true);
@@ -15,10 +16,28 @@ function SigninButtons() {
         <b>Github</b> account
       </div>
       <div className="flex flex-col gap-2">
-        <Button onClick={() => signIn("google").catch(console.error)}>
+        <Button
+          onClick={() => {
+            event({
+              action: isSignin ? "signin_google" : "signup_google",
+              category: "engagement",
+              label: `User ${isSignin ? "signing in with Google" : "signing up with Google"}`,
+            });
+            signIn("google").catch(console.error);
+          }}
+        >
           <SiGoogle /> {isSignin ? "Login in" : "Sign up"} with Google
         </Button>
-        <Button onClick={() => signIn("github").catch(console.error)}>
+        <Button
+          onClick={() => {
+            event({
+              action: isSignin ? "signin_github" : "signup_github",
+              category: "engagement",
+              label: `User ${isSignin ? "signing in with Github" : "signing up with Github"}`,
+            });
+            signIn("github").catch(console.error);
+          }}
+        >
           <SiGithub /> {isSignin ? "Login in" : "Sign up"} with Github
         </Button>
       </div>

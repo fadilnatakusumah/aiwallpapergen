@@ -6,14 +6,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
+
 import { SpinnerGenerateWallpaper } from "~/components/customs/Spinners";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 import { WallpaperModal } from "~/components/WallpaperModal";
+
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
+import { pageview } from "~/lib/gtag";
 
 function MyCollectionPage() {
+  pageview("/my-collections");
+
   const session = useSession();
   const {
     data,

@@ -207,21 +207,72 @@ export const wallpaperRouter = createTRPCRouter({
 
   getAllMyWallpapers: protectedProcedure
     .input(
-      z
-        .object({
-          limit: z.number().min(1).max(50).optional().default(10), // Items per page
-          cursor: z.string().optional(),
-        })
-        .optional(),
+      z.object({
+        limit: z.number().min(1).max(50).default(10), // Items per page
+        cursor: z.string().optional(), // Cursor for pagination
+      }),
     )
-    .query(async ({ ctx }) => {
+    .query(async ({ ctx, input }) => {
+      const { limit, cursor } = input;
       const wallpapers = await ctx.db.wallpaper.findMany({
         where: {
           user_id: ctx.session.user.id,
         },
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          created_at: "desc",
+        },
+        include: {
+          prompt: true,
+          user: true,
+          likes: true,
+        },
       });
-      console.log("🚀 ~ .query ~ wallpapers:", wallpapers);
-      return { wallpapers };
+
+      let nextCursor: string | null = null;
+      if (wallpapers.length > limit) {
+        const nextChat = wallpapers.pop(); // Remove the extra item
+        nextCursor = nextChat?.id ?? null;
+      }
+
+      return {
+        wallpapers,
+        nextCursor,
+      };
+    }),
+
+  exploreAllWallpapers: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(50).default(10), // Items per page
+        cursor: z.string().optional(), // Cursor for pagination
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { limit, cursor } = input;
+      const wallpapers = await ctx.db.wallpaper.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        orderBy: {
+          created_at: "desc",
+        },
+        include: {
+          prompt: true,
+          user: true,
+        },
+      });
+
+      let nextCursor: string | null = null;
+      if (wallpapers.length > limit) {
+        const nextChat = wallpapers.pop(); // Remove the extra item
+        nextCursor = nextChat?.id ?? null;
+      }
+
+      return {
+        wallpapers,
+        nextCursor,
+      };
     }),
 });
 

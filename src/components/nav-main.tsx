@@ -1,54 +1,50 @@
 "use client";
 
 import {
-  ChevronRight,
   LibraryBig,
-  Star,
-  Telescope,
-  type LucideIcon,
+  Telescope
 } from "lucide-react";
 import Link from "next/link";
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "~/components/ui/collapsible";
-import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
+  useSidebar
 } from "~/components/ui/sidebar";
-// import { AppSidebarMenu } from "./AppSidebarMenu";
+import { useIsMobile } from "~/hooks/use-mobile";
 
 export function NavMain() {
+  const ctx = useSidebar();
+  const isMobile = useIsMobile();
+
   return (
     <SidebarGroup>
       <SidebarMenu>
         <SidebarMenuItem>
-          <Link href="/explore">
+          <Link href="/explore" onClick={() => isMobile && ctx.toggleSidebar()}>
             <SidebarMenuButton>
               <Telescope />
               <span>Explore</span>
             </SidebarMenuButton>
           </Link>
-          <Link href="/my-collections">
+          <Link
+            href="/my-collections"
+            onClick={() => isMobile && ctx.toggleSidebar()}
+          >
             <SidebarMenuButton>
               <LibraryBig />
               <span>My Collections</span>
             </SidebarMenuButton>
           </Link>
-          <Link href="/favorites">
+          {/* TODO: Add favorites feature */}
+          {/* <Link href="/favorites">
             <SidebarMenuButton>
               <Star />
               <span>Favorites</span>
             </SidebarMenuButton>
-          </Link>
+          </Link> */}
         </SidebarMenuItem>
       </SidebarMenu>
       {/* <SidebarGroupLabel>Wallpapers</SidebarGroupLabel> */}

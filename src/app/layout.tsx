@@ -7,7 +7,7 @@ import AllProviders from "./_components/AllProviders";
 export const metadata: Metadata = {
   title: "AI Wallpaper Gen",
   description: "Generate your own wallpaper using advanced AI technology",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  // icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 export default async function RootLayout({

@@ -1,26 +1,20 @@
 "use client";
 
 import {
-  BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
+  LogOut
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu";
 import {
   SidebarMenu,
@@ -28,6 +22,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
+import { event } from "~/lib/gtag";
 
 export function NavUser({
   user,
@@ -39,6 +34,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const { data, update } = useSession();
 
   return (
     <SidebarMenu>
@@ -113,7 +109,16 @@ export function NavUser({
             <DropdownMenuSeparator /> */}
             <DropdownMenuItem
               className="cursor-pointer"
-              onClick={() => signOut().finally(() => redirect("/auth"))}
+              onClick={async () => {
+                event({
+                  action: "log_out",
+                  category: "authentication",
+                  label: "User Logged Out",
+                  event_label: "User Logged Out",
+                  user_id: data?.user.id || "", // Include if available
+                });
+                signOut({ redirect: true, redirectTo: "/" });
+              }}
             >
               <LogOut />
               Log out

@@ -57,6 +57,7 @@ export const authConfig = {
       clientSecret: env.GITHUB_CLIENT_SECRET || "",
       allowDangerousEmailAccountLinking: true,
     }),
+
     /**
      * ...add more providers here.
      *
@@ -67,6 +68,13 @@ export const authConfig = {
      * @see https://next-auth.js.org/providers
      */
   ],
+
+  pages: {
+    signIn: "/auth/signin", // Custom sign-in page
+    error: "/auth/error",
+  },
+
+  
 
   // Using PrismaAdapter to store user data in the database
   adapter: PrismaAdapter(db),

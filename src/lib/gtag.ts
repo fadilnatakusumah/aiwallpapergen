@@ -3,6 +3,7 @@
 // src/lib/gtag.ts
 
 import { env } from "~/env";
+import { getDeviceType } from "~/helpers/device";
 
 // Log a page view
 export const pageview = (url: string) => {
@@ -19,17 +20,21 @@ export const event = ({
   category,
   label,
   value,
+  ...rest
 }: {
   action: string;
   category: string;
   label: string;
-  value?: number;
-}) => {
+  value?: number | string;
+} & Record<string, string | number>) => {
   if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("event", action, {
       event_category: category,
       event_label: label,
       value: value,
+      timestamp: Date.now(),
+      device: getDeviceType(),
+      ...rest,
     });
   }
 };

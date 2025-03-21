@@ -10,6 +10,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { SidebarInset, SidebarTrigger } from "~/components/ui/sidebar";
 import UserCredits from "~/components/UserCredits";
+import AllProviders from "../_components/AllProviders";
 
 import { auth } from "~/server/auth";
 
@@ -22,28 +23,30 @@ export default async function RootLayout({
 
   return (
     <>
-      <AppSidebar />
-      <SidebarInset className="h-screen">
-        <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="mr-2 h-4" />
-          <Breadcrumb className="sticky w-full">
-            <BreadcrumbList className="flex justify-between">
-              <BreadcrumbItem className="hidden items-center md:flex">
-                <UserCredits />
-              </BreadcrumbItem>
-              {!session?.user && (
-                <BreadcrumbItem className="self-end">
-                  <Link href={"/auth"}>
-                    <Button>Login</Button>
-                  </Link>
+      <AllProviders withSidebar>
+        <AppSidebar />
+        <SidebarInset className="h-screen">
+          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-2 border-b bg-white px-4">
+            <SidebarTrigger className="-ml-1" />
+            <Separator orientation="vertical" className="mr-2 h-4" />
+            <Breadcrumb className="sticky w-full">
+              <BreadcrumbList className="flex justify-between">
+                <BreadcrumbItem className="items-center md:flex">
+                  <UserCredits />
                 </BreadcrumbItem>
-              )}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-        {children}
-      </SidebarInset>
+                {!session?.user && (
+                  <BreadcrumbItem className="self-end">
+                    <Link href={"/auth"}>
+                      <Button>Login</Button>
+                    </Link>
+                  </BreadcrumbItem>
+                )}
+              </BreadcrumbList>
+            </Breadcrumb>
+          </header>
+          {children}
+        </SidebarInset>
+      </AllProviders>
     </>
   );
 }

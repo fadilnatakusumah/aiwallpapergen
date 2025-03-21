@@ -1,5 +1,4 @@
-// TODO: Currently this page is hidden 
-
+// TODO: Currently this page is hidden
 
 import { redirect } from "next/navigation";
 import React from "react";

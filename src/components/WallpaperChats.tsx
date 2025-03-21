@@ -1,5 +1,6 @@
 "use client";
 
+import { Chat } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BadgeInfoIcon,
@@ -37,14 +38,15 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
-
-import { useInfiniteChats } from "~/hooks/chat";
-import { cn } from "~/lib/utils";
-import { api } from "~/trpc/react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
 import { Spinner } from "./ui/spinner";
+
+import { useInfiniteChats } from "~/hooks/chat";
+import { event } from "~/lib/gtag";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
 
 export function WallpaperChats() {
   const session = useSession();
@@ -53,6 +55,7 @@ export function WallpaperChats() {
     data,
     isLoading,
     hasNextPage,
+    error,
     // isFetchingNextPage,
 
     fetchNextPage,
@@ -66,13 +69,16 @@ export function WallpaperChats() {
   const [edittedValue, setEdittedValue] = useState("");
   const [isLoadingUpdate, setLoadingUpdate] = useState("");
 
-  const refSearchInput = useRef(document.createElement("input"));
+  const refSearchInput = useRef<HTMLInputElement>(
+    (typeof document !== "undefined" && document?.createElement("input")) ||
+      window?.document?.createElement("input"),
+  );
   const {
     //  ref,
     inView,
   } = useInView();
   const params = useParams();
-
+  const isUserExist = session.data?.user;
   const updateNameAPI = api.chat.updateChatName.useMutation();
 
   // Trigger fetching when the "load more" element is visible
@@ -84,9 +90,19 @@ export function WallpaperChats() {
     })().catch(console.error);
   }, [inView, hasNextPage, fetchNextPage]);
 
-  function onBlurSubmit(chat: { title: string }) {
+  function onBlurSubmit(chat: { title: Chat["title"]; id: Chat["id"] }) {
     if (edittedValue && edittedID && edittedValue !== chat.title) {
       setLoadingUpdate(edittedID);
+      event({
+        action: "rename_chat",
+        category: "chat_management",
+        label: "User Renamed Chat",
+        user_id: session.data?.user.id!, // Include if available
+        chat_id: chat.id,
+        old_title: chat.title,
+        new_title: edittedValue,
+        timestamp: Date.now(),
+      });
       updateNameAPI.mutate(
         {
           chatId: edittedID,
@@ -104,7 +120,7 @@ export function WallpaperChats() {
     setEdittedValue("");
   }
 
-  function onKeyDownInput(chat: { title: string }) {
+  function onKeyDownInput(chat: { title: Chat["title"]; id: Chat["id"] }) {
     return (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
         onBlurSubmit(chat);
@@ -174,11 +190,11 @@ export function WallpaperChats() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
-            className="relative rounded bg-gray-100 px-2 py-1 shadow"
+            className="relative rounded bg-gray-100 px-2 py-1"
           >
             <Input
               ref={refSearchInput}
-              className="bg-white"
+              className="border-gray-200 bg-white shadow !ring-gray-400"
               onChange={({ target }) => setSearchText(target.value)}
               value={searchText}
               placeholder="Search your chat here..."
@@ -187,7 +203,15 @@ export function WallpaperChats() {
         )}
       </AnimatePresence>
 
-      {isLoading && chats.length === 0 ? (
+      {/* TODO: refactor this so it can be better */}
+      {error?.message === "UNAUTHORIZED" || !isUserExist ? (
+        <div className="flex h-full items-center px-2 text-xs">
+          <span className="mr-3">
+            <BadgeInfoIcon />
+          </span>
+          Sign in with your account to see your history
+        </div>
+      ) : isLoading ? (
         <SidebarMenu>
           <div className="mx-2.5 pt-6">
             <Spinner />
@@ -255,6 +279,7 @@ export function WallpaperChats() {
                         <Edit className="text-muted-foreground" />
                         <span>Rename</span>
                       </DropdownMenuItem>
+                      {/* TODO: add delete chat feature */}
                       {/* <DropdownMenuSeparator />
                       <DropdownMenuItem>
                         <Trash2 className="text-muted-foreground" />
@@ -267,14 +292,7 @@ export function WallpaperChats() {
             ))
           )}
         </>
-      ) : (
-        <div className="flex h-full items-center px-2 text-xs">
-          <span className="mr-3">
-            <BadgeInfoIcon />
-          </span>
-          Sign in with your account to see your history
-        </div>
-      )}
+      ) : null}
     </SidebarGroup>
   );
 }

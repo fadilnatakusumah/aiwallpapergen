@@ -2,7 +2,12 @@
 
 import { TRPCClientError } from "@trpc/client";
 import clsx from "clsx";
-import { BanIcon, MessageSquareCode, Stars } from "lucide-react";
+import {
+  BanIcon,
+  InfoIcon,
+  MessageSquareCode,
+  Stars
+} from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -20,6 +25,7 @@ import { SpinnerGenerateWallpaper } from "./Spinners";
 
 import { SUGGESTION_TYPE_URL, WALLPAPERS_TYPE } from "~/data/prompt";
 import { useInfinitePrompt } from "~/hooks/prompt";
+import { event } from "~/lib/gtag";
 import { api } from "~/trpc/react";
 
 export default function CreateWallpaper() {
@@ -27,6 +33,7 @@ export default function CreateWallpaper() {
   const { isLoading, data, refetch } = params?.id
     ? useInfinitePrompt({ id: params.id as string })
     : {};
+  const trpcContext = api.useContext();
 
   const [form, setForm] = useState({
     prompt: "",
@@ -49,6 +56,7 @@ export default function CreateWallpaper() {
         setForm({ prompt: "", amount: 1 });
         refetch?.().catch(console.error);
       } else {
+        trpcContext.chat.myChats.invalidate();
         router.push(`/c/${data.data.chat_id}`);
       }
     },
@@ -67,6 +75,15 @@ export default function CreateWallpaper() {
 
   function generate() {
     scrollToBottom();
+    event({
+      action: "create_wallpaper",
+      category: "content_creation",
+      label: "User Created Wallpaper",
+      prompt: form.prompt,
+      user_id: session.data?.user.id!, // Include if available
+      count: form.amount, // Number of wallpapers generated
+      prompt_length: form.prompt.length, // Length of the prompt (number of characters)
+    });
     generateWallpaperAPI.mutate({
       prompt: form.prompt,
       type: wallpaperType! || null,
@@ -289,6 +306,15 @@ export default function CreateWallpaper() {
         </div>
 
         <div className="mt-4 rounded-lg bg-slate-100 p-4">
+          {isSubmitting && (
+            <div className="mb-3 flex gap-2 rounded-lg bg-white p-2">
+              <InfoIcon size={32} />
+              <span className="text-sm">
+                Since you can generate up to 4 wallpapers at a time, please be
+                patient.
+              </span>
+            </div>
+          )}
           <Button
             className="w-full"
             onClick={generate}
@@ -296,7 +322,9 @@ export default function CreateWallpaper() {
             disabled={isDisabled}
           >
             {isSubmitting ? (
-              <Spinner className="text-white" />
+              <>
+                <Spinner className="text-white" /> <span>Generating</span>
+              </>
             ) : !isAuthenticated ? (
               <span>Login to Generate</span>
             ) : (
@@ -324,7 +352,7 @@ export default function CreateWallpaper() {
         onIndexChange={setIndex}
       />
 
-      {!!promptChats.length ? (
+      {!!promptChats.length && !isLoading ? (
         <ScrollArea className="flex-1 border-r">
           {/* TODO: make better "view-all wallpapers in chat" feature */}
           {/* {!!promptChats.length && (

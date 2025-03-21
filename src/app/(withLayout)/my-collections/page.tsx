@@ -14,11 +14,8 @@ import { Spinner } from "~/components/ui/spinner";
 import { WallpaperModal } from "~/components/WallpaperModal";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
-import { pageview } from "~/lib/gtag";
 
 function MyCollectionPage() {
-  pageview("/my-collections");
-
   const session = useSession();
   const {
     data,
@@ -29,6 +26,7 @@ function MyCollectionPage() {
     fetchNextPage,
     // refetch,
   } = useInfiniteMyWallpapers();
+
   type WallpaperState = Wallpaper & { prompt: Prompt; user: User };
 
   const [selectedWallpaper, setSelectedWallpaper] =

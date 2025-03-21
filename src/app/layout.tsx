@@ -4,14 +4,47 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 import Script from "next/script";
 
-import AllProviders from "./_components/AllProviders";
-
 import { env } from "~/env";
 
+// app/layout.tsx
 export const metadata: Metadata = {
-  title: "AI Wallpaper Gen",
-  description: "Generate your own wallpaper using advanced AI technology",
-  // icons: [{ rel: "icon", url: "/favicon.ico" }],
+  title: "AI Wallpaper Generator | Create Stunning AI-Generated Wallpapers",
+  description:
+    "Discover the ultimate AI-powered wallpaper generator. Create, customize, and share unique wallpapers generated with cutting-edge AI technology. Perfect for desktop and mobile backgrounds.",
+  keywords: [
+    "AI wallpaper",
+    "wallpaper generator",
+    "DALL-E",
+    "AI art",
+    "digital art",
+    "creative wallpapers",
+    "AI design",
+  ],
+  openGraph: {
+    title: "AI Wallpaper Generator",
+    description:
+      "Unleash your creativity with our AI-powered wallpaper generator. Make unique, stunning wallpapers perfect for every device.",
+    url: "https://aiwallpapergen.com",
+    siteName: "AI Wallpaper Generator",
+    images: [
+      {
+        url: "https://aiwallpapergen.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AI Wallpaper Generator Preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@dilnatakusumah", // Replace with your Twitter handle if available
+    title: "AI Wallpaper Generator",
+    description:
+      "Create, customize, and share stunning AI-generated wallpapers. Perfect for every device!",
+    images: ["https://aiwallpapergen.com/og-image.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -35,24 +68,10 @@ export default function RootLayout({
           });
         `}
         </Script>
-        <link
-          rel="icon"
-          type="image/png"
-          href="/favicon-96x96.png"
-          sizes="96x96"
-        />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </head>
-      <body>
-        <AllProviders withSidebar>{children}</AllProviders>;
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -235,9 +235,14 @@ export const wallpaperRouter = createTRPCRouter({
         const nextChat = wallpapers.pop(); // Remove the extra item
         nextCursor = nextChat?.id ?? null;
       }
+      // Transform each wallpaper object to override the URL
+      const transformedWallpapers = wallpapers.map((wallpaper) => ({
+        ...wallpaper,
+        url: `${env.NEXTAUTH_URL}/wallpapers/${wallpaper.id}`,
+      }));
 
       return {
-        wallpapers,
+        wallpapers: transformedWallpapers,
         nextCursor,
       };
     }),
@@ -269,8 +274,13 @@ export const wallpaperRouter = createTRPCRouter({
         nextCursor = nextChat?.id ?? null;
       }
 
+      const transformedWallpapers = wallpapers.map((wallpaper) => ({
+        ...wallpaper,
+        url: `${env.NEXTAUTH_URL}/wallpapers/${wallpaper.id}`,
+      }));
+
       return {
-        wallpapers,
+        wallpapers: transformedWallpapers,
         nextCursor,
       };
     }),

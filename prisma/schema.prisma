@@ -7,12 +7,13 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    provider  = "postgresql"
     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
 
     // binaryTargets = ["native", "debian-openssl-3.0.x", "linux-arm64-openssl-1.1.x", "rhel-openssl-1.0.x"]
 }
@@ -66,7 +67,8 @@ model User {
     favorites    Favorite[] // Relation to Favorites
     transactions Transaction[] // Relation to Transactions
 
-    Prompt Prompt[]
+    Prompt         Prompt[]
+    AnalyticsEvent AnalyticsEvent[]
 }
 
 model Chat {
@@ -163,4 +165,17 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model AnalyticsEvent {
+    id          String   @id @default(uuid())
+    user_id     String? // nullable if user is not logged in
+    ip_address  String?
+    device_info String? // store JSON as string
+    user_agent  String? // store raw user agent
+    referrer    String? // store the referrer if you want
+    created_at  DateTime @default(now())
+
+    // Relation to User if you want
+    user User? @relation(fields: [user_id], references: [id])
 }

@@ -3,9 +3,13 @@
  * for Docker builds.
  */
 import "./src/env.js";
+import pack from "./package.json" with { type: "json" };
 
 /** @type {import("next").NextConfig} */
 const config = {
+  env: {
+    version: pack.version,
+  },
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
@@ -14,6 +18,10 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
+        hostname: "**",
+      },
+      {
+        protocol: "http",
         hostname: "**",
       },
     ],

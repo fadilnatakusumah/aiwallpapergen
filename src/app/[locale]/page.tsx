@@ -1,6 +1,5 @@
 import { User } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import LanguageDropdown from "~/components/LanguageDropdown";
@@ -13,6 +12,7 @@ import HeroSection from "./(landing-page)/HeroSection";
 import PricingSection from "./(landing-page)/PricingSection";
 
 import { auth } from "~/server/auth";
+import { Link } from "~/i18n/navigation";
 
 /**
  * The homepage of the application.
@@ -24,6 +24,7 @@ import { auth } from "~/server/auth";
  */
 export default async function Home() {
   const session = await auth();
+
   if (session?.user.id) {
     redirect("/c");
   }

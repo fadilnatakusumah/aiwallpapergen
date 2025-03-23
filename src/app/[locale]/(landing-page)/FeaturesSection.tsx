@@ -6,8 +6,11 @@ import { Palette, Sparkles, Zap } from "lucide-react";
 import FeatureCard from "~/components/feature-card";
 
 import { fadeIn, staggerContainer } from "./const";
+import { T, useTranslate } from "@tolgee/react";
 
 function FeaturesSection() {
+  const { t } = useTranslate();
+
   return (
     <section id="features" className="bg-white py-20">
       <div className="container mx-auto px-4">
@@ -18,7 +21,7 @@ function FeaturesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          Create Wallpapers Like Never Before
+          <T keyName={"landing-page.features-section.title"} />
         </motion.h2>
 
         <motion.div
@@ -31,7 +34,7 @@ function FeaturesSection() {
           <motion.div variants={fadeIn}>
             <FeatureCard
               icon={<Sparkles className="h-6 w-6 text-pink-500" />}
-              title="AI-Powered Generation"
+              title={t("landing-page.features-section.feature-1.title")}
               description="Our advanced AI models create unique wallpapers based on your preferences and prompts."
             />
           </motion.div>

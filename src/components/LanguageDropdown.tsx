@@ -2,10 +2,13 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useLocale } from "next-intl";
+import { useEffect, useRef, useState, useTransition } from "react";
 
 import { Button } from "./ui/button";
 
+import { usePathname, useRouter } from "next/navigation";
+import nProgress from "nprogress";
 import { cn } from "~/lib/utils";
 
 type Language = {
@@ -16,11 +19,12 @@ type Language = {
 
 const languages: Language[] = [
   { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "it", name: "Italiano", flag: "🇮🇹" },
-  { code: "ja", name: "日本語", flag: "🇯🇵" },
+  { code: "id", name: "Indonesia", flag: " 🇮🇩" },
+  // { code: "es", name: "Español", flag: "🇪🇸" },
+  // { code: "fr", name: "Français", flag: "🇫🇷" },
+  // { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  // { code: "it", name: "Italiano", flag: "🇮🇹" },
+  // { code: "ja", name: "日本語", flag: "🇯🇵" },
 ];
 
 interface LanguageDropdownProps {
@@ -30,15 +34,25 @@ interface LanguageDropdownProps {
 }
 
 export default function LanguageDropdown({
-  initialLanguage = "en",
   onLanguageChange,
   className,
 }: LanguageDropdownProps) {
+  const locale = useLocale();
+  // const { i18n } = useTranslations();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    languages.find((lang) => lang.code === initialLanguage) || languages[0]!,
+    languages.find((lang) => lang.code === locale) || languages[0]!,
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // const changeLanguage = (lng: "en" | "id" extends string) => {
+  //   i18n.changeLanguage(lng);
+  //   router.refresh(); // Refresh the page for App Router to pick up the new language
+  // };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -60,8 +74,25 @@ export default function LanguageDropdown({
   const handleLanguageSelect = (language: Language) => {
     setSelectedLanguage(language);
     setIsOpen(false);
+    const newPathname =
+      language.code === "en"
+        ? `/${pathname.slice(3)}`
+        : `/${language.code}${pathname.slice(3)}`;
+    console.log("🚀 ~ handleLanguageSelect ~ newPathname:", newPathname);
+
+    startTransition(() => {
+      router.replace(newPathname);
+    });
     onLanguageChange?.(language);
   };
+
+  useEffect(() => {
+    if (isPending) {
+      nProgress.start();
+    } else {
+      nProgress.done();
+    }
+  }, [isPending]);
 
   return (
     <div
@@ -99,7 +130,7 @@ export default function LanguageDropdown({
             animate={{ opacity: 1, y: 0, height: "auto" }}
             exit={{ opacity: 0, y: -10, height: 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
-            className="absolute right-0 z-10 mt-2 md:w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none md:w-full"
             style={{ transformOrigin: "top" }}
           >
             <div
@@ -110,15 +141,17 @@ export default function LanguageDropdown({
                 <button
                   key={language.code}
                   className={cn(
-                    "flex items-center px-4 py-2 text-left text-sm hover:bg-gray-100",
+                    "flex w-full items-center justify-between px-4 py-2 text-left text-sm hover:bg-gray-100",
                     selectedLanguage.code === language.code
                       ? "bg-gray-50 text-primary"
                       : "text-gray-700",
                   )}
                   onClick={() => handleLanguageSelect(language)}
                 >
-                  <span className="mr-2 text-base">{language.flag}</span>
-                  <span className="flex-grow">{language.name}</span>
+                  <span>
+                    <span className="mr-2 text-base">{language.flag}</span>
+                    <span className="flex-grow">{language.name}</span>
+                  </span>
                   {selectedLanguage.code === language.code && (
                     <Check className="ml-1 h-4 w-4 text-primary" />
                   )}

@@ -10,7 +10,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { SidebarInset, SidebarTrigger } from "~/components/ui/sidebar";
 import UserCredits from "~/components/UserCredits";
-import AllProviders from "../_components/AllProviders";
+import AllProviders from "../../_components/AllProviders";
 
 import { auth } from "~/server/auth";
 

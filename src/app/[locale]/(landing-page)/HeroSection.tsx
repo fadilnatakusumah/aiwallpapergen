@@ -8,8 +8,13 @@ import InfiniteCarousel from "~/components/infinite-carousel";
 import { Button } from "~/components/ui/button";
 
 import { fadeIn, staggerContainer } from "./const";
+import { useTranslations } from "next-intl";
+import { T, useTolgee, useTranslate } from "@tolgee/react";
 
 function HeroSection() {
+  const t = useTranslations("landing-page.hero-section");
+  const { t: tTolgee } = useTolgee();
+  const { t: translate } = useTranslate();
   return (
     <section className="relative flex min-h-screen items-center justify-center pt-20">
       <HeroBackground />
@@ -24,17 +29,25 @@ function HeroSection() {
             className="mb-6 text-4xl font-bold tracking-tight text-gray-900 md:text-6xl lg:text-7xl"
             variants={fadeIn}
           >
-            AI-Generated Wallpapers <br className="hidden md:block" />
-            <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
-              That Inspire
-            </span>
+            {t.rich("greeting", {
+              "colored-text": (chunks) => (
+                <>
+                  <br className="hidden md:block" />
+
+                  <span className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">
+                    {chunks}
+                  </span>
+                </>
+              ),
+            })}
+            {/* AI-Generated Wallpapers <br className="hidden md:block" /> */}
           </motion.h1>
+
           <motion.p
             className="mx-auto mb-10 max-w-2xl text-xl text-gray-700"
             variants={fadeIn}
           >
-            Create stunning, unique wallpapers powered by AI. Personalize your
-            devices with art that's generated just for you.
+            {t("description")}
           </motion.p>
           <motion.div
             key={"button"}
@@ -46,7 +59,7 @@ function HeroSection() {
                 size="lg"
                 className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 text-white hover:opacity-90"
               >
-                Generate Wallpaper
+                {t("generate")}
               </Button>
             </Link>
             {/* <Button

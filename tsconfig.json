@@ -36,7 +36,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts"
-, "src/app/d", "src/app/(withLayout)/my-collections/test"  ],
+    ".next/types/**/*.ts",
+    "src/app/d"
+  ],
   "exclude": ["node_modules"]
 }

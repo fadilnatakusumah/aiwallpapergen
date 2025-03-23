@@ -2,7 +2,7 @@ import { BackgroundLines } from "~/components/ui/background-lines";
 import { Button } from "~/components/ui/button";
 // use import/esm to allow tree shaking
 import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
-import SigninButtons from "../_components/SigninButtons";
+import SigninButtons from "../../_components/SigninButtons";
 import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 

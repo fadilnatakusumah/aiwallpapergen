@@ -123,7 +123,7 @@ export const wallpaperRouter = createTRPCRouter({
 
               const compressedImages = await Promise.all(
                 generatedImages.map(async (item) =>
-                  optimizeImage(Buffer.from(item.data[0]?.b64_json!, "base64")),
+                  optimizeImage(Buffer.from(item.data[0]!.b64_json!, "base64")),
                 ),
               );
 
@@ -143,9 +143,8 @@ export const wallpaperRouter = createTRPCRouter({
                   prompt: input.prompt,
                   prompt_sent: sentPrompt,
                   user_id: ctx.session.user.id,
-                  refined_prompt:
-                    generatedImages[0]?.data?.[0]!.revised_prompt!,
-                  chat_id: input.chatId || currentChat?.id || "", // Added default value for chat_id
+                  refined_prompt: generatedImages[0]!.data[0]!.revised_prompt!,
+                  chat_id: input.chatId ?? currentChat!.id ?? "", // Added default value for chat_id
                 },
               });
 
@@ -178,11 +177,11 @@ export const wallpaperRouter = createTRPCRouter({
             return {
               message: "success",
               data: {
-                chat_id: chat?.id,
-                chat_title: chat?.title,
+                chat_id: chat!.id,
+                chat_title: chat!.title,
                 wallpapers: wallpapers,
-                created_at: chat?.created_at!,
-                prompt: addedPrompt?.prompt,
+                created_at: chat!.created_at!,
+                prompt: addedPrompt.prompt,
                 user_id: ctx.session.user.id,
               },
             };

@@ -2,12 +2,12 @@ import { Chat } from "@prisma/client";
 import { type inferProcedureOutput, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { WALLPAPERS_PROMPT, WALLPAPERS_TYPE } from "~/data/prompt";
-import { env } from "~/env";
 
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { uploadToS3 } from "~/server/utils/aws";
 import { optimizeImage } from "~/server/utils/image";
 import { openai } from "~/server/utils/openai";
+import { generateAccessURLWallpaper } from "~/server/utils/string";
 
 export const wallpaperRouter = createTRPCRouter({
   generateWallpaper: protectedProcedure
@@ -209,13 +209,14 @@ export const wallpaperRouter = createTRPCRouter({
       z.object({
         limit: z.number().min(1).max(50).default(10), // Items per page
         cursor: z.string().optional(), // Cursor for pagination
+        isExplore: z.boolean().optional().default(false),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { limit, cursor } = input;
+      const { limit, cursor, isExplore } = input;
       const wallpapers = await ctx.db.wallpaper.findMany({
         where: {
-          user_id: ctx.session.user.id,
+          ...(isExplore ? { user_id: ctx.session.user.id } : {}),
         },
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,
@@ -227,6 +228,9 @@ export const wallpaperRouter = createTRPCRouter({
           user: true,
           likes: true,
         },
+        omit: {
+          url: true,
+        },
       });
 
       let nextCursor: string | null = null;
@@ -237,7 +241,7 @@ export const wallpaperRouter = createTRPCRouter({
       // Transform each wallpaper object to override the URL
       const transformedWallpapers = wallpapers.map((wallpaper) => ({
         ...wallpaper,
-        url: `${env.NEXTAUTH_URL}/wallpapers/${wallpaper.id}`,
+        url: generateAccessURLWallpaper(wallpaper.id),
       }));
 
       return {
@@ -246,43 +250,46 @@ export const wallpaperRouter = createTRPCRouter({
       };
     }),
 
-  exploreAllWallpapers: protectedProcedure
-    .input(
-      z.object({
-        limit: z.number().min(1).max(50).default(10), // Items per page
-        cursor: z.string().optional(), // Cursor for pagination
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const { limit, cursor } = input;
-      const wallpapers = await ctx.db.wallpaper.findMany({
-        take: limit + 1,
-        cursor: cursor ? { id: cursor } : undefined,
-        orderBy: {
-          created_at: "desc",
-        },
-        include: {
-          prompt: true,
-          user: true,
-        },
-      });
+  // exploreAllWallpapers: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       limit: z.number().min(1).max(50).default(10), // Items per page
+  //       cursor: z.string().optional(), // Cursor for pagination
+  //     }),
+  //   )
+  //   .query(async ({ ctx, input }) => {
+  //     const { limit, cursor } = input;
+  //     const wallpapers = await ctx.db.wallpaper.findMany({
+  //       take: limit + 1,
+  //       cursor: cursor ? { id: cursor } : undefined,
+  //       orderBy: {
+  //         created_at: "desc",
+  //       },
+  //       include: {
+  //         prompt: true,
+  //         user: true,
+  //       },
+  //       omit: {
+  //         url: true,
+  //       },
+  //     });
 
-      let nextCursor: string | null = null;
-      if (wallpapers.length > limit) {
-        const nextChat = wallpapers.pop(); // Remove the extra item
-        nextCursor = nextChat?.id ?? null;
-      }
+  //     let nextCursor: string | null = null;
+  //     if (wallpapers.length > limit) {
+  //       const nextChat = wallpapers.pop(); // Remove the extra item
+  //       nextCursor = nextChat?.id ?? null;
+  //     }
 
-      const transformedWallpapers = wallpapers.map((wallpaper) => ({
-        ...wallpaper,
-        url: `${env.NEXTAUTH_URL}/wallpapers/${wallpaper.id}`,
-      }));
+  //     const transformedWallpapers = wallpapers.map((wallpaper) => ({
+  //       ...wallpaper,
+  //       url: generateAccessURLWallpaper(wallpaper.id),
+  //     }));
 
-      return {
-        wallpapers: transformedWallpapers,
-        nextCursor,
-      };
-    }),
+  //     return {
+  //       wallpapers: transformedWallpapers,
+  //       nextCursor,
+  //     };
+  //   }),
 });
 
 export type GenerateWallpaper = inferProcedureOutput<

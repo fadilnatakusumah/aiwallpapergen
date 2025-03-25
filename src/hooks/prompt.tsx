@@ -9,6 +9,8 @@ export function useInfinitePrompt({ id }: { id: string }) {
       limit: 10,
     },
     {
+      staleTime: 1000 * 60 * 5, // data considered fresh for 5 minutes
+      refetchOnWindowFocus: false, // do not refetch on window focus
       getNextPageParam: (lastPage) => lastPage.nextCursor,
       // initialCursor: 1, // <-- optional you can pass an initialCursor
     },

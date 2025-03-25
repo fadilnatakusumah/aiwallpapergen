@@ -1,12 +1,7 @@
-export const downloadImage = (
+export const downloadImage = async (
   url: string,
-  filename: string = `aiwallpapergen-${new Date().toISOString()}`,
+  _filename = `aiwallpapergen-${new Date().toISOString()}`,
 ) => {
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  anchor.target = "_blank";
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
+  const redirectWindow = window.open(url, "_blank");
+  redirectWindow?.location;
 };

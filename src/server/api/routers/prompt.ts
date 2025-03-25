@@ -1,11 +1,7 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  // protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { generateAccessURLWallpaper } from "~/server/utils/string";
 
 export const promptRouter = createTRPCRouter({
   getPrompts: protectedProcedure
@@ -29,7 +25,12 @@ export const promptRouter = createTRPCRouter({
           created_at: "desc",
         },
         include: {
-          wallpapers: true,
+          // wallpapers: true,
+          wallpapers: {
+            omit: {
+              url: true,
+            },
+          },
         },
       });
 
@@ -38,9 +39,17 @@ export const promptRouter = createTRPCRouter({
         const nextPrompt = myPrompts.pop(); // Remove the extra item
         nextCursor = nextPrompt?.id ?? null;
       }
+      // Transform each wallpaper to override the url
+      const transformedPrompts = myPrompts.map((prompt) => ({
+        ...prompt,
+        wallpapers: prompt.wallpapers.map((wp) => ({
+          ...wp,
+          url: generateAccessURLWallpaper(wp.id), // your custom function to compute the URL
+        })),
+      }));
 
       return {
-        prompts: myPrompts,
+        prompts: transformedPrompts,
         nextCursor,
       };
     }),

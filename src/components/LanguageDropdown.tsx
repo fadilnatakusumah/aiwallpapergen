@@ -66,7 +66,6 @@ export default function LanguageDropdown({
   }, []);
 
   const handleLanguageSelect = (language: Language) => {
-    console.log("🚀 ~ handleLanguageSelect ~ language:", language);
     setSelectedLanguage(language);
     setIsOpen(false);
     // const newPathname = `/${language.code}/${pathname.slice(2)}`;

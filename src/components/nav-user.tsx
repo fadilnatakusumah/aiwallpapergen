@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  ChevronsUpDown,
-  LogOut
-} from "lucide-react";
+import { ChevronsUpDown, LogOut } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 
@@ -14,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import {
   SidebarMenu,
@@ -115,9 +112,11 @@ export function NavUser({
                   category: "authentication",
                   label: "User Logged Out",
                   event_label: "User Logged Out",
-                  user_id: data?.user.id || "", // Include if available
+                  user_id: data?.user.id ?? "", // Include if available
                 });
-                signOut({ redirect: true, redirectTo: "/" });
+                await signOut({ redirect: true, redirectTo: "/" }).catch(
+                  console.error,
+                );
               }}
             >
               <LogOut />

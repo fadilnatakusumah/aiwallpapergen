@@ -4,12 +4,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
+import nProgress from "nprogress";
 
 import { Button } from "./ui/button";
 
-import { usePathname, useRouter } from "next/navigation";
-import nProgress from "nprogress";
 import { cn } from "~/lib/utils";
+import { usePathname, useRouter } from "~/i18n/navigation";
 
 type Language = {
   code: string;
@@ -38,21 +38,15 @@ export default function LanguageDropdown({
   className,
 }: LanguageDropdownProps) {
   const locale = useLocale();
-  // const { i18n } = useTranslations();
   const router = useRouter();
   const pathname = usePathname();
   const [isPending, startTransition] = useTransition();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(
-    languages.find((lang) => lang.code === locale) || languages[0]!,
+    languages.find((lang) => lang.code === locale) ?? languages[0]!,
   );
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // const changeLanguage = (lng: "en" | "id" extends string) => {
-  //   i18n.changeLanguage(lng);
-  //   router.refresh(); // Refresh the page for App Router to pick up the new language
-  // };
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -72,17 +66,16 @@ export default function LanguageDropdown({
   }, []);
 
   const handleLanguageSelect = (language: Language) => {
+    console.log("🚀 ~ handleLanguageSelect ~ language:", language);
     setSelectedLanguage(language);
     setIsOpen(false);
-    const newPathname =
-      language.code === "en"
-        ? `/${pathname.slice(3)}`
-        : `/${language.code}${pathname.slice(3)}`;
-    console.log("🚀 ~ handleLanguageSelect ~ newPathname:", newPathname);
+    // const newPathname = `/${language.code}/${pathname.slice(2)}`;
 
+    // console.log("🚀 ~ handleLanguageSelect ~ newPathname:", newPathname);
     startTransition(() => {
-      router.replace(newPathname);
+      router.push(pathname, { locale: language.code });
     });
+    router.refresh();
     onLanguageChange?.(language);
   };
 

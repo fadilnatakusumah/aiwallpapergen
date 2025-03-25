@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 import HeroBackground from "~/components/hero-background";
 import InfiniteCarousel from "~/components/infinite-carousel";
 import { Button } from "~/components/ui/button";
+import { Link } from "~/i18n/navigation";
 
-import { fadeIn, staggerContainer } from "./const";
+import { useTolgee, useTranslate } from "@tolgee/react";
 import { useTranslations } from "next-intl";
-import { T, useTolgee, useTranslate } from "@tolgee/react";
+import { fadeIn, staggerContainer } from "./const";
 
 function HeroSection() {
   const t = useTranslations("landing-page.hero-section");

@@ -2,9 +2,9 @@
 
 import { Github, Globe, Instagram } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 import { Button } from "~/components/ui/button";
+import { Link } from "~/i18n/navigation";
 
 function Footer() {
   return (

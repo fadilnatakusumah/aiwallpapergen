@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import * as React from "react";
 
 import { NavMain } from "~/components/nav-main";
@@ -16,6 +15,8 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar";
 import { WallpaperChats } from "~/components/WallpaperChats";
+import { Link } from "~/i18n/navigation";
+
 import { getCurrentVersion } from "~/helpers/version";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -52,7 +53,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       {session?.data && (
         <>
-          <div className="px-4 py-1 md:text-sm text-slate-400 text-right">v{getCurrentVersion()}</div>
+          <div className="px-4 py-1 text-right text-slate-400 md:text-sm">
+            v{getCurrentVersion()}
+          </div>
           <SidebarFooter>
             <NavUser
               user={{

@@ -3,7 +3,6 @@
 import { Prompt, User, Wallpaper } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -12,6 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 import { WallpaperModal } from "~/components/WallpaperModal";
+import { Link } from "~/i18n/navigation";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
 
@@ -106,6 +106,7 @@ function MyCollectionPage() {
                       src={wallpaper.url || "/placeholder.svg"}
                       alt={wallpaper.prompt.prompt_sent}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

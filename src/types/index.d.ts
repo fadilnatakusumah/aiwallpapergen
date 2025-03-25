@@ -1,12 +1,12 @@
 declare global {
   interface Window {
-    dataLayer?: Record<string, any>[];
+    dataLayer?: Record<string, unknown>[];
     timeoutList: Record<string, NodeJS.Timer>;
-    gtag: (...any) => void;
+    gtag: (...args) => void;
   }
   namespace JSX {
     interface IntrinsicElements {
-      "dotlottie-player": any;
+      "dotlottie-player": unknown;
     }
   }
 }

@@ -10,9 +10,9 @@ import {
   SquarePen,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
+  RefObject,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -38,6 +38,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
+import { Link } from "~/i18n/navigation";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
@@ -69,10 +70,7 @@ export function WallpaperChats() {
   const [edittedValue, setEdittedValue] = useState("");
   const [isLoadingUpdate, setLoadingUpdate] = useState("");
 
-  const refSearchInput = useRef<HTMLInputElement>(
-    (typeof document !== "undefined" && document?.createElement("input")) ||
-      window?.document?.createElement("input"),
-  );
+  const refSearchInput = useRef<HTMLInputElement>(null);
   const {
     //  ref,
     inView,
@@ -97,7 +95,7 @@ export function WallpaperChats() {
         action: "rename_chat",
         category: "chat_management",
         label: "User Renamed Chat",
-        user_id: session.data?.user.id!, // Include if available
+        user_id: session.data?.user?.id ?? "", // Include if available
         chat_id: chat.id,
         old_title: chat.title,
         new_title: edittedValue,
@@ -110,7 +108,7 @@ export function WallpaperChats() {
         },
         {
           onSuccess: async () => {
-            await refetch();
+            refetch();
             setLoadingUpdate("");
           },
         },
@@ -134,7 +132,7 @@ export function WallpaperChats() {
     }
   }, [edittedID]);
 
-  useOnClickOutside(refSearchInput, () => {
+  useOnClickOutside(refSearchInput as RefObject<HTMLElement>, () => {
     setShowSearchField(false);
     setSearchText("");
   });
@@ -157,7 +155,7 @@ export function WallpaperChats() {
                 .toLowerCase()
                 .includes(searchText.toLowerCase()),
             ),
-        ) || []
+        ) ?? []
     );
   }, [data?.pages[0]?.chats, searchText]);
 

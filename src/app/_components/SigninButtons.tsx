@@ -3,11 +3,12 @@
 import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
+import { Link } from "~/i18n/navigation";
+
 import { event } from "~/lib/gtag";
 
 function SigninButtons() {

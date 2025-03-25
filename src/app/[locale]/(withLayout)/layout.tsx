@@ -1,5 +1,4 @@
 import { Separator } from "@radix-ui/react-separator";
-import Link from "next/link";
 
 import { AppSidebar } from "~/components/AppSidebar";
 import {
@@ -10,11 +9,13 @@ import {
 import { Button } from "~/components/ui/button";
 import { SidebarInset, SidebarTrigger } from "~/components/ui/sidebar";
 import UserCredits from "~/components/UserCredits";
+import { Link } from "~/i18n/navigation";
 import AllProviders from "../../_components/AllProviders";
 
 import { auth } from "~/server/auth";
 
 import "~/styles/globals.css";
+import LanguageDropdown from "~/components/LanguageDropdown";
 
 export default async function RootLayout({
   children,
@@ -34,13 +35,14 @@ export default async function RootLayout({
                 <BreadcrumbItem className="items-center md:flex">
                   <UserCredits />
                 </BreadcrumbItem>
-                {!session?.user && (
-                  <BreadcrumbItem className="self-end">
+                <BreadcrumbItem className="self-end">
+                  <LanguageDropdown />
+                  {!session?.user && (
                     <Link href={"/auth"}>
                       <Button>Login</Button>
                     </Link>
-                  </BreadcrumbItem>
-                )}
+                  )}
+                </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </header>

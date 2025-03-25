@@ -2,12 +2,7 @@
 
 import { TRPCClientError } from "@trpc/client";
 import clsx from "clsx";
-import {
-  BanIcon,
-  InfoIcon,
-  MessageSquareCode,
-  Stars
-} from "lucide-react";
+import { BanIcon, InfoIcon, MessageSquareCode, Stars } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";

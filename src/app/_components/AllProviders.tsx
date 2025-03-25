@@ -1,16 +1,13 @@
-import { GeistSans } from "geist/font/sans";
 import { SessionProvider } from "next-auth/react";
-import Head from "next/head";
-import Script from "next/script";
 
 import ProgressBarProvider from "~/components/ProgressBar";
 import { SidebarProvider } from "~/components/ui/sidebar";
 import { Toaster } from "~/components/ui/sonner";
 
-import { env } from "~/env";
 import { TRPCReactProvider } from "~/trpc/react";
 
-import "~/styles/globals.css";
+import { NextIntlClientProvider } from "next-intl";
+import CustomTolgeeProvider from "~/components/customs/TolgeeProvider";
 
 export default async function AllProviders({
   children,
@@ -21,11 +18,13 @@ export default async function AllProviders({
       <TRPCReactProvider>
         <SessionProvider>
           <ProgressBarProvider>
-            {withSidebar ? (
-              <SidebarProvider>{children}</SidebarProvider>
-            ) : (
-              children
-            )}
+            <CustomTolgeeProvider>
+              {withSidebar ? (
+                <SidebarProvider>{children}</SidebarProvider>
+              ) : (
+                children
+              )}
+            </CustomTolgeeProvider>
           </ProgressBarProvider>
         </SessionProvider>
       </TRPCReactProvider>

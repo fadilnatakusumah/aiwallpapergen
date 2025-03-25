@@ -1,7 +1,6 @@
 "use client";
 
 import { LibraryBig, Telescope } from "lucide-react";
-import Link from "next/link";
 
 import {
   SidebarGroup,
@@ -10,6 +9,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "~/components/ui/sidebar";
+import { Link } from "~/i18n/navigation";
 
 export function NavMain() {
   const ctx = useSidebar();

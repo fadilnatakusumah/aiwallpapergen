@@ -1,14 +1,9 @@
 import "~/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import Script from "next/script";
-// import {  } from "next-i18next";
+import { hasLocale } from "next-intl";
 
-import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
-import CustomTolgeeProvider from "~/components/customs/TolgeeProvider";
-import { env } from "~/env";
 import { routing } from "~/i18n/routing";
 
 // app/layout.tsx
@@ -59,40 +54,13 @@ async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: "en" | "id" }>;
 }>) {
-  // Ensure that the incoming `locale` is valid
+  // // Ensure that the incoming `locale` is valid
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
-  return (
-    <html lang={locale} className={`${GeistSans.variable}`}>
-      <head>
-        {/* Load gtag.js after the page is interactive */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="gtag-init" strategy="afterInteractive">
-          {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
-            page_path: window.location.pathname,
-          });
-        `}
-        </Script>
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-      </head>
-      <body>
-        <NextIntlClientProvider locale={locale}>
-          <CustomTolgeeProvider>{children}</CustomTolgeeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
-  );
+  return <>{children}</>;
 }
 
 export default RootLayout;

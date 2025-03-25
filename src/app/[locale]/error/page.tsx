@@ -4,10 +4,11 @@
 import { motion } from "framer-motion";
 import { GeistSans } from "geist/font/sans";
 import { Home } from "lucide-react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
+
 import { Button } from "~/components/ui/button";
+import { Link } from "~/i18n/navigation";
 
 export default function ErrorSignin() {
   const searchParams = useSearchParams();

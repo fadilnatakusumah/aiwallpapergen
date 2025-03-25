@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 
 import { Button } from "~/components/ui/button";
+import { Link } from "~/i18n/navigation";
 
 function CTASection() {
   return (

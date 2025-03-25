@@ -3,7 +3,6 @@
 import { Prompt, User, Wallpaper } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -12,6 +11,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 import { WallpaperModal } from "~/components/WallpaperModal";
+import { Link } from "~/i18n/navigation";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
 
@@ -25,7 +25,7 @@ function ExplorePage() {
 
     fetchNextPage,
     // refetch,
-  } = useInfiniteMyWallpapers();
+  } = useInfiniteMyWallpapers({ isExplore: true });
   type WallpaperState = Wallpaper & { prompt: Prompt; user: User };
 
   const [selectedWallpaper, setSelectedWallpaper] =

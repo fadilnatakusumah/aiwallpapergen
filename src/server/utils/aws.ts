@@ -12,7 +12,7 @@ const s3 = new S3Client({
 
 export const uploadToS3 = async (
   imageBuffer: Buffer,
-  // prompt: string,
+  prompt: string,
   userId: string,
 ) => {
   const key = `wallpapers/${userId}/${Date.now()}.jpg`; // Generate unique filename
@@ -21,9 +21,9 @@ export const uploadToS3 = async (
     Key: key,
     Body: imageBuffer,
     ContentType: "image/jpeg",
-    // Metadata: {
-    //   prompt,
-    // },
+    Metadata: {
+      prompt,
+    },
   };
 
   await s3.send(new PutObjectCommand(params));

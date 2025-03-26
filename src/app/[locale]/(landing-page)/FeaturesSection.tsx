@@ -5,11 +5,11 @@ import { Palette, Sparkles, Zap } from "lucide-react";
 
 import FeatureCard from "~/components/feature-card";
 
+import useMyTranslation from "~/hooks/translation";
 import { fadeIn, staggerContainer } from "./const";
-import { T, useTranslate } from "@tolgee/react";
 
 function FeaturesSection() {
-  const { t } = useTranslate();
+  const { t } = useMyTranslation("landing-page.features-section");
 
   return (
     <section id="features" className="bg-white py-20">
@@ -21,7 +21,7 @@ function FeaturesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <T keyName={"landing-page.features-section.title"} />
+          {t("title")}
         </motion.h2>
 
         <motion.div
@@ -34,22 +34,22 @@ function FeaturesSection() {
           <motion.div variants={fadeIn}>
             <FeatureCard
               icon={<Sparkles className="h-6 w-6 text-pink-500" />}
-              title={t("landing-page.features-section.feature-1.title")}
-              description="Our advanced AI models create unique wallpapers based on your preferences and prompts."
+              title={t("feature-1.title")}
+              description={t("feature-1.description")}
             />
           </motion.div>
           <motion.div variants={fadeIn}>
             <FeatureCard
               icon={<Palette className="h-6 w-6 text-purple-500" />}
-              title="Endless Customization"
-              description="Adjust colors, styles, and themes to match your personality and device aesthetics."
+              title={t("feature-2.title")}
+              description={t("feature-2.description")}
             />
           </motion.div>
           <motion.div variants={fadeIn}>
             <FeatureCard
               icon={<Zap className="h-6 w-6 text-cyan-500" />}
-              title="Instant Creation"
-              description="Generate high-resolution wallpapers in seconds, ready to download and use."
+              title={t("feature-3.title")}
+              description={t("feature-3.description")}
             />
           </motion.div>
         </motion.div>

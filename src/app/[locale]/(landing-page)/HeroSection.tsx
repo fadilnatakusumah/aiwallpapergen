@@ -1,31 +1,29 @@
 "use client";
 
-import { motion } from "framer-motion";
-
 import HeroBackground from "~/components/hero-background";
 import InfiniteCarousel from "~/components/infinite-carousel";
+import MotionWrapper from "~/components/MotionWrapper";
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
 
-import { useTolgee, useTranslate } from "@tolgee/react";
-import { useTranslations } from "next-intl";
+import useMyTranslation from "~/hooks/translation";
 import { fadeIn, staggerContainer } from "./const";
 
 function HeroSection() {
-  const t = useTranslations("landing-page.hero-section");
-  const { t: tTolgee } = useTolgee();
-  const { t: translate } = useTranslate();
+  const { t } = useMyTranslation("landing-page.hero-section");
+
   return (
     <section className="relative flex min-h-screen items-center justify-center pt-20">
       <HeroBackground />
       <div className="container relative z-10 mx-auto px-4 py-20">
-        <motion.div
+        <MotionWrapper
           className="mb-16 text-center"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.h1
+          <MotionWrapper
+            tag="h1"
             className="mb-6 text-4xl font-bold tracking-tight text-gray-900 md:text-6xl lg:text-7xl"
             variants={fadeIn}
           >
@@ -41,15 +39,16 @@ function HeroSection() {
               ),
             })}
             {/* AI-Generated Wallpapers <br className="hidden md:block" /> */}
-          </motion.h1>
+          </MotionWrapper>
 
-          <motion.p
+          <MotionWrapper
+            tag="p"
             className="mx-auto mb-10 max-w-2xl text-xl text-gray-700"
             variants={fadeIn}
           >
             {t("description")}
-          </motion.p>
-          <motion.div
+          </MotionWrapper>
+          <MotionWrapper
             key={"button"}
             className="flex flex-col justify-center gap-4 sm:flex-row"
             variants={fadeIn}
@@ -69,18 +68,18 @@ function HeroSection() {
           >
             Explore Gallery
           </Button> */}
-          </motion.div>
-        </motion.div>
+          </MotionWrapper>
+        </MotionWrapper>
 
         {/* Dynamic Wallpaper Carousel */}
-        <motion.div
+        <MotionWrapper
           className="mt-12 space-y-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
           <InfiniteCarousel />
-        </motion.div>
+        </MotionWrapper>
 
         {/* <motion.div
           className="mt-8 flex justify-center"

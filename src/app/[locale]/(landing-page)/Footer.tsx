@@ -4,9 +4,12 @@ import { Github, Globe, Instagram } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "~/components/ui/button";
+import useMyTranslation from "~/hooks/translation";
 import { Link } from "~/i18n/navigation";
 
 function Footer() {
+  const { t } = useMyTranslation("landing-page.footer-section");
+
   return (
     <footer className="border-t border-gray-200 bg-white py-12">
       <div className="container mx-auto px-4">
@@ -34,19 +37,19 @@ function Footer() {
               href="#features"
               className="text-gray-600 transition-colors hover:text-gray-900"
             >
-              Features
+              {t("features")}
             </Link>
             <Link
               href="#pricing"
               className="text-gray-600 transition-colors hover:text-gray-900"
             >
-              Pricing
+              {t("pricing")}
             </Link>
             <Link
               href="#gallery"
               className="text-gray-600 transition-colors hover:text-gray-900"
             >
-              Gallery
+              {t("gallery")}
             </Link>
             {/* <Link
               href="#"
@@ -114,7 +117,9 @@ function Footer() {
         </div>
 
         <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-500">
-          © {new Date().getFullYear()} WallpaperAI. All rights reserved.
+          © {new Date().getFullYear()}
+          &nbsp;
+          {t("all-rights-reserved")}
         </div>
       </div>
     </footer>

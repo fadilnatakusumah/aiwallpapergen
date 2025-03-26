@@ -47,7 +47,7 @@ export default function PricingCard({
       </CardHeader>
 
       <CardContent>
-        <ul className="h-36 space-y-3">
+        <ul className="min-h-36 space-y-3">
           {features.map((feature, index) => (
             <li key={index} className="flex items-start">
               <Check className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-green-500" />

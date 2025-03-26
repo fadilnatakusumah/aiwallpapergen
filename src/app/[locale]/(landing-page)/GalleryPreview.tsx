@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
 
 import { fadeIn, staggerContainer } from "./const";
+import useMyTranslation from "~/hooks/translation";
 
 const wallpapersDesktop = [
   { id: 1, src: "/images/gallery/1.png", alt: "Wallpaper 1" },
@@ -22,6 +23,8 @@ const wallpapersMobile = [
 ];
 
 function GalleryPreview() {
+  const { t } = useMyTranslation("landing-page.gallery-showcase-section");
+
   return (
     <section id="gallery" className="bg-white py-20">
       <div className="container mx-auto px-4">
@@ -32,7 +35,7 @@ function GalleryPreview() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          Gallery Showcase
+          {t("title")}
         </motion.h2>
 
         {/* <motion.div
@@ -106,7 +109,7 @@ function GalleryPreview() {
               variant="outline"
               className="border-gray-300 text-gray-700 hover:bg-gray-100"
             >
-              View Full Gallery
+              {t("view-full-gallery")}
             </Button>
           </Link>
         </motion.div>

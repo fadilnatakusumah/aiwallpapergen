@@ -5,8 +5,11 @@ import { motion } from "framer-motion";
 import PricingCard from "~/components/pricing-card";
 
 import { fadeIn, staggerContainer } from "./const";
+import useMyTranslation from "~/hooks/translation";
 
 function PricingSection() {
+  const { t } = useMyTranslation("landing-page.pricing-section");
+
   return (
     <section id="pricing" className="bg-gray-50 py-20">
       <div className="container mx-auto px-4">
@@ -17,11 +20,10 @@ function PricingSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="mb-4 text-center text-3xl font-semibold text-gray-900 md:text-4xl">
-            Choose Your Plan
+            {t("title")}
           </h2>
           <p className="mx-auto mb-16 max-w-2xl text-center text-gray-600">
-            Select the perfect plan for your wallpaper needs, from casual use to
-            professional creation.
+            {t("description")}
           </p>
         </motion.div>
 
@@ -34,26 +36,26 @@ function PricingSection() {
         >
           <motion.div variants={fadeIn}>
             <PricingCard
-              title="Free"
+              title={t("pricing-free.title")}
               price="$0"
-              description="Perfect for casual users"
+              description={t("pricing-free.description")}
               features={[
-                "15 credits after first time registration",
-                "Standard resolution",
-                "Basic customization",
-                "No Ads",
+                t("pricing-free.feature-1"),
+                t("pricing-free.feature-2"),
+                t("pricing-free.feature-3"),
+                t("pricing-free.feature-4"),
               ]}
-              buttonText="Get Started"
+              buttonText={t("pricing-free.button-text")}
               buttonVariant="default"
               highlighted={true}
             />
           </motion.div>
           <motion.div variants={fadeIn}>
             <PricingCard
-              title="Premium"
+              title={t("pricing-premium.title")}
               price="$--"
-              period="per month"
-              description="For wallpaper enthusiasts"
+              period={t("pricing-premium.period")}
+              description={t("pricing-premium.description")}
               features={[
                 "-",
                 // "50 wallpapers per month",
@@ -62,7 +64,7 @@ function PricingSection() {
                 // "Ad-free experience",
                 // "Priority generation",
               ]}
-              buttonText="Subscribe Now"
+              buttonText={t("pricing-premium.button-text")}
               buttonVariant="outline"
               // highlighted={true}
               disabled
@@ -70,11 +72,10 @@ function PricingSection() {
           </motion.div>
           <motion.div variants={fadeIn}>
             <PricingCard
-              disabled
-              title="Unlimited"
+              title={t("pricing-unlimited.title")}
               price="$--"
-              period="per month"
-              description="For professionals & creators"
+              period={t("pricing-unlimited.period")}
+              description={t("pricing-unlimited.description")}
               features={[
                 "-",
                 // "Unlimited wallpapers",
@@ -84,8 +85,9 @@ function PricingSection() {
                 // "API access",
                 // "Priority support",
               ]}
-              buttonText="Go Unlimited"
+              buttonText={t("pricing-unlimited.button-text")}
               buttonVariant="outline"
+              disabled
             />
           </motion.div>
         </motion.div>

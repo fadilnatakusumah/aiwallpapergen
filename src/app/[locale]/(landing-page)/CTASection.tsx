@@ -3,8 +3,9 @@
 import { motion } from "framer-motion";
 
 import { Button } from "~/components/ui/button";
-import useMyTranslation from "~/hooks/translation";
 import { Link } from "~/i18n/navigation";
+
+import useMyTranslation from "~/i18n/translation-client";
 
 function CTASection() {
   const { t } = useMyTranslation("landing-page.cta-section");

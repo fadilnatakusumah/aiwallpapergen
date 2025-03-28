@@ -48,10 +48,12 @@ import { useInfiniteChats } from "~/hooks/chat";
 import { event } from "~/lib/gtag";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
+import useMyTranslation from "~/i18n/translation-client";
 
 export function WallpaperChats() {
   const session = useSession();
   const { isMobile } = useSidebar();
+  const { t } = useMyTranslation("common.sidebar");
   const {
     data,
     isLoading,
@@ -162,7 +164,7 @@ export function WallpaperChats() {
   return (
     <SidebarGroup className="h-full group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel className="flex justify-between">
-        <div className="text-base">Wallpapers</div>
+        <div className="text-base">{t("wallpaper")}</div>
         <div>
           <Button
             className="mr-1"
@@ -195,7 +197,7 @@ export function WallpaperChats() {
               className="border-gray-200 bg-white shadow !ring-gray-400"
               onChange={({ target }) => setSearchText(target.value)}
               value={searchText}
-              placeholder="Search your chat here..."
+              placeholder={t("search-text-placeholder")}
             />
           </motion.div>
         )}
@@ -207,7 +209,7 @@ export function WallpaperChats() {
           <span className="mr-3">
             <BadgeInfoIcon />
           </span>
-          Sign in with your account to see your history
+          {t("signup-to-see-history")}
         </div>
       ) : isLoading ? (
         <SidebarMenu>
@@ -219,7 +221,7 @@ export function WallpaperChats() {
         <>
           {!chats.length ? (
             <div className="px-2 pt-4 text-center text-xs text-slate-500">
-              Create your wallpaper now
+              {t("create-your-wallpaper")}
             </div>
           ) : (
             chats.map((chat) => (
@@ -233,7 +235,7 @@ export function WallpaperChats() {
                     <Skeleton className="mb-4 h-[24px] w-full rounded-full last:mb-0" />
                   </div>
                 ) : chat.id === edittedID ? (
-                  <div className="px-2">
+                  <div className="mb-1 px-2">
                     <Input
                       className="bg-white text-sm"
                       id={chat.id}
@@ -250,7 +252,7 @@ export function WallpaperChats() {
                       href={`/c/${chat.id}`}
                       onClick={() => isMobile && ctx.toggleSidebar()}
                     >
-                      <span>{chat.title || "No name for chat"}</span>
+                      <span>{chat.title || t("no-name-chat")}</span>
                     </Link>
                   </SidebarMenuButton>
                 )}
@@ -275,7 +277,7 @@ export function WallpaperChats() {
                         }}
                       >
                         <Edit className="text-muted-foreground" />
-                        <span>Rename</span>
+                        <span>{t("rename-chat")}</span>
                       </DropdownMenuItem>
                       {/* TODO: add delete chat feature */}
                       {/* <DropdownMenuSeparator />

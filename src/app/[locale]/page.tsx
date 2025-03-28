@@ -11,8 +11,9 @@ import GalleryPreview from "./(landing-page)/GalleryPreview";
 import HeroSection from "./(landing-page)/HeroSection";
 import PricingSection from "./(landing-page)/PricingSection";
 
-import { auth } from "~/server/auth";
 import { Link } from "~/i18n/navigation";
+import { getMyTranslation } from "~/i18n/translation-server";
+import { auth } from "~/server/auth";
 
 /**
  * The homepage of the application.
@@ -24,6 +25,7 @@ import { Link } from "~/i18n/navigation";
  */
 export default async function Home() {
   const session = await auth();
+  const { t } = await getMyTranslation("common");
 
   if (session?.user.id) {
     redirect("/c");
@@ -122,7 +124,8 @@ export default async function Home() {
               <Link href="/auth">
                 <Button className="bg-primary text-white hover:bg-primary/90">
                   <User />
-                  Login
+
+                  {t("button.login")}
                 </Button>
               </Link>
             </div>

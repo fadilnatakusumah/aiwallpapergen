@@ -4,7 +4,7 @@ import { Github, Globe, Instagram } from "lucide-react";
 import Image from "next/image";
 
 import { Button } from "~/components/ui/button";
-import useMyTranslation from "~/hooks/translation";
+import useMyTranslation from "~/i18n/translation-client";
 import { Link } from "~/i18n/navigation";
 
 function Footer() {

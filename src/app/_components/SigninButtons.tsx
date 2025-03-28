@@ -8,13 +8,15 @@ import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
-
+import useMyTranslation from "~/i18n/translation-client";
 import { event } from "~/lib/gtag";
 
 function SigninButtons() {
   const [isSignin, setIsSignin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [signinType, setSigninType] = useState("");
+  const { t } = useMyTranslation("common");
+
   async function signingIn(type: "google" | "github") {
     try {
       setIsLoading(true);
@@ -35,8 +37,12 @@ function SigninButtons() {
   return (
     <div className="relative mx-auto mt-4 max-w-lg rounded-lg border bg-white p-4">
       <div className="mb-3">
-        {isSignin ? "Sign in" : "Sign up"} with your <b>Google</b> or{" "}
-        <b>Github</b> account
+        {t.rich(
+          isSignin ? "signin-with-your-account" : "signup-with-your-account",
+          {
+            strong: (chunks) => <strong>{chunks}</strong>,
+          },
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <Button
@@ -53,7 +59,8 @@ function SigninButtons() {
           {isLoading && signinType === "google" && (
             <Loader2 className="animate-spin" />
           )}
-          <SiGoogle /> {isSignin ? "Login in" : "Sign up"} with Google
+          <SiGoogle />{" "}
+          {t(isSignin ? "signin-with-google" : "signup-with-google")}
         </Button>
         <Button
           disabled={isLoading}
@@ -69,28 +76,33 @@ function SigninButtons() {
           {isLoading && signinType === "github" && (
             <Loader2 className="animate-spin" />
           )}
-          <SiGithub /> {isSignin ? "Login in" : "Sign up"} with Github
+          <SiGithub />{" "}
+          {t(isSignin ? "signin-with-github" : "signup-with-github")}
         </Button>
       </div>
       <p className="mt-4 text-center text-sm">
-        {!isSignin
-          ? "Already have an account?"
-          : `Haven't got an account yet? Sign up`}{" "}
-        <span
-          onClick={() => setIsSignin(!isSignin)}
-          className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
-        >
-          here
-        </span>
+        {t.rich(isSignin ? "already-have-an-account" : "dont-have-an-account", {
+          here: (chunks: React.ReactNode) => (
+            <span
+              onClick={() => setIsSignin(!isSignin)}
+              className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
+            >
+              {chunks}
+            </span>
+          ),
+        })}
       </p>
       <p className="mt-1 text-center text-sm">
-        Or go back to{" "}
-        <Link
-          href="/"
-          className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
-        >
-          Home
-        </Link>
+        {t.rich("back-to-home", {
+          home: (chunks: React.ReactNode) => (
+            <Link
+              href="/"
+              className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
+            >
+              {chunks}
+            </Link>
+          ),
+        })}
       </p>
     </div>
   );

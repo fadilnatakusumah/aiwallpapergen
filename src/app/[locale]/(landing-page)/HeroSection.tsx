@@ -6,12 +6,13 @@ import MotionWrapper from "~/components/MotionWrapper";
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
 
-import useMyTranslation from "~/hooks/translation";
+import useMyTranslation from "~/i18n/translation-client";
 import { fadeIn, staggerContainer } from "./const";
+import { T, useTranslate } from "@tolgee/react";
 
 function HeroSection() {
   const { t } = useMyTranslation("landing-page.hero-section");
-
+  // const { t: tolgee } = useTranslate();
   return (
     <section className="relative flex min-h-screen items-center justify-center pt-20">
       <HeroBackground />
@@ -38,7 +39,6 @@ function HeroSection() {
                 </>
               ),
             })}
-            {/* AI-Generated Wallpapers <br className="hidden md:block" /> */}
           </MotionWrapper>
 
           <MotionWrapper

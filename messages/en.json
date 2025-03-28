@@ -1,0 +1,108 @@
+{
+  "common": {
+    "already-have-an-account": "Already have an account? Login <here>here</here> ",
+    "back-to-home": "Or go back to <home>Home</home> ",
+    "button": {
+      "login": "Login"
+    },
+    "dont-have-an-account": "Haven't got an account yet? Sign up <here>here</here> ",
+    "sidebar": {
+      "": "Wallpapers",
+      "create-your-wallpaper": "Create your wallpaper now.",
+      "explore": "Explore",
+      "my-collection": "My Collections",
+      "no-name-chat": "(no name for chat)",
+      "rename-chat": "Rename",
+      "search-text-placeholder": "Search your chat here...",
+      "signup-to-see-history": "Log in with your account to see your history",
+      "wallpaper": "Wallpapers"
+    },
+    "signin-with-github": "Login in with Github\n",
+    "signin-with-google": "Login in with Google\n",
+    "signin-with-your-account": "Sign in with your <strong>Google</strong> or <strong>Github</strong> account.",
+    "signup-with-github": "Sign up with Github",
+    "signup-with-google": "Sign up with Google",
+    "signup-with-your-account": "Sign up with your <strong>Google</strong> or <strong>Github</strong> account.",
+    "user-credits": {
+      "add-credits": "Add Credit",
+      "back-button": "Back",
+      "confirm-button": "Confirm Purchase",
+      "description": "Purchase credits to generate more AI wallpapers.",
+      "title": "Add Credits",
+      "your-credit-amount": "Your Credits <amount></amount>\n"
+    }
+  },
+  "creating-wallpaper": {
+    "be-patient-information": "Since you can generate up to 4 wallpapers at a time, please be patient.",
+    "generate": "Generate",
+    "generate-amount": "Generate Amount",
+    "generating": "Generating",
+    "login-to-generate": "Login To Generate",
+    "preset-styles": "Preset Styles",
+    "prompt": "Prompt",
+    "prompt-placeholder": "Create a neon-lit cyberpunk cityscape at dusk",
+    "your-credit-left": "{amount, plural, one {Your credit #} other {Your credits #}}\n"
+  },
+  "landing-page": {
+    "cta-section": {
+      "description": "Join thousands of users creating stunning AI-generated wallpapers for their devices.",
+      "get-started-now": "Get Started Now!",
+      "title": "Ready to Transform Your Screens?"
+    },
+    "features-section": {
+      "feature-1": {
+        "description": "Our advanced AI models create unique wallpapers based on your preferences and prompts.",
+        "title": "AI-Powered Generation"
+      },
+      "feature-2": {
+        "description": "Adjust colors, styles, and themes to match your personality and device aesthetics.",
+        "title": "Endless Customization"
+      },
+      "feature-3": {
+        "description": "Generate high-resolution wallpapers in seconds, ready to download and use.",
+        "title": "Instant Creation"
+      },
+      "title": "Create Wallpapers Like Never Before"
+    },
+    "footer-section": {
+      "all-rights-reserved": "AI Wallpaper Gen. All rights reserved.",
+      "features": "Features",
+      "gallery": "Gallery",
+      "pricing": "Pricing"
+    },
+    "gallery-showcase-section": {
+      "title": "Gallery Showcase",
+      "view-full-gallery": "View Full Gallery"
+    },
+    "hero-section": {
+      "description": "Create stunning, unique wallpapers powered by AI. Personalize your devices with art that's generated just for you.",
+      "generate": "Generate Wallpaper",
+      "greeting": "AI-Generated Wallpapers <colored-text>That Inspire</colored-text>"
+    },
+    "pricing-section": {
+      "description": "Select the perfect plan for your wallpaper needs, from casual use to professional creation.",
+      "pricing-free": {
+        "button-text": "Get Started!",
+        "description": "Perfect for casual users:",
+        "feature-1": "15 credits after first time registration",
+        "feature-2": "Standard resolution",
+        "feature-3": "Basic customization",
+        "feature-4": "No Ads",
+        "title": "Free"
+      },
+      "pricing-premium": {
+        "button-text": "Subscribe Now",
+        "description": "For wallpaper enthusiasts",
+        "period": "per month",
+        "title": "Premium"
+      },
+      "pricing-unlimited": {
+        "button-text": "Go Unlimited",
+        "description": "For professionals & creators",
+        "period": "per month",
+        "title": "Unlimited"
+      },
+      "title": "Choose Your Plan"
+    }
+  }
+}

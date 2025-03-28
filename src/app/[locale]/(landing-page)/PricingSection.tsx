@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import PricingCard from "~/components/pricing-card";
 
 import { fadeIn, staggerContainer } from "./const";
-import useMyTranslation from "~/hooks/translation";
+import useMyTranslation from "~/i18n/translation-client";
 
 function PricingSection() {
   const { t } = useMyTranslation("landing-page.pricing-section");

@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
 
 import { fadeIn, staggerContainer } from "./const";
-import useMyTranslation from "~/hooks/translation";
+import useMyTranslation from "~/i18n/translation-client";
 
 const wallpapersDesktop = [
   { id: 1, src: "/images/gallery/1.png", alt: "Wallpaper 1" },

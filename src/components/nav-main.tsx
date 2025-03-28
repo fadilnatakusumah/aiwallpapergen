@@ -10,9 +10,11 @@ import {
   useSidebar,
 } from "~/components/ui/sidebar";
 import { Link } from "~/i18n/navigation";
+import useMyTranslation from "~/i18n/translation-client";
 
 export function NavMain() {
   const ctx = useSidebar();
+  const { t } = useMyTranslation("common.sidebar");
 
   return (
     <SidebarGroup>
@@ -24,7 +26,7 @@ export function NavMain() {
           >
             <SidebarMenuButton>
               <Telescope />
-              <span>Explore</span>
+              <span>{t("explore")}</span>
             </SidebarMenuButton>
           </Link>
           <Link
@@ -33,7 +35,7 @@ export function NavMain() {
           >
             <SidebarMenuButton>
               <LibraryBig />
-              <span>My Collections</span>
+              <span>{t("my-collection")}</span>
             </SidebarMenuButton>
           </Link>
           {/* TODO: Add favorites feature */}

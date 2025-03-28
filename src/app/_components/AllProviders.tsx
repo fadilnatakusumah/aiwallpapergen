@@ -6,9 +6,6 @@ import { Toaster } from "~/components/ui/sonner";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-import { NextIntlClientProvider } from "next-intl";
-import CustomTolgeeProvider from "~/components/customs/TolgeeProvider";
-
 export default async function AllProviders({
   children,
   withSidebar,
@@ -18,13 +15,11 @@ export default async function AllProviders({
       <TRPCReactProvider>
         <SessionProvider>
           <ProgressBarProvider>
-            <CustomTolgeeProvider>
-              {withSidebar ? (
-                <SidebarProvider>{children}</SidebarProvider>
-              ) : (
-                children
-              )}
-            </CustomTolgeeProvider>
+            {withSidebar ? (
+              <SidebarProvider>{children}</SidebarProvider>
+            ) : (
+              children
+            )}
           </ProgressBarProvider>
         </SessionProvider>
       </TRPCReactProvider>

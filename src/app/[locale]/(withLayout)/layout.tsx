@@ -14,13 +14,14 @@ import AllProviders from "../../_components/AllProviders";
 
 import { auth } from "~/server/auth";
 
-import "~/styles/globals.css";
 import LanguageDropdown from "~/components/LanguageDropdown";
+import { getMyTranslation } from "~/i18n/translation-server";
 
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth();
+  const { t } = await getMyTranslation("common");
 
   return (
     <>
@@ -37,9 +38,10 @@ export default async function RootLayout({
                 </BreadcrumbItem>
                 <BreadcrumbItem className="self-end">
                   <LanguageDropdown />
+                  {/* <Button>Login</Button> */}
                   {!session?.user && (
                     <Link href={"/auth"}>
-                      <Button>Login</Button>
+                      <Button>{t("login")}</Button>
                     </Link>
                   )}
                 </BreadcrumbItem>

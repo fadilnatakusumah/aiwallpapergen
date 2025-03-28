@@ -1,0 +1,108 @@
+{
+  "common": {
+    "already-have-an-account": "Sudah punya akun? Masuk <here>disini</here> ",
+    "back-to-home": "Atau kembali ke <home>Beranda</home> ",
+    "button": {
+      "login": "Masuk"
+    },
+    "dont-have-an-account": "Belum punya akun? Daftar <here>disini</here> ",
+    "sidebar": {
+      "": "Wallpaper",
+      "create-your-wallpaper": "Buat wallpaper kamu sekarang.",
+      "explore": "Jelajahi",
+      "my-collection": "Koleksi Saya",
+      "no-name-chat": "(chat tidak memiliki nama)",
+      "rename-chat": "Ubah nama",
+      "search-text-placeholder": "Cari chat kamu disini...",
+      "signup-to-see-history": "Masuk untuk melihat riwayat pembuatan kamu",
+      "wallpaper": "Wallpaper"
+    },
+    "signin-with-github": "Masuk dengan akun Github",
+    "signin-with-google": "Masuk dengan akun Google",
+    "signin-with-your-account": "Masuk dengan akun <strong>Google</strong> atau <strong>Github</strong>.",
+    "signup-with-github": "Daftar dengan akun Github",
+    "signup-with-google": "Daftar dengan akun Google",
+    "signup-with-your-account": "Daftar dengan akun <strong>Google</strong> atau <strong>Github</strong>.",
+    "user-credits": {
+      "add-credits": "Tambah Kredit",
+      "back-button": "Kembali",
+      "confirm-button": "Konfirmasi Pembelian",
+      "description": "Beli kredit untuk membuat lebih banyak wallpaper AI.",
+      "title": "Tambah Kredit",
+      "your-credit-amount": "Kredit Kamu <amount></amount>"
+    }
+  },
+  "creating-wallpaper": {
+    "be-patient-information": "Karena Anda dapat membuat hingga 4 wallpaper sekaligus, harap bersabar.",
+    "generate": "Buat",
+    "generate-amount": "Jumlah Pembuatan",
+    "generating": "Sedang Membuat",
+    "login-to-generate": "Masuk Untuk Membuat",
+    "preset-styles": "Opsi Preset",
+    "prompt": "Prompt",
+    "prompt-placeholder": "Buat pemandangan kota cyberpunk dengan cahaya neon saat senja.",
+    "your-credit-left": "{amount, plural, one {Kreditmu #} other {Kreditmu #}}"
+  },
+  "landing-page": {
+    "cta-section": {
+      "description": "Bergabunglah dengan ribuan pengguna yang membuat wallpaper menakjubkan dengan AI untuk perangkat mereka.",
+      "get-started-now": "Mulai Sekarang!",
+      "title": "Siap Mengubah Tampilan Layar Anda?"
+    },
+    "features-section": {
+      "feature-1": {
+        "description": "Model AI canggih kami menciptakan wallpaper unik berdasarkan preferensi dan prompt Anda.",
+        "title": "Generasi Berbasis AI"
+      },
+      "feature-2": {
+        "description": "Sesuaikan warna, gaya, dan tema agar sesuai dengan kepribadian serta estetika perangkat Anda.",
+        "title": "Kustomisasi Tanpa Batas"
+      },
+      "feature-3": {
+        "description": "Hasilkan wallpaper beresolusi tinggi dalam hitungan detik, siap diunduh dan digunakan.",
+        "title": "Pembuatan Instan"
+      },
+      "title": "Buat Wallpaper dengan Cara yang Belum Pernah Ada Sebelumnya"
+    },
+    "footer-section": {
+      "all-rights-reserved": "AI Wallpaper Gen. Semua hak cipta dilindungi undang-undang.",
+      "features": "Fitur",
+      "gallery": "Galeri",
+      "pricing": "Harga"
+    },
+    "gallery-showcase-section": {
+      "title": "Pameran Galeri",
+      "view-full-gallery": "Lihat Galeri Lengkap"
+    },
+    "hero-section": {
+      "description": "Ciptakan wallpaper menakjubkan dan unik dengan teknologi AI. Personalisasi perangkat Anda dengan karya seni yang dibuat khusus untuk Anda.",
+      "generate": "Buat Wallpaper",
+      "greeting": "Wallpaper AI yang <colored-text>Menginspirasi</colored-text>"
+    },
+    "pricing-section": {
+      "description": "Pilih paket yang tepat untuk kebutuhan wallpaper Anda, mulai dari penggunaan santai hingga pembuatan profesional.",
+      "pricing-free": {
+        "button-text": "Mulai Sekarang!",
+        "description": "Cocok untuk pengguna santai:",
+        "feature-1": "15 kredit setelah pendaftaran pertama",
+        "feature-2": "Resolusi standar",
+        "feature-3": "Kustomisasi dasar",
+        "feature-4": "Tanpa iklan",
+        "title": "Gratis"
+      },
+      "pricing-premium": {
+        "button-text": "Berlangganan Sekarang",
+        "description": "Untuk para penggemar wallpaper",
+        "period": "per bulan",
+        "title": "Premium"
+      },
+      "pricing-unlimited": {
+        "button-text": "Akses Tanpa Batas",
+        "description": "Untuk profesional & kreator",
+        "period": "per bulan",
+        "title": "Unlimited"
+      },
+      "title": "Pilih Paket Anda"
+    }
+  }
+}

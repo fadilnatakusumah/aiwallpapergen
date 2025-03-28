@@ -20,6 +20,7 @@ import { SpinnerGenerateWallpaper } from "./Spinners";
 
 import { SUGGESTION_TYPE_URL, WALLPAPERS_TYPE } from "~/data/prompt";
 import { useInfinitePrompt } from "~/hooks/prompt";
+import useMyTranslation from "~/i18n/translation-client";
 import { event } from "~/lib/gtag";
 import { api } from "~/trpc/react";
 
@@ -36,6 +37,7 @@ export default function CreateWallpaper() {
   });
   const session = useSession();
   const router = useRouter();
+  const { t } = useMyTranslation("creating-wallpaper");
 
   const [wallpaperType, setWallpaperType] = useState<WALLPAPERS_TYPE>();
   const [isShowPreview, setShowPreview] = useState(false);
@@ -114,10 +116,10 @@ export default function CreateWallpaper() {
     return (
       <form onSubmit={(evt) => evt.preventDefault()}>
         <div className="rounded-lg bg-slate-100 p-4">
-          <div className="mb-1 font-semibold">Prompt</div>
+          <div className="mb-1 font-semibold">{t("prompt")}</div>
           <Textarea
             className="h-12 min-h-24 w-full bg-white pe-9"
-            placeholder="Create a neon-lit cyberpunk cityscape at dusk"
+            placeholder={t("prompt-placeholder")}
             value={form.prompt}
             disabled={isDisabled}
             onChange={({ target }) =>
@@ -133,14 +135,13 @@ export default function CreateWallpaper() {
 
         <div className="mt-4 rounded-lg bg-slate-100 p-4">
           <div className="mb-1">
-            <span className="font-semibold">Preset Styles</span>
+            <span className="font-semibold">{t("preset-styles")}</span>
             <span className="text-xs">
               {!!wallpaperType && ` (${wallpaperType})`}
             </span>
           </div>
           <ScrollArea>
             <div className="flex h-full min-h-28 flex-nowrap gap-6 overflow-hidden pb-4">
-              {/* <div>{JSON.stringify({ wallpaperType }, null, 2)}</div> */}
               <div className="relative">
                 {wallpaperType === undefined && (
                   <svg
@@ -276,7 +277,7 @@ export default function CreateWallpaper() {
         </div>
 
         <div className="mt-4 rounded-lg bg-slate-100 p-4">
-          <div className="mb-2 font-semibold">Generate Amount</div>
+          <div className="mb-2 font-semibold">{t("generate-amount")}</div>
           <div className={clsx("flex items-center gap-2")}>
             {[...Array(4)].map((_, idx) => (
               <div
@@ -304,10 +305,7 @@ export default function CreateWallpaper() {
           {isSubmitting && (
             <div className="mb-3 flex gap-2 rounded-lg bg-white p-2">
               <InfoIcon size={32} />
-              <span className="text-sm">
-                Since you can generate up to 4 wallpapers at a time, please be
-                patient.
-              </span>
+              <span className="text-sm">{t("be-patient-information")}</span>
             </div>
           )}
           <Button
@@ -318,16 +316,19 @@ export default function CreateWallpaper() {
           >
             {isSubmitting ? (
               <>
-                <Spinner className="text-white" /> <span>Generating</span>
+                <Spinner className="text-white" />{" "}
+                <span>{t("generating")}</span>
               </>
             ) : !isAuthenticated ? (
-              <span>Login to Generate</span>
+              <span>{t("login-to-generate")}</span>
             ) : (
               <>
-                <span>Generate</span>
+                <span>{t("generate")}</span>
                 <span className="ml-1 flex items-center gap-1 text-xs">
                   <Stars size={8} />
-                  {`${session?.data?.user?.credits! > 1 ? session?.data?.user.credits || 0 + " credits" : session?.data?.user.credits || 0 + " credit"}`}
+                  {t.rich("your-credit-left", {
+                    amount: session?.data?.user?.credits ?? 0,
+                  })}
                 </span>
               </>
             )}

@@ -68,11 +68,8 @@ export default function LanguageDropdown({
   const handleLanguageSelect = (language: Language) => {
     setSelectedLanguage(language);
     setIsOpen(false);
-    // const newPathname = `/${language.code}/${pathname.slice(2)}`;
-
-    // console.log("🚀 ~ handleLanguageSelect ~ newPathname:", newPathname);
     startTransition(() => {
-      router.push(pathname, { locale: language.code });
+      router.replace(pathname, { locale: language.code });
     });
     router.refresh();
     onLanguageChange?.(language);

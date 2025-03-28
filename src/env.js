@@ -30,6 +30,7 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: z.string(),
     UPSTASH_REDIS_REST_TOKEN: z.string(),
     CLOUDFLARE_IMAGE_CDN: z.string(),
+    SERVER_USE_TOLGEE: z.string(),
   },
 
   /**
@@ -42,6 +43,7 @@ export const env = createEnv({
     NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string(),
     NEXT_PUBLIC_TOLGEE_API_KEY: z.string(),
     NEXT_PUBLIC_TOLGEE_API_URL: z.string(),
+    NEXT_PUBLIC_USE_TOLGEE: z.string(),
   },
 
   /**
@@ -66,11 +68,13 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     CLOUDFLARE_IMAGE_CDN: process.env.CLOUDFLARE_IMAGE_CDN,
+    SERVER_USE_TOLGEE: process.env.SERVER_USE_TOLGEE,
 
     // client configuration
     NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
     NEXT_PUBLIC_TOLGEE_API_KEY: process.env.NEXT_PUBLIC_TOLGEE_API_KEY,
     NEXT_PUBLIC_TOLGEE_API_URL: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
+    NEXT_PUBLIC_USE_TOLGEE: process.env.NEXT_PUBLIC_USE_TOLGEE,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

@@ -5,7 +5,7 @@ import { Palette, Sparkles, Zap } from "lucide-react";
 
 import FeatureCard from "~/components/feature-card";
 
-import useMyTranslation from "~/hooks/translation";
+import useMyTranslation from "~/i18n/translation-client";
 import { fadeIn, staggerContainer } from "./const";
 
 function FeaturesSection() {

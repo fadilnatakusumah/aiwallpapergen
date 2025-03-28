@@ -2,11 +2,12 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
 import Script from "next/script";
-
 import { getLocale } from "next-intl/server";
+
 import { env } from "~/env";
+
+import I18NProvider from "~/i18n/I18NProvider";
 
 // app/layout.tsx
 export const metadata: Metadata = {
@@ -53,6 +54,7 @@ async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
   const locale = await getLocale();
 
@@ -78,9 +80,7 @@ async function RootLayout({
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
       </head>
       <body>
-        <NextIntlClientProvider locale={locale}>
-          {children}
-        </NextIntlClientProvider>
+        <I18NProvider>{children}</I18NProvider>
       </body>
     </html>
   );

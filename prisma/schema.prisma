@@ -55,7 +55,7 @@ model User {
     email           String?   @unique
     email_verified  DateTime?
     profile_picture String?
-    credits         Int       @default(5)
+    credits         Int       @default(10)
     accounts        Account[]
     sessions        Session[]
     created_at      DateTime  @default(now())

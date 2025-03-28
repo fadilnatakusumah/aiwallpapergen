@@ -1,8 +1,8 @@
 import { FormatIcu } from "@tolgee/format-icu";
-import { BackendFetch, DevTools, Tolgee, TolgeeOptions } from "@tolgee/web";
+import { DevTools, Tolgee, type TolgeeOptions } from "@tolgee/web";
 
-import enLocale from "~/../messages/en.json";
-import idLocale from "~/../messages/id.json";
+import enLocale from "~/../messages/en.json" assert { type: "json" };
+import idLocale from "~/../messages/id.json" assert { type: "json" };
 
 import { env } from "~/env";
 
@@ -24,7 +24,7 @@ export const TolgeeBase = () =>
   Tolgee()
     .use(DevTools())
     .use(FormatIcu())
-    .use(BackendFetch())
+    // .use(BackendFetch())
     // .use(FormatSimple())
     // .useI18nReact() // Optional: if you want integration with React’s context
     .updateDefaults(defaultTolgeeOptions);

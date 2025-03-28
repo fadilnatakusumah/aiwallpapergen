@@ -1,12 +1,20 @@
-export function fsStatus() {
-  if (!document || window === undefined) return -1;
+interface DocumentWithFullscreen extends Document {
+  mozFullScreenElement?: Element | null;
+  webkitFullscreenElement?: Element | null;
+  msFullscreenElement?: Element | null;
+}
+
+export function fsStatus(): number {
+  if (typeof document === "undefined" || typeof window === "undefined")
+    return -1;
+
+  const doc = document as DocumentWithFullscreen;
 
   const isFullScreen =
-    document?.fullscreenElement ??
-    (document as unknown as any).mozFullScreenElement ??
-    (document as unknown as any).webkitFullScreenElement ??
-    (document as unknown as any).msFullScreenElement;
+    doc.fullscreenElement ??
+    doc.mozFullScreenElement ??
+    doc.webkitFullscreenElement ??
+    doc.msFullscreenElement;
 
-  if (isFullScreen) return 1;
-  else return -1;
+  return isFullScreen ? 1 : -1;
 }

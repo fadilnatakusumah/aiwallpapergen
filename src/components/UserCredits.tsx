@@ -80,12 +80,12 @@ function UserCredits() {
   const [showModal, setShowModal] = useState(false);
   const { t } = useMyTranslation("common.user-credits");
   const handleOpenModal = () => setShowModal(true);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [step, setStep] = useState<"input" | "confirm" | "success" | "error">(
     "input",
   );
-  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
-  const [customAmount, setCustomAmount] = useState("");
+  const [selectedPackage] = useState<string | null>(null);
+  const [customAmount] = useState("");
 
   // Initialize form
   // const form = useForm<z.infer<typeof formSchema>>({

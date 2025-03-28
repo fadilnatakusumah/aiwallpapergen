@@ -14,7 +14,12 @@ import PricingSection from "./(landing-page)/PricingSection";
 import { Link } from "~/i18n/navigation";
 import { getMyTranslation } from "~/i18n/translation-server";
 import { auth } from "~/server/auth";
+import { routing } from "~/i18n/routing";
+import { setRequestLocale } from "next-intl/server";
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 /**
  * The homepage of the application.
  *
@@ -23,7 +28,16 @@ import { auth } from "~/server/auth";
  *
  * @returns The JSX element for the homepage.
  */
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  // Enable static rendering
+  setRequestLocale(locale);
+
   const session = await auth();
   const { t } = await getMyTranslation("common");
 

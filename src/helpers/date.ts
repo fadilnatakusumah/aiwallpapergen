@@ -1,4 +1,4 @@
-import { formatRelative, format } from "date-fns";
+import { formatRelative } from "date-fns";
 import { id } from "date-fns/locale";
 
 export const formatDate = (createdAt: Date) => {

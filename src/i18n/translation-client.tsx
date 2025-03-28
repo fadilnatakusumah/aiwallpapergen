@@ -1,10 +1,176 @@
-// src/hooks/useMyTranslation.ts
+// // src/hooks/useMyTranslation.ts
+// "use client";
+
+// import { useTranslate } from "@tolgee/react";
+// import { Formats, useTranslations } from "next-intl";
+// import { Fragment, type ReactNode } from "react";
+
+// import { env } from "~/env";
+
+// type CombinedOptions<T> = Record<string, T>;
+
+// /**
+//  * A unified translation function interface that supports:
+//  * - t(key, options)
+//  * - t.rich(key, options)
+//  * - t.markup(key, options)
+//  */
+// type TranslateFunction = ((
+//   keyTranslation: string,
+//   options?: Record<string, string | number | Date>,
+//   formats?: Formats,
+// ) => string) & {
+//   rich: (
+//     keyTranslation: string,
+//     options: Record<
+//       string,
+//       string | number | Date | ((chunks: ReactNode) => ReactNode)
+//     >,
+//   ) => ReactNode;
+// };
+// /**
+//  * A custom hook that returns a translation function abstracting between Tolgee and next‑intl.
+//  *
+//  * It chooses the underlying implementation based on the environment variable NEXT_PUBLIC_USE_TOLGEE.
+//  */
+// export default function useMyTranslation(key: string): {
+//   t: TranslateFunction;
+// } {
+//   const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE === "true";
+//   const { t: tTolgee } = useTranslate();
+//   const tNextIntl = useTranslations(key);
+
+//   // Start with either tTolgee or tNextIntl, casting to our TranslateFunction type.
+//   // let t: TranslateFunction = (
+//   //   isUseTolgee ? tTolgee : tNextIntl
+//   // ) as TranslateFunction;
+
+//   // if (isUseTolgee) {
+//   //   // Override `t` for Tolgee mode.
+//   //   t = ((keyTranslation: string) =>
+//   //     tTolgee(`${key}.${keyTranslation}`)) as TranslateFunction;
+
+//   //   t.rich = (
+//   //     keyTranslation: string,
+//   //     options: Record<
+//   //       string,
+//   //       string | number | Date | ((chunks: ReactNode) => ReactNode)
+//   //     >,
+//   //   ): ReactNode => {
+//   //     if (options === undefined) {
+//   //       return tTolgee(`${key}.${keyTranslation}`);
+//   //     }
+//   //     return tTolgee(
+//   //       `${key}.${keyTranslation}`,
+//   //       "", // or adjust if needed
+//   //       options,
+//   //     );
+//   //   };
+//   // }
+
+//   // Start with either Tolgee or next-intl translation function.
+//   let t: TranslateFunction = (
+//     isUseTolgee ? tTolgee : tNextIntl
+//   ) as TranslateFunction;
+
+//   if (isUseTolgee) {
+//     // Override t for Tolgee mode.
+//     t = ((keyTranslation: string) =>
+//       tTolgee(`${key}.${keyTranslation}`)) as TranslateFunction;
+
+//     t.rich = (
+//       keyTranslation: string,
+//       options: Record<
+//         string,
+//         string | number | Date | ((chunks: ReactNode) => ReactNode)
+//       >,
+//     ): ReactNode => {
+//       // If options is falsy, simply call tTolgee.
+//       if (!options) {
+//         return tTolgee(`${key}.${keyTranslation}`);
+//       }
+
+//       // Build a new combinedOptions object by transforming function values.
+//       const combinedOptions: CombinedOptions<ReactNode> = {};
+//       for (const optionKey of Object.keys(options)) {
+//         const optionValue = options[optionKey];
+//         if (typeof optionValue === "function") {
+//           combinedOptions[optionKey] = optionValue(
+//             <Fragment>{`${optionKey}.${keyTranslation}`}</Fragment>,
+//           );
+//         } else {
+//           combinedOptions[optionKey] = optionValue;
+//         }
+//       }
+
+//       // Here, we assume tTolgee expects the third argument to be CombinedOptions<ReactNode>
+//       return tTolgee(
+//         `${key}.${keyTranslation}`,
+//         // Using a fallback string if options is not a string.
+//         typeof options === "string" ? options : `${key}.${keyTranslation}`,
+//         combinedOptions,
+//       );
+//     };
+
+//     t.markup = (
+//       keyTranslation: string,
+//       options?: Record<string, string | number | Date>,
+//     ): ReactNode => tTolgee(`${key}.${keyTranslation}`, options);
+//   }
+
+//   return { t };
+
+//   // const t: unknown = isUseTolgee ? tTolgee : tNextIntl;
+
+//   // if (isUseTolgee) {
+//   //   (t as TranslateFunction).rich = (
+//   //     keyTranslation: string,
+//   //     options: {
+//   //       [key: string]: string | number | Date;
+//   //     },
+//   //   ) => {
+//   //     if (options === undefined) return tTolgee(`${key}.${keyTranslation}`);
+
+//   //     return tTolgee(`${key}.${keyTranslation}`, "", options);
+//   //   };
+//   // }
+
+//   // if (useTolgeeMode) {
+//   //   t = (keyTranslation: string) => tTolgee(`${key}.${keyTranslation}`);
+//   //   t.rich = (
+//   //     keyTranslation: string,
+//   //     options?: Record<string, (el: ReactNode) => ReactNode>,
+//   //   ) => {
+//   //     if (options === undefined) return tTolgee(`${key}.${keyTranslation}`);
+
+//   //     return tTolgee(
+//   //       `${key}.${keyTranslation}`,
+//   //       typeof options === "string" ? options : `${key}.${keyTranslation}`,
+//   //       ((): CombinedOptions<ReactNode> => {
+//   //         const keysObjects: Record<string, any> = {};
+//   //         Object.keys(options!).forEach((key) => {
+//   //           keysObjects[key] = options![key] ?? (
+//   //             <Fragment
+//   //               key={`${key}.${keyTranslation}`}
+//   //             >{`${key}.${keyTranslation}`}</Fragment>
+//   //           );
+//   //         });
+//   //         return keysObjects;
+//   //       })() as CombinedOptions<any>,
+//   //     );
+//   //   };
+//   //   t.markup = (keyTranslation: string, options?: any) =>
+//   //     tTolgee(`${key}.${keyTranslation}`, options);
+//   // }
+
+//   return { t } as { t: TranslateFunction };
+// }
+
 "use client";
 
-import { CombinedOptions, T, useTranslate } from "@tolgee/react";
-import { useTranslations } from "next-intl";
-import { Fragment, ReactNode } from "react";
-
+import { type CombinedOptions, type DefaultParamType, useTranslate } from "@tolgee/react";
+import { Formats, useTranslations } from "next-intl";
+import { type ReactNode } from "react";
 import { env } from "~/env";
 
 /**
@@ -13,55 +179,86 @@ import { env } from "~/env";
  * - t.rich(key, options)
  * - t.markup(key, options)
  */
-export type TranslationFunction = {
-  t: {
-    (key: string, options?: any): string;
-    rich(
-      key: string,
-      options?: Record<string, ReactNode | ((el: ReactNode) => ReactNode)>,
-    ): string;
-    markup(key: string, options?: any): string;
-  };
+type TranslateFunction = ((
+  keyTranslation: string,
+  options?: Record<string, string | number | Date>,
+  formats?: Formats,
+) => string) & {
+  rich: (
+    keyTranslation: string,
+    options: Record<
+      string,
+      string | number | Date | ((chunks: ReactNode) => ReactNode)
+    >,
+  ) => ReactNode;
+  markup?: (
+    keyTranslation: string,
+    options?: Record<string, string | number | Date>,
+  ) => ReactNode;
 };
 
-/**
- * A custom hook that returns a translation function abstracting between Tolgee and next‑intl.
- *
- * It chooses the underlying implementation based on the environment variable NEXT_PUBLIC_USE_TOLGEE.
- */
-export default function useMyTranslation(key: string): TranslationFunction {
-  const useTolgeeMode = env.NEXT_PUBLIC_USE_TOLGEE === "true";
+export default function useMyTranslation(key: string): {
+  t: TranslateFunction;
+} {
+  const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE === "true";
   const { t: tTolgee } = useTranslate();
-  // const tNextIntl = useTolgeeMode ? tTolgee : useTranslations(key);
-  let t: unknown | any = useTolgeeMode ? tTolgee : useTranslations(key);
+  const tNextIntl = useTranslations(key);
 
-  if (useTolgeeMode) {
-    t = (keyTranslation: string) => tTolgee(`${key}.${keyTranslation}`);
+  // Start with either Tolgee or next‑intl translation function.
+  let t: TranslateFunction = (
+    isUseTolgee ? tTolgee : tNextIntl
+  ) as TranslateFunction;
+
+  if (isUseTolgee) {
+    // Override t for Tolgee mode.
+    t = ((keyTranslation: string) =>
+      tTolgee(`${key}.${keyTranslation}`)) as TranslateFunction;
+
     t.rich = (
       keyTranslation: string,
-      options?: Record<string, (el: ReactNode) => ReactNode>,
-    ) => {
-      if (options === undefined) return tTolgee(`${key}.${keyTranslation}`);
+      options: Record<
+        string,
+        string | number | Date | ((chunks: ReactNode) => ReactNode)
+      >,
+    ): ReactNode => {
+      if (!options) {
+        return tTolgee(`${key}.${keyTranslation}`);
+      }
 
-      return tTolgee(
-        `${key}.${keyTranslation}`,
-        typeof options === "string" ? options : `${key}.${keyTranslation}`,
-        ((): CombinedOptions<ReactNode> => {
-          const keysObjects: Record<string, any> = {};
-          Object.keys(options!).forEach((key) => {
-            keysObjects[key] = options![key] ?? (
-              <Fragment
-                key={`${key}.${keyTranslation}`}
-              >{`${key}.${keyTranslation}`}</Fragment>
-            );
-          });
-          return keysObjects;
-        })() as CombinedOptions<any>,
-      );
+      // Build a new combinedOptions object using Tolgee's CombinedOptions type.
+      const combinedOptions: CombinedOptions<DefaultParamType> =
+        {} as CombinedOptions<DefaultParamType>;
+
+      for (const optionKey of Object.keys(options)) {
+        const value = options[optionKey];
+        combinedOptions[optionKey] = value as DefaultParamType;
+      }
+
+      // return tTolgee(
+      //   `${key}.${keyTranslation}`,
+      //   typeof options === "string" ? options : `${key}.${keyTranslation}`,
+      //   ((): CombinedOptions<ReactNode> => {
+      //     const keysObjects: Record<string, any> = {};
+      //     Object.keys(options!).forEach((key) => {
+      //       keysObjects[key] = options![key] ?? (
+      //         <Fragment
+      //           key={`${key}.${keyTranslation}`}
+      //         >{`${key}.${keyTranslation}`}</Fragment>
+      //       );
+      //     });
+      //     return keysObjects;
+      //   })() as CombinedOptions<any>,
+      // );
+
+      // Pass the transformed options to tTolgee.
+      return tTolgee(`${key}.${keyTranslation}`, "", combinedOptions);
     };
-    t.markup = (keyTranslation: string, options?: any) =>
-      tTolgee(`${key}.${keyTranslation}`, options);
+
+    t.markup = (
+      keyTranslation: string,
+      options?: Record<string, string | number | Date>,
+    ): ReactNode => tTolgee(`${key}.${keyTranslation}`, options);
   }
 
-  return { t } as TranslationFunction;
+  return { t };
 }

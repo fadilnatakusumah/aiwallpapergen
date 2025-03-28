@@ -3,7 +3,7 @@
 import "~/styles/globals.css";
 
 import { Home } from "lucide-react";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 
 import MotionWrapper from "~/components/MotionWrapper";
 import { Button } from "~/components/ui/button";
@@ -80,12 +80,12 @@ export default async function NotFound() {
   // }, [isRepairing]);
 
   // Generate glitch positions for the animation
-  const glitchPositions = Array.from({ length: 15 }, () => ({
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    width: 5 + Math.random() * 20,
-    height: 5 + Math.random() * 20,
-  }));
+  // const glitchPositions = Array.from({ length: 15 }, () => ({
+  //   x: Math.random() * 100,
+  //   y: Math.random() * 100,
+  //   width: 5 + Math.random() * 20,
+  //   height: 5 + Math.random() * 20,
+  // }));
 
   return (
     <>
@@ -110,7 +110,7 @@ export default async function NotFound() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            The page you're looking is not available
+            The page you`re looking is not available
           </MotionWrapper>
 
           {/* Corrupted wallpaper visualization */}
@@ -221,7 +221,7 @@ export default async function NotFound() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            The page you're looking for seems to be corrupted or doesn't exist.
+            The page you`re looking for seems to be corrupted or doesn`t exist.
             You can return home
           </MotionWrapper>
 

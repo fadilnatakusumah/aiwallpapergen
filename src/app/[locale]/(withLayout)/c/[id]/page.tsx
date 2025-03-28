@@ -1,4 +1,4 @@
-import CreateWallpaper from "~/components/customs/CreatingWallpaper";
+import CreateWallpaper from "~/components/customs/CreateWallpaper";
 
 export default function Chat() {
   return (

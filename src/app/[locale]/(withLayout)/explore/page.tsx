@@ -1,6 +1,6 @@
 "use client";
 
-import { Prompt, User, Wallpaper } from "@prisma/client";
+import { type Prompt, type User, type Wallpaper } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -55,7 +55,7 @@ function ExplorePage() {
     return data?.pages.flatMap((page) =>
       page.wallpapers.flatMap((wallpaper) => wallpaper),
     );
-  }, [data?.pages.length, data?.pages[0]?.wallpapers.length]);
+  }, [data?.pages]);
 
   const isAuthenticated = session.data?.user.id;
 
@@ -71,7 +71,7 @@ function ExplorePage() {
                 Sign in first
               </h1>
               <p className="mt-2 text-sm text-slate-700">
-                You have to Sign in first before you can see other people's
+                You have to Sign in first before you can see other people`s
                 wallpapers.
               </p>
 

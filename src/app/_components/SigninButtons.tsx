@@ -47,13 +47,13 @@ function SigninButtons() {
       <div className="flex flex-col gap-2">
         <Button
           disabled={isLoading}
-          onClick={() => {
+          onClick={async () => {
             event({
               action: isSignin ? "signin_google" : "signup_google",
               category: "engagement",
               label: `User ${isSignin ? "signing in with Google" : "signing up with Google"}`,
             });
-            signingIn("google");
+            await signingIn("google").catch(console.error);
           }}
         >
           {isLoading && signinType === "google" && (
@@ -64,13 +64,13 @@ function SigninButtons() {
         </Button>
         <Button
           disabled={isLoading}
-          onClick={() => {
+          onClick={async () => {
             event({
               action: isSignin ? "signin_github" : "signup_github",
               category: "engagement",
               label: `User ${isSignin ? "signing in with Github" : "signing up with Github"}`,
             });
-            signingIn("github");
+            await signingIn("github").catch(console.error);
           }}
         >
           {isLoading && signinType === "github" && (

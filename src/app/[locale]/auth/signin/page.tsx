@@ -4,7 +4,7 @@
 import { motion } from "framer-motion";
 import { Home } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";

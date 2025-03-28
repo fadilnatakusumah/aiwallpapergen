@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import React from "react";
+import { env } from "~/env";
 
 import { TolgeeNextProvider } from "~/tolgee/client";
 import { getTolgee } from "~/tolgee/server";
@@ -9,15 +10,18 @@ import { ALL_LANGUAGES } from "~/tolgee/shared";
 
 async function I18NProvider({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
+  const isUseTolgee = env.SERVER_USE_TOLGEE === "true";
 
   if (!ALL_LANGUAGES.includes(locale)) {
     notFound();
   }
 
   const tolgee = await getTolgee();
-  const records = await tolgee.loadRequired().catch(() => {
-    return [];
-  });
+  const records = isUseTolgee
+    ? await tolgee.loadRequired().catch(() => {
+        return [];
+      })
+    : [];
 
   return (
     <NextIntlClientProvider locale={locale}>

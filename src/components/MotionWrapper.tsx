@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, MotionProps } from "framer-motion";
+import { motion, type MotionProps } from "framer-motion";
 import { forwardRef } from "react";
 
 type MotionTags = keyof HTMLElementTagNameMap; // Restrict to valid HTML tags

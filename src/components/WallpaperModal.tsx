@@ -1,13 +1,13 @@
 "use client";
 
-import { Prompt, User, Wallpaper } from "@prisma/client";
+import type { Prompt, User, Wallpaper } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
-import { Download, Heart, Share2, X } from "lucide-react";
+import { Download, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect } from "react";
 
-import { Button } from "./ui/button";
 import { downloadImage } from "~/helpers/file";
+import { Button } from "./ui/button";
 
 interface WallpaperModalProps {
   isOpen: boolean;

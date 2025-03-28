@@ -1,6 +1,6 @@
 "use client";
 
-import { Chat } from "@prisma/client";
+import { type Chat } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BadgeInfoIcon,
@@ -12,7 +12,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import {
-  RefObject,
+  type RefObject,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -109,8 +109,8 @@ export function WallpaperChats() {
           name: edittedValue,
         },
         {
-          onSuccess: async () => {
-            refetch();
+          onSuccess: () => {
+            refetch().catch(console.error);
             setLoadingUpdate("");
           },
         },
@@ -143,23 +143,38 @@ export function WallpaperChats() {
     if (refSearchInput.current && isShowSearchField) {
       refSearchInput.current.focus();
     }
-  }, [refSearchInput.current, isShowSearchField]);
+  }, [isShowSearchField]);
 
+  // const chats = useMemo(() => {
+  //   return (
+  //     data?.pages
+  //       .flatMap((page) => page.chats.flatMap((chats) => chats))
+  //       .filter(
+  //         (chat) =>
+  //           chat.title.toLowerCase().includes(searchText.toLowerCase()) ||
+  //           chat.wallpapers.some((wallpaper) =>
+  //             wallpaper.prompt.prompt
+  //               .toLowerCase()
+  //               .includes(searchText.toLowerCase()),
+  //           ),
+  //       ) ?? []
+  //   );
+  // }, [data?.pages?.[0]?.chats, searchText]);
+
+  // const pages = data?.pages ?? [];
   const chats = useMemo(() => {
-    return (
-      data?.pages
-        .flatMap((page) => page.chats.flatMap((chats) => chats))
-        .filter(
-          (chat) =>
-            chat.title.toLowerCase().includes(searchText.toLowerCase()) ||
-            chat.wallpapers.some((wallpaper) =>
-              wallpaper.prompt.prompt
-                .toLowerCase()
-                .includes(searchText.toLowerCase()),
-            ),
-        ) ?? []
-    );
-  }, [data?.pages[0]?.chats, searchText]);
+    return data?.pages
+      .flatMap((page) => page.chats.flatMap((chats) => chats))
+      .filter(
+        (chat) =>
+          chat.title.toLowerCase().includes(searchText.toLowerCase()) ||
+          chat.wallpapers.some((wallpaper) =>
+            wallpaper.prompt.prompt
+              .toLowerCase()
+              .includes(searchText.toLowerCase()),
+          ),
+      );
+  }, [data?.pages, searchText]);
 
   return (
     <SidebarGroup className="h-full group-data-[collapsible=icon]:hidden">
@@ -219,7 +234,7 @@ export function WallpaperChats() {
         </SidebarMenu>
       ) : session.status === "authenticated" ? (
         <>
-          {!chats.length ? (
+          {!chats?.length ? (
             <div className="px-2 pt-4 text-center text-xs text-slate-500">
               {t("create-your-wallpaper")}
             </div>

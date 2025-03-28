@@ -31,7 +31,7 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const { data, update } = useSession();
+  const { data } = useSession();
 
   return (
     <SidebarMenu>

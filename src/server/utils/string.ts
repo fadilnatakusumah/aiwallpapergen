@@ -1,4 +1,4 @@
-import { Wallpaper } from "@prisma/client";
+import { type Wallpaper } from "@prisma/client";
 import { env } from "~/env";
 
 export function generateCDNURLWallpaper(wallpaper: Wallpaper) {

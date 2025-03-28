@@ -1,6 +1,6 @@
 "use client";
 
-import { Prompt, User, Wallpaper } from "@prisma/client";
+import { type Prompt, type User, type Wallpaper } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
@@ -14,6 +14,7 @@ import { WallpaperModal } from "~/components/WallpaperModal";
 import { Link } from "~/i18n/navigation";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
+import useMyTranslation from "~/i18n/translation-client";
 
 function MyCollectionPage() {
   const session = useSession();
@@ -26,6 +27,7 @@ function MyCollectionPage() {
     fetchNextPage,
     // refetch,
   } = useInfiniteMyWallpapers();
+  const { t } = useMyTranslation("collection");
 
   type WallpaperState = Wallpaper & { prompt: Prompt; user: User };
 
@@ -56,7 +58,7 @@ function MyCollectionPage() {
     return data?.pages.flatMap((page) =>
       page.wallpapers.flatMap((wallpaper) => wallpaper),
     );
-  }, [data?.pages.length, data?.pages[0]?.wallpapers.length]);
+  }, [data?.pages]);
 
   const isAuthenticated = session.data?.user.id;
 
@@ -69,13 +71,15 @@ function MyCollectionPage() {
           ) : (
             <div className="max-w-2xl px-4 text-center">
               <h1 className="text-2xl font-semibold text-slate-800">
-                No Wallpapers Yet
+                {t("empty.title")}
+                {/* No Wallpapers Yet */}
               </h1>
               <p className="mt-2 text-sm text-slate-700">
-                Start creating stunning AI-generated wallpapers! Simply enter a
+                {t("empty.description")}
+                {/* Start creating stunning AI-generated wallpapers! Simply enter a
                 prompt, and let AI bring your imagination to life. Try something
                 like "A futuristic city glowing under a neon sky" or "A serene
-                mountain landscape at sunrise."
+                mountain landscape at sunrise." */}
               </p>
 
               <Link
@@ -83,9 +87,14 @@ function MyCollectionPage() {
                 className="mt-4 block"
               >
                 <Button>
-                  {isAuthenticated
+                  {t(
+                    isAuthenticated
+                      ? "empty.authenticated"
+                      : "empty.unauthenticated",
+                  )}
+                  {/* {isAuthenticated
                     ? `Create Your First Wallpaper`
-                    : `Sign in to Create Wallpapers`}
+                    : `Sign in to Create Wallpapers`} */}
                 </Button>
               </Link>
             </div>

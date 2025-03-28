@@ -1,6 +1,6 @@
 "use client";
 
-import { CacheInternalRecord, TolgeeProvider } from "@tolgee/react";
+import { type CacheInternalRecord, TolgeeProvider } from "@tolgee/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { TolgeeBase } from "./shared";
@@ -25,7 +25,7 @@ export const TolgeeNextProvider = ({
       router.refresh();
     });
     return () => unsubscribe();
-  }, [TolgeeBase, router]);
+  }, [router]);
 
   return (
     <TolgeeProvider

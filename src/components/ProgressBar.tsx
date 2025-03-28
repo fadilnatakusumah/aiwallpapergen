@@ -1,7 +1,7 @@
 "use client";
 
 import { AppProgressProvider as ProgressProvider } from "@bprogress/next";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 function ProgressBarProvider({ children }: { children: ReactNode }) {
   return (

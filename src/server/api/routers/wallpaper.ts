@@ -1,4 +1,4 @@
-import { Chat } from "@prisma/client";
+import { type Chat } from "@prisma/client";
 import { type inferProcedureOutput, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { WALLPAPERS_PROMPT, WALLPAPERS_TYPE } from "~/data/prompt";
@@ -180,7 +180,7 @@ export const wallpaperRouter = createTRPCRouter({
                 chat_id: chat!.id,
                 chat_title: chat!.title,
                 wallpapers: wallpapers,
-                created_at: chat!.created_at!,
+                created_at: chat!.created_at,
                 prompt: addedPrompt.prompt,
                 user_id: ctx.session.user.id,
               },

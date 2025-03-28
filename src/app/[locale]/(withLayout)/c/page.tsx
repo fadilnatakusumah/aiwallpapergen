@@ -1,5 +1,4 @@
-import CreateWallpaper from "~/components/customs/CreatingWallpaper";
-import { pageview } from "~/lib/gtag";
+import CreateWallpaper from "~/components/customs/CreateWallpaper";
 
 export default function Chat() {
   return (

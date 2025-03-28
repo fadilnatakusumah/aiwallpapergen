@@ -1,6 +1,4 @@
-import React from "react";
 import { BackgroundLines } from "~/components/ui/background-lines";
-import { Cover } from "~/components/ui/cover";
 
 export default function Auth() {
   return (

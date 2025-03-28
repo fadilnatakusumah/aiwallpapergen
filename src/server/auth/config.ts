@@ -74,8 +74,6 @@ export const authConfig = {
     error: "/auth/error",
   },
 
-  
-
   // Using PrismaAdapter to store user data in the database
   adapter: PrismaAdapter(db),
 
@@ -94,10 +92,7 @@ export const authConfig = {
       return token;
     },
 
-    async session({ session, user, token }) {
-      // console.log("🚀 ~ session ~ session:", session);
-      // console.log("🚀 ~ session ~ rest:", rest);
-      // console.log("🚀 ~ session ~ session:", session);
+    async session({ session, user: _user, token }) {
       // Ensure user is defined before accessing user.id
       if (token?.id) {
         session.user.id = token.id as string; // Add user id to the session

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function InfiniteCarousel() {
@@ -53,7 +54,9 @@ export default function InfiniteCarousel() {
               key={`ltr-${wallpaper.id}-${index}`}
               className="w-[300px] flex-shrink-0 px-2"
             >
-              <img
+              <Image
+                height={200}
+                width={160}
                 src={wallpaper.src || "/placeholder.svg"}
                 alt={wallpaper.alt}
                 className="h-[200px] w-full rounded-lg object-cover shadow-md transition-all duration-500 hover:scale-105"
@@ -73,7 +76,9 @@ export default function InfiniteCarousel() {
               key={`rtl-${wallpaper.id}-${index}`}
               className="w-[300px] flex-shrink-0 px-2"
             >
-              <img
+              <Image
+                height={200}
+                width={160}
                 src={wallpaper.src || "/placeholder.svg"}
                 alt={wallpaper.alt}
                 className="h-[200px] w-full rounded-lg object-cover shadow-md transition-all duration-500 hover:scale-105"

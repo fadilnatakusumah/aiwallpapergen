@@ -27,9 +27,10 @@ import { api } from "~/trpc/react";
 
 export default function CreateWallpaper() {
   const params = useParams<{ id: string }>();
-  const { isLoading, data, refetch } = params?.id
-    ? useInfinitePrompt({ id: params.id as string })
-    : {};
+  const { isLoading, data, refetch } = useInfinitePrompt({
+    id: params.id,
+  });
+
   const trpcContext = api.useUtils();
 
   const [form, setForm] = useState({
@@ -52,9 +53,9 @@ export default function CreateWallpaper() {
       setShowModalCreate(false);
       if (params?.id) {
         setForm({ prompt: "", amount: 1 });
-        refetch?.().catch(console.error);
+        await refetch?.().catch(console.error);
       } else {
-        trpcContext.chat.myChats.invalidate();
+        await trpcContext.chat.myChats.invalidate().catch(console.error);
         router.push(`/c/${data.data.chat_id}`);
       }
     },
@@ -78,7 +79,7 @@ export default function CreateWallpaper() {
       category: "content_creation",
       label: "User Created Wallpaper",
       prompt: form.prompt,
-      user_id: session.data?.user.id!, // Include if available
+      user_id: session.data?.user.id ?? "", // Include if available
       count: form.amount, // Number of wallpapers generated
       prompt_length: form.prompt.length, // Length of the prompt (number of characters)
     });
@@ -109,7 +110,7 @@ export default function CreateWallpaper() {
             key: wallpaper.id ?? "",
           })),
         ),
-      ) || []
+      ) ?? []
     );
   }, [data?.pages]);
 

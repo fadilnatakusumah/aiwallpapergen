@@ -16,7 +16,8 @@ import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
 import { ModalDialog } from "../Modal";
-import { SpinnerGenerateWallpaper } from "./Spinners";
+import MotionWrapper from "../MotionWrapper";
+import GeneratingWallpaper from "../ui/GeneratingWallpaper";
 
 import { SUGGESTION_TYPE_URL, WALLPAPERS_TYPE } from "~/data/prompt";
 import { useInfinitePrompt } from "~/hooks/prompt";
@@ -29,7 +30,7 @@ export default function CreateWallpaper() {
   const { isLoading, data, refetch } = params?.id
     ? useInfinitePrompt({ id: params.id as string })
     : {};
-  const trpcContext = api.useContext();
+  const trpcContext = api.useUtils();
 
   const [form, setForm] = useState({
     prompt: "",
@@ -339,7 +340,7 @@ export default function CreateWallpaper() {
   }
 
   return (
-    <div className="relative flex h-full">
+    <div className="relative flex h-full bg-gradient-to-b from-blue-50 to-white">
       <PhotoSlider
         images={promptChats}
         visible={isShowPreview}
@@ -383,9 +384,15 @@ export default function CreateWallpaper() {
               <div ref={messagesEndRef} />
 
               {generateWallpaperAPI.status === "pending" && (
-                <div className="flex justify-center p-4 pb-28 pt-12">
-                  <SpinnerGenerateWallpaper />
-                </div>
+                <MotionWrapper
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 3 }}
+                  className="aspect-video"
+                >
+                  <GeneratingWallpaper />
+                </MotionWrapper>
               )}
 
               {data?.pages.flatMap((prompt) =>
@@ -521,7 +528,7 @@ export default function CreateWallpaper() {
         </div>
       )}
 
-      <div className="sticky top-0 hidden h-fit max-w-96 p-5 lg:block">
+      <div className="sticky top-0 hidden h-fit max-w-96 bg-white p-5 lg:block">
         {createForm()}
       </div>
 

@@ -137,7 +137,7 @@ export default function LanguageDropdown({
                   )}
                   onClick={() => handleLanguageSelect(language)}
                 >
-                  <span>
+                  <span className="whitespace-nowrap">
                     <span className="mr-2 text-base">{language.flag}</span>
                     <span className="flex-grow">{language.name}</span>
                   </span>

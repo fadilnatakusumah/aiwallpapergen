@@ -3,10 +3,10 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { env } from "~/env";
 
 const s3 = new S3Client({
-  region: env.AWS_REGION,
+  region: env.MY_AWS_REGION,
   credentials: {
-    accessKeyId: env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: env.MY_AWS_ACCESS_KEY_ID,
+    secretAccessKey: env.MY_AWS_SECRET_ACCESS_KEY,
   },
 });
 
@@ -17,7 +17,7 @@ export const uploadToS3 = async (
 ) => {
   const key = `wallpapers/${userId}/${Date.now()}.jpg`; // Generate unique filename
   const params = {
-    Bucket: env.AWS_S3_BUCKET,
+    Bucket: env.MY_AWS_S3_BUCKET,
     Key: key,
     Body: imageBuffer,
     ContentType: "image/jpeg",
@@ -27,5 +27,5 @@ export const uploadToS3 = async (
   };
 
   await s3.send(new PutObjectCommand(params));
-  return `https://${env.AWS_S3_BUCKET}.s3.${env.AWS_REGION}.amazonaws.com/${key}`;
+  return `https://${env.MY_AWS_S3_BUCKET}.s3.${env.MY_AWS_REGION}.amazonaws.com/${key}`;
 };

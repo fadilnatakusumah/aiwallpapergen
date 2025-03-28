@@ -73,7 +73,7 @@ function Footer() {
           <div className="flex gap-4">
             <Link
               title="Website | fadilnatakusumah"
-              href="https://ffadilnatakusumah.com"
+              href="https://fadilnatakusumah.com"
               target="_blank"
               aria-label="Website"
             >

@@ -36,7 +36,7 @@ function SigninButtons() {
 
   return (
     <div className="relative mx-auto mt-4 max-w-lg rounded-lg border bg-white p-4">
-      <div className="mb-3">
+      <div className="mb-3 text-center">
         {t.rich(
           isSignin ? "signin-with-your-account" : "signup-with-your-account",
           {
@@ -81,16 +81,19 @@ function SigninButtons() {
         </Button>
       </div>
       <p className="mt-4 text-center text-sm">
-        {t.rich(isSignin ? "already-have-an-account" : "dont-have-an-account", {
-          here: (chunks: React.ReactNode) => (
-            <span
-              onClick={() => setIsSignin(!isSignin)}
-              className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
-            >
-              {chunks}
-            </span>
-          ),
-        })}
+        {t.rich(
+          !isSignin ? "already-have-an-account" : "dont-have-an-account",
+          {
+            here: (chunks: React.ReactNode) => (
+              <span
+                onClick={() => setIsSignin(!isSignin)}
+                className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
+              >
+                {chunks}
+              </span>
+            ),
+          },
+        )}
       </p>
       <p className="mt-1 text-center text-sm">
         {t.rich("back-to-home", {

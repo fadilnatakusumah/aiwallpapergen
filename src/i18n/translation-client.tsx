@@ -170,7 +170,7 @@
 
 import { useTranslate } from "@tolgee/react";
 import { type Formats, useTranslations } from "next-intl";
-import { type ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { env } from "~/env";
 
 /**
@@ -216,26 +216,25 @@ export default function useMyTranslation(key: string): {
 
     t.rich = (keyTranslation: string, options: any): ReactNode => {
       if (!options) {
-        return tTolgee(`${key}.${keyTranslation}`);
+        return tTolgee(`${key}.${keyTranslation}`, "", options);
       }
 
       // Build a new combinedOptions object using Tolgee's CombinedOptions type.
-      // const combinedOptions: CombinedOptions<DefaultParamType> | any =
-      //   {} as CombinedOptions<DefaultParamType> as any;
+      const combinedOptions: any = {};
 
-      // for (const optionKey of Object.keys(options)) {
-      //   const value = options[optionKey];
-      //   if (value === undefined) continue; // Skip undefined values
-      //   // if (typeof value === "function") {
-      //   // combinedOptions[optionKey] = (chunks: ReactNode) => (
-      //   //   <Fragment key={`${key}-${optionKey}-${keyTranslation}`}>
-      //   //     {value(chunks)}
-      //   //   </Fragment>
-      //   // );
-      //   combinedOptions[optionKey] = value as any;
-      //   // } else {
-      //   // }
-      // }
+      for (const optionKey of Object.keys(options)) {
+        const value = options[optionKey];
+        if (value === undefined) continue; // Skip undefined values
+        if (typeof value === "function") {
+          combinedOptions[optionKey] = (chunks: ReactNode) => (
+            <Fragment key={`${key}-${optionKey}-${keyTranslation}`}>
+              {value(chunks)}
+            </Fragment>
+          );
+        } else {
+          combinedOptions[optionKey] = value as any;
+        }
+      }
 
       // return tTolgee(
       //   `${key}.${keyTranslation}`,

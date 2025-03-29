@@ -43,52 +43,56 @@ export default function InfiniteCarousel() {
   ];
 
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* Left to Right Carousel */}
-      <div
-        className={`relative w-full overflow-hidden py-4 ${activeDirection === "ltr" ? "opacity-100" : "opacity-40"} transition-opacity duration-1000`}
-      >
-        <div className="flex animate-carousel-ltr">
-          {duplicatedWallpapersRTL.map((wallpaper, index) => (
-            <div
-              key={`ltr-${wallpaper.id}-${index}`}
-              className="w-[300px] flex-shrink-0 px-2"
-            >
-              <Image
-                height={200}
-                width={160}
-                src={wallpaper.src || "/placeholder.svg"}
-                alt={wallpaper.alt}
-                className="h-[200px] w-full rounded-lg object-cover shadow-md transition-all duration-500 hover:scale-105"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+    <div>
+      <div className="relative w-full">
+        {/* Left to Right Carousel */}
 
-      {/* Right to Left Carousel */}
-      <div
-        className={`relative w-full overflow-hidden py-4 ${activeDirection === "rtl" ? "opacity-100" : "opacity-40"} transition-opacity duration-1000`}
-      >
-        <div className="flex animate-carousel-rtl">
-          {duplicatedWallpapersLTR.map((wallpaper, index) => (
-            <div
-              key={`rtl-${wallpaper.id}-${index}`}
-              className="w-[300px] flex-shrink-0 px-2"
-            >
-              <Image
-                height={200}
-                width={160}
-                src={wallpaper.src || "/placeholder.svg"}
-                alt={wallpaper.alt}
-                className="h-[200px] w-full rounded-lg object-cover shadow-md transition-all duration-500 hover:scale-105"
-              />
-            </div>
-          ))}
+        <div
+          className={`relative max-w-fit overflow-hidden py-4 ${activeDirection === "ltr" ? "opacity-100" : "opacity-40"} transition-opacity duration-1000`}
+        >
+          <div className={`flex w-fit animate-carousel-ltr flex-nowrap gap-4`}>
+            {duplicatedWallpapersLTR.map((wallpaper, index) => (
+              <div
+                key={`ltr-${wallpaper.id}-${index}`}
+                className="w-[300px] flex-shrink-0"
+              >
+                <Image
+                  height={200}
+                  width={160}
+                  src={wallpaper.src || "/placeholder.svg"}
+                  alt={wallpaper.alt}
+                  className="h-[200px] w-full rounded-lg object-cover shadow-md transition-all duration-500 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* <div className="flex justify-center gap-4 py-4">
+        {/* Right to Left Carousel */}
+        <div
+          className={`relative max-w-fit overflow-hidden py-4 ${activeDirection === "rtl" ? "opacity-100" : "opacity-40"} transition-opacity duration-1000`}
+        >
+          <div
+            className={`gap-4ks flex w-fit animate-carousel-rtl flex-nowrap`}
+          >
+            {duplicatedWallpapersRTL.map((wallpaper, index) => (
+              <div
+                key={`rtl-${wallpaper.id}-${index}`}
+                className="w-[300px] flex-shrink-0 px-2"
+              >
+                <Image
+                  height={200}
+                  width={160}
+                  src={wallpaper.src || "/placeholder.svg"}
+                  alt={wallpaper.alt}
+                  className="h-[200px] w-full rounded-lg object-cover shadow-md transition-all duration-500 hover:scale-105"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* <div className="flex justify-center gap-4 py-4">
         <button
           onClick={() => setActiveDirection("ltr")}
           className={`rounded-md px-4 py-2 ${activeDirection === "ltr" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}
@@ -102,6 +106,7 @@ export default function InfiniteCarousel() {
           Right to Left
         </button>
       </div> */}
+      </div>
     </div>
   );
 }

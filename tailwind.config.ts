@@ -8,17 +8,17 @@ export default {
     extend: {
       keyframes: {
         "carousel-ltr": {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
+          "0%": { transform: "translateX(calc(-50% - 0.5rem))" },
+          "100%": { transform: "translateX(0)" },
         },
         "carousel-rtl": {
-          "0%": { transform: "translateX(-50%)" },
-          "100%": { transform: "translateX(0)" },
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(calc(-50% - 0.5rem))" },
         },
       },
       animation: {
-        "carousel-ltr": "carousel-ltr 30s linear infinite",
-        "carousel-rtl": "carousel-rtl 30s linear infinite",
+        "carousel-ltr": "carousel-ltr 20s linear infinite",
+        "carousel-rtl": "carousel-rtl 20s linear infinite",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],

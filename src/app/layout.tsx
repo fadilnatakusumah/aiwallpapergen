@@ -11,7 +11,15 @@ import I18NProvider from "~/i18n/I18NProvider";
 
 // app/layout.tsx
 export const metadata: Metadata = {
-  title: "AI Wallpaper Generator | Create Stunning AI-Generated Wallpapers",
+  metadataBase: new URL("https://aiwallpapergen.com"),
+  alternates: {
+    canonical: "/",
+    languages: {
+      "en-US": "/",
+      "id-ID": "/id",
+    },
+  },
+  title: "AI Wallpaper Gen | Create Stunning AI-Generated Wallpapers",
   description:
     "Discover the ultimate AI-powered wallpaper generator. Create, customize, and share unique wallpapers generated with cutting-edge AI technology. Perfect for desktop and mobile backgrounds.",
   keywords: [
@@ -24,7 +32,7 @@ export const metadata: Metadata = {
     "AI design",
   ],
   openGraph: {
-    title: "AI Wallpaper Generator",
+    title: "AI Wallpaper Gen",
     description:
       "Unleash your creativity with our AI-powered wallpaper generator. Make unique, stunning wallpapers perfect for every device.",
     url: "https://aiwallpapergen.com",

@@ -168,9 +168,13 @@
 
 "use client";
 
-import { type CombinedOptions, type DefaultParamType, useTranslate } from "@tolgee/react";
-import { Formats, useTranslations } from "next-intl";
-import { type ReactNode } from "react";
+import {
+  type CombinedOptions,
+  type DefaultParamType,
+  useTranslate,
+} from "@tolgee/react";
+import { type Formats, useTranslations } from "next-intl";
+import { Fragment, type ReactNode } from "react";
 import { env } from "~/env";
 
 /**
@@ -227,11 +231,20 @@ export default function useMyTranslation(key: string): {
 
       // Build a new combinedOptions object using Tolgee's CombinedOptions type.
       const combinedOptions: CombinedOptions<DefaultParamType> =
-        {} as CombinedOptions<DefaultParamType>;
+        {} as CombinedOptions<DefaultParamType> as any;
 
       for (const optionKey of Object.keys(options)) {
         const value = options[optionKey];
-        combinedOptions[optionKey] = value as DefaultParamType;
+        if (value === undefined) continue; // Skip undefined values
+        if (typeof value === "function") {
+          combinedOptions[optionKey] = (chunks: ReactNode) => (
+            <Fragment key={`${optionKey}-${keyTranslation}`}>
+              {value(chunks)}
+            </Fragment>
+          );
+        } else {
+          combinedOptions[optionKey] = value as DefaultParamType;
+        }
       }
 
       // return tTolgee(
@@ -251,7 +264,7 @@ export default function useMyTranslation(key: string): {
       // );
 
       // Pass the transformed options to tTolgee.
-      return tTolgee(`${key}.${keyTranslation}`, "", combinedOptions);
+      return tTolgee(`${key}.${keyTranslation}`, "", combinedOptions as any);
     };
 
     t.markup = (

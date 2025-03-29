@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "AI Wallpaper Generator",
     images: [
       {
-        url: "https://aiwallpapergen.com/og-image.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "AI Wallpaper Generator Preview",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     title: "AI Wallpaper Generator",
     description:
       "Create, customize, and share stunning AI-generated wallpapers. Perfect for every device!",
-    images: ["https://aiwallpapergen.com/og-image.jpg"],
+    images: ["/og-image.jpg"],
   },
 };
 

@@ -15,7 +15,7 @@ function FeaturesSection() {
     <section id="features" className="bg-white py-20">
       <div className="container mx-auto px-4">
         <motion.h2
-          className="mb-16 text-center text-3xl font-semibold text-gray-900 md:text-4xl"
+          className="mb-16 text-center text-3xl max-w-4xl mx-auto font-semibold text-gray-900 md:text-4xl"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

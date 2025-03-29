@@ -168,7 +168,7 @@
 
 "use client";
 
-import { useTranslate } from "@tolgee/react";
+import { type DefaultParamType, useTranslate } from "@tolgee/react";
 import { type Formats, useTranslations } from "next-intl";
 import { Fragment, type ReactNode } from "react";
 import { env } from "~/env";
@@ -232,7 +232,7 @@ export default function useMyTranslation(key: string): {
             </Fragment>
           );
         } else {
-          combinedOptions[optionKey] = value as any;
+          combinedOptions[optionKey] = value as DefaultParamType;
         }
       }
 

@@ -10,6 +10,6 @@ export function generateCDNURLWallpaper(wallpaper: Wallpaper) {
 }
 
 export function generateAccessURLWallpaper(wallpaperID: string) {
-  return `${env.NEXTAUTH_URL}/wallpapers/${wallpaperID}`;
+  return `${env.AUTH_URL}/wallpapers/${wallpaperID}`;
 }
 // https://ai-wallpaper-generator.s3.ap-southeast-2.amazonaws.com/wallpapers/cm85iuppp0000yqb8dse5fcxz/1741769651811.jpg

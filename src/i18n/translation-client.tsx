@@ -168,13 +168,9 @@
 
 "use client";
 
-import {
-  type CombinedOptions,
-  type DefaultParamType,
-  useTranslate,
-} from "@tolgee/react";
+import { useTranslate } from "@tolgee/react";
 import { type Formats, useTranslations } from "next-intl";
-import { Fragment, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { env } from "~/env";
 
 /**
@@ -218,34 +214,28 @@ export default function useMyTranslation(key: string): {
     t = ((keyTranslation: string) =>
       tTolgee(`${key}.${keyTranslation}`)) as TranslateFunction;
 
-    t.rich = (
-      keyTranslation: string,
-      options: Record<
-        string,
-        string | number | Date | ((chunks: ReactNode) => ReactNode)
-      >,
-    ): ReactNode => {
+    t.rich = (keyTranslation: string, options: any): ReactNode => {
       if (!options) {
         return tTolgee(`${key}.${keyTranslation}`);
       }
 
       // Build a new combinedOptions object using Tolgee's CombinedOptions type.
-      const combinedOptions: CombinedOptions<DefaultParamType> =
-        {} as CombinedOptions<DefaultParamType> as any;
+      // const combinedOptions: CombinedOptions<DefaultParamType> | any =
+      //   {} as CombinedOptions<DefaultParamType> as any;
 
-      for (const optionKey of Object.keys(options)) {
-        const value = options[optionKey];
-        if (value === undefined) continue; // Skip undefined values
-        if (typeof value === "function") {
-          combinedOptions[optionKey] = (chunks: ReactNode) => (
-            <Fragment key={`${optionKey}-${keyTranslation}`}>
-              {value(chunks)}
-            </Fragment>
-          );
-        } else {
-          combinedOptions[optionKey] = value as DefaultParamType;
-        }
-      }
+      // for (const optionKey of Object.keys(options)) {
+      //   const value = options[optionKey];
+      //   if (value === undefined) continue; // Skip undefined values
+      //   // if (typeof value === "function") {
+      //   // combinedOptions[optionKey] = (chunks: ReactNode) => (
+      //   //   <Fragment key={`${key}-${optionKey}-${keyTranslation}`}>
+      //   //     {value(chunks)}
+      //   //   </Fragment>
+      //   // );
+      //   combinedOptions[optionKey] = value as any;
+      //   // } else {
+      //   // }
+      // }
 
       // return tTolgee(
       //   `${key}.${keyTranslation}`,
@@ -264,7 +254,7 @@ export default function useMyTranslation(key: string): {
       // );
 
       // Pass the transformed options to tTolgee.
-      return tTolgee(`${key}.${keyTranslation}`, "", combinedOptions as any);
+      return tTolgee(`${key}.${keyTranslation}`, "", options);
     };
 
     t.markup = (

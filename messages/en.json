@@ -32,6 +32,11 @@
       "your-credit-amount": "Your Credits <amount></amount>\n"
     }
   },
+  "contact-us": {
+    "description": "We'd love to hear from you! Whether you have questions about our AI Wallpaper Generator, need technical support, or want to share your amazing creations, our team is here to help.",
+    "return-home": "Return Home",
+    "title": "Contact Us"
+  },
   "creating-wallpaper": {
     "be-patient-information": "Since you can generate up to 4 wallpapers at a time, please be patient.",
     "generate": "Generate",
@@ -66,9 +71,12 @@
     },
     "footer-section": {
       "all-rights-reserved": "AI Wallpaper Gen. All rights reserved.",
+      "contact-us": "Contact Us",
       "features": "Features",
       "gallery": "Gallery",
-      "pricing": "Pricing"
+      "pricing": "Pricing",
+      "privacy-policy": "Privacy Policy",
+      "terms-of-service": "Terms of Service"
     },
     "gallery-showcase-section": {
       "title": "Gallery Showcase",
@@ -104,5 +112,21 @@
       },
       "title": "Choose Your Plan"
     }
+  },
+  "not-found": {
+    "404": "404",
+    "description": "The page you`re looking for seems to be corrupted or doesn`t exist. You can return home.",
+    "heading": "The page you`re looking is not available",
+    "return-home": "Return Home"
+  },
+  "privacy-policy": {
+    "content": "Effective Date: March 30th 2025\n<br/> <br/>\n1. Introduction\n<br/>\nWelcome to AI Wallpaper Gen (\"we\", \"us\", \"our\"). This Privacy Policy explains how we collect, use, and share information when you use our website (https://aiwallpapergen.com) and associated services (\"Service\"). By using our Service, you agree to the practices described in this Privacy Policy.\n<br/><br/>\n2. Information We Collect\n<br/>\na. Personal Information:\n<br/>\n    When you sign up or sign in, we may collect your name, email address, and profile picture.\n<br/>\n    We use third-party authentication providers (e.g., Google, GitHub), and some of your basic profile information (such as your email and name) is provided by these services.\n<br/>\nb. Non-Personal Information:\n<br/>\n    Device Information: We automatically collect device information (e.g., browser type, operating system, and device identifiers) in a JSON format using tools like device.js.\n<br/>\n    IP Address: We log your IP address for security and analytics purposes.\n<br/>\n    Usage Data: We collect data regarding how you interact with our Service (e.g., pages viewed, wallpaper generation events, and clicks).\n<br/><br/>\n3. How We Use Your Information\n<br/>\n    To Provide and Improve the Service: We use your data to authenticate users, generate and serve AI wallpapers, and improve our features.\n<br/>\n    Analytics: We use usage data and device information to monitor trends, diagnose technical issues, and enhance user experience.\n<br/>\n    Communication: With your consent, we may send you updates or promotional materials related to our Service. You can opt-out at any time.\n<br/><br/>\n4. Sharing and Disclosure\n<br/>\n    Third-Party Providers: We share your data with trusted third-party service providers (e.g., Google Analytics, authentication providers) solely for service operation and improvement.\n<br/>\n    Legal Requirements: We may disclose your data if required by law or to protect our rights.\n<br/>\n    Business Transfers: In the event of a merger or acquisition, your data may be transferred as part of the transaction, subject to applicable privacy policies.\n<br/>\n5. Data Security\n<br/>\nWe take reasonable measures to protect your information from unauthorized access, alteration, or disclosure. However, no method of transmission over the Internet or electronic storage is 100% secure.\n<br/><br/>\n6. Data Retention\n<br/>\nWe retain your personal and usage data only as long as necessary to fulfill the purposes outlined in this Privacy Policy, or as required by law.\n<br/><br/>\n7. Your Rights\n<br/>\nDepending on your jurisdiction, you may have rights regarding your personal data, such as accessing, correcting, or deleting your information. Please contact us at the address below to exercise your rights.\n<br/><br/>\n8. Cookies and Tracking Technologies\n<br/>\nOur Service may use cookies and similar tracking technologies to enhance user experience and for analytics purposes. You can control cookie settings in your browser.\n<br/><br/>\n9. Changes to This Privacy Policy\n<br/>\nWe may update this Privacy Policy from time to time. The updated version will be posted on this page with a new effective date. We encourage you to review this page periodically.\n<br/><br/>\n10. Contact Us\n<br/>\nIf you have any questions or concerns about this Privacy Policy, please contact us at:\nEmail: aiwallpapergen@gmail.com\n<br/>",
+    "return-home": "Return Home",
+    "title": "Privacy Policy"
+  },
+  "terms-of-service": {
+    "content": "Effective Date: March 30th 2025\n<br/><br/>\n1. Introduction\n<br/>\nThese Terms of Service (\"Terms\") govern your access to and use of the AI Wallpaper Gen website and services (\"Service\") provided by [Your Company Name] (\"we\", \"us\", \"our\"). By accessing or using our Service, you agree to be bound by these Terms.\n<br/><br/>\n2. Eligibility\n<br/>\nYou must be at least 13 years old to use the Service. By using the Service, you represent and warrant that you meet the eligibility requirements.\n<br/><br/>\n3. Account Registration\n<br/>\n    Registration: To access certain features of the Service, you must create an account by providing accurate and complete information.\n<br/>\n    Security: You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.\n<br/>\n    Account Termination: We reserve the right to suspend or terminate your account at our sole discretion, for any reason, without notice.\n<br/><br/>\n4. Use of the Service\n<br/>\n    License: We grant you a limited, non-exclusive, non-transferable, revocable license to use our Service for personal and non-commercial purposes.\n<br/>\n    Restrictions: You agree not to:\n<br/>\n        Use the Service in any unlawful manner.\n<br/>\n        Reverse engineer, decompile, or disassemble any portion of the Service.\n<br/>\n        Attempt to disrupt, disable, or harm the Service or its infrastructure.\n<br/>\n    User Content: You are solely responsible for any content you generate using our Service. By uploading or generating content, you grant us a worldwide, royalty-free, non-exclusive license to use, display, and distribute your content for the purpose of providing the Service.\n<br/><br/>\n5. AI-Generated Content\n<br/>\n    The wallpapers and images generated by our AI are provided \"as is.\" We do not guarantee that the generated content will be error-free or meet your expectations.\n<br/>\n    You acknowledge that the AI may produce unexpected results and that you use the Service at your own risk.\n<br/><br/>\n6. Intellectual Property\n<br/>\n    Our Content: All content provided by the Service, including text, images, graphics, and software, is owned by us or our licensors and is protected by intellectual property laws.\n<br/>\n    User Content: You retain all rights to the content you create, but by using the Service, you grant us permission to use your content in connection with the Service.\n<br/><br/>\n7. Disclaimers and Limitation of Liability\n<br/>\n    Disclaimers: The Service is provided on an \"AS IS\" and \"AS AVAILABLE\" basis without warranties of any kind, either express or implied.\n<br/>\n    Limitation of Liability: In no event will we be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of the Service.\n<br/><br/>\n8. Indemnification\n<br/>\nYou agree to indemnify, defend, and hold harmless [Your Company Name] and its affiliates, licensors, and service providers from any claims, liabilities, damages, and expenses arising from your use of the Service or your violation of these Terms.\n<br/><br/>\n9. Governing Law\n<br/>\nThese Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction]. Any disputes arising out of these Terms shall be resolved in the courts of [Your Jurisdiction].\n10. Modifications\n<br/>\nWe reserve the right to modify or update these Terms at any time. Any changes will be posted on this page with an updated effective date. Your continued use of the Service after any changes signifies your acceptance of the new Terms.\n<br/><br/>\n11. Contact Information\n<br/>\nFor any questions regarding these Terms, please contact us at:\nEmail: aiwallpapergen@gmail.com\n<br/>",
+    "return-home": "Return Home",
+    "title": "Terms of Service"
   }
 }

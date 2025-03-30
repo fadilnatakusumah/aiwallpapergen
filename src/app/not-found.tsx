@@ -5,9 +5,11 @@ import "~/styles/globals.css";
 import { Home } from "lucide-react";
 import { type Metadata } from "next";
 
+import LanguageDropdown from "~/components/LanguageDropdown";
 import MotionWrapper from "~/components/MotionWrapper";
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
+import { getMyTranslation } from "~/i18n/translation-server";
 
 // app/layout.tsx
 export const metadata: Metadata = {
@@ -87,6 +89,8 @@ export default async function NotFound() {
   //   height: 5 + Math.random() * 20,
   // }));
 
+  const { t } = await getMyTranslation("not-found");
+
   return (
     <>
       <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4">
@@ -99,7 +103,7 @@ export default async function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, type: "spring" }}
           >
-            404
+            {t("404")}
           </MotionWrapper>
 
           {/* Subtitle */}
@@ -110,7 +114,8 @@ export default async function NotFound() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            The page you`re looking is not available
+            {t("heading")}
+            {/* The page you`re looking is not available */}
           </MotionWrapper>
 
           {/* Corrupted wallpaper visualization */}
@@ -221,8 +226,8 @@ export default async function NotFound() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            The page you`re looking for seems to be corrupted or doesn`t exist.
-            You can return home
+            {t("description")}
+            {/*    */}
           </MotionWrapper>
 
           {/* Action buttons */}
@@ -232,14 +237,14 @@ export default async function NotFound() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
+            <LanguageDropdown />
             <Link href="/">
               <Button
-                size="lg"
                 variant="outline"
                 className="border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 <Home className="mr-2 h-4 w-4" />
-                Return Home
+                {t("return-home")}
               </Button>
             </Link>
           </MotionWrapper>

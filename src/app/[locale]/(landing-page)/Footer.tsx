@@ -51,6 +51,24 @@ function Footer() {
             >
               {t("gallery")}
             </Link>
+            <Link
+              href="/contact-us"
+              className="text-gray-600 transition-colors hover:text-gray-900"
+            >
+              {t("contact-us")}
+            </Link>
+            <Link
+              href="/terms-of-service"
+              className="text-gray-600 transition-colors hover:text-gray-900"
+            >
+              {t("terms-of-service")}
+            </Link>
+            <Link
+              href="/privacy-policy"
+              className="text-gray-600 transition-colors hover:text-gray-900"
+            >
+              {t("privacy-policy")}
+            </Link>
             {/* <Link
               href="#"
               className="text-gray-600 transition-colors hover:text-gray-900"

@@ -39,8 +39,8 @@ export const authConfig = {
   providers: [
     // DiscordProvider,
     GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID || "",
-      clientSecret: env.GOOGLE_CLIENT_SECRET || "",
+      clientId: env.AUTH_GOOGLE_CLIENT_ID || "",
+      clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET || "",
       authorization: {
         params: {
           prompt: "consent",
@@ -52,8 +52,8 @@ export const authConfig = {
       // redirectProxyUrl
     }),
     GithubProvider({
-      clientId: env.GITHUB_CLIENT_ID || "",
-      clientSecret: env.GITHUB_CLIENT_SECRET || "",
+      clientId: env.AUTH_GITHUB_CLIENT_ID || "",
+      clientSecret: env.AUTH_GITHUB_CLIENT_SECRET || "",
       allowDangerousEmailAccountLinking: true,
     }),
 

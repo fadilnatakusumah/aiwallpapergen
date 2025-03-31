@@ -186,7 +186,7 @@ type TranslateFunction = ((
 ) => string) & {
   rich: (
     keyTranslation: string,
-    options: Record<
+    options?: Record<
       string,
       string | number | Date | ((chunks: ReactNode) => ReactNode)
     >,
@@ -202,7 +202,7 @@ export default function useMyTranslation(key: string): {
 } {
   const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE === "true";
   const { t: tTolgee } = useTranslate();
-  const tNextIntl = useTranslations(key);
+  const tNextIntl = isUseTolgee ? tTolgee : useTranslations(key);
 
   // Start with either Tolgee or next‑intl translation function.
   let t: TranslateFunction = (
@@ -216,7 +216,14 @@ export default function useMyTranslation(key: string): {
 
     t.rich = (keyTranslation: string, options: any): ReactNode => {
       if (!options) {
-        return tTolgee(`${key}.${keyTranslation}`, "", options);
+        return (
+          <span
+            dangerouslySetInnerHTML={{
+              __html: tTolgee(`${key}.${keyTranslation}`),
+            }}
+          ></span>
+        );
+        // return tTolgee(`${key}.${keyTranslation}`, "", options);
       }
 
       // Build a new combinedOptions object using Tolgee's CombinedOptions type.

@@ -41,13 +41,13 @@ export const authConfig = {
     GoogleProvider({
       clientId: env.AUTH_GOOGLE_CLIENT_ID || "",
       clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET || "",
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      // authorization: {
+      //   params: {
+      //     prompt: "consent",
+      //     access_type: "offline",
+      //     response_type: "code",
+      //   },
+      // },
       allowDangerousEmailAccountLinking: true,
       // redirectProxyUrl
     }),

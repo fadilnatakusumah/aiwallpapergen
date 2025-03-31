@@ -154,17 +154,29 @@ function UserCredits() {
 
   return (
     <>
-      {t.rich("your-credit-amount", {
-        amount: () => (
-          <span className="flex items-center justify-center rounded-full bg-slate-500 px-1 py-0.5 text-white">
-            {data?.user?.credits ?? 0}
-          </span>
-        ),
-      })}
+      <span className="hidden">
+        {t.rich("your-credit-amount", {
+          amount: () => (
+            <span className="flex items-center justify-center rounded-full bg-slate-500 px-1 py-0.5 text-white">
+              {data?.user?.credits ?? 0}
+            </span>
+          ),
+        })}
+      </span>
+      <span className="flex items-center justify-center rounded-full bg-slate-500 px-2 py-0.5 text-white">
+        {t.rich("your-credit-amount-mobile", {
+          amount: data?.user?.credits ?? 0,
+        })}
+      </span>
+      
       {/* Your credits{" "} */}
-      <Button className="relative ml-4" onClick={handleOpenModal}>
+      <Button
+        size={"sm"}
+        className="relative md:ml-4"
+        onClick={handleOpenModal}
+      >
         <Plus />
-        <span>{t("add-credits")}</span>
+        <span className="hidden md:inline">{t("add-credits")}</span>
       </Button>
       <ModalDialog
         isOpen={showModal}

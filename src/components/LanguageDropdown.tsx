@@ -86,18 +86,18 @@ export default function LanguageDropdown({
   return (
     <div
       ref={dropdownRef}
-      className={cn("relative inline-block text-left", className)}
+      className={cn("relative block text-left w-min", className)}
     >
       {/* Dropdown trigger button */}
       <Button
         type="button"
-        className="inline-flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        className="inline-flex w-fit items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
         <span className="flex items-center">
-          <span className="text-base md:mr-2">{selectedLanguage.flag}</span>
+          <span className="text-base md:mx-2">{selectedLanguage.flag}</span>
           <span className="hidden md:inline-block">
             {selectedLanguage.name}
           </span>

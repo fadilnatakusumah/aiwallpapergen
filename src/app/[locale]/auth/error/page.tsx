@@ -6,10 +6,8 @@ import { Home } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { type ReactNode } from "react";
 
-import LanguageDropdown from "~/components/LanguageDropdown";
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
-
 import useMyTranslation from "~/i18n/translation-client";
 
 export default function ErrorSignin() {
@@ -21,7 +19,7 @@ export default function ErrorSignin() {
   // "An unknown error occurred.";
 
   // Customize your error messages based on error type
-  if (errorType === "OAuthCallbackError") {
+  if (errorType === "Configuration") {
     errorMessage = (
       <span>
         {t.rich("error-callback")}
@@ -72,15 +70,14 @@ export default function ErrorSignin() {
 
           {/* Action buttons */}
           <motion.div
-            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+            className="flex flex-col justify-center gap-4 sm:flex-row"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
-            <LanguageDropdown />
-
             <Link href="/auth">
               <Button
+                size="lg"
                 variant="outline"
                 className="border-gray-300 text-gray-700 hover:bg-gray-100"
               >

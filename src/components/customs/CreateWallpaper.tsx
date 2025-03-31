@@ -521,8 +521,7 @@ export default function CreateWallpaper() {
                 priority
               />
               <div className="mt-2 max-w-lg text-center text-sm text-gray-500">
-                Unlock your creative potential and experience the awesomeness of
-                AI Wallpaper Gen right now!
+                {t("unlock-your-creativity")}
               </div>
             </>
           )}
@@ -539,7 +538,7 @@ export default function CreateWallpaper() {
           onClick={() => setShowModalCreate(true)}
         >
           <MessageSquareCode />
-          Create a wallpaper
+          {t("create-a-wallpaper")}
         </Button>
       </div>
 

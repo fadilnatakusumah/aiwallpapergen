@@ -1,4 +1,12 @@
 {
+  "auth": {
+    "dont-have-permission": "You do not have permission to sign in.",
+    "error-authentication": "Authentication Error",
+    "error-callback": "Sign in was cancelled or encountered an issue. <br />\nPlease try again.",
+    "return-to-login": "Return to Login Page",
+    "sorry": "Sorry!",
+    "unknown-error": "An unknown error occurred."
+  },
   "common": {
     "already-have-an-account": "Already have an account? Login <here>here</here> ",
     "back-to-home": "Or go back to <home>Home</home> ",
@@ -29,7 +37,8 @@
       "confirm-button": "Confirm Purchase",
       "description": "Purchase credits to generate more AI wallpapers.",
       "title": "Add Credits",
-      "your-credit-amount": "Your Credits <amount></amount>\n"
+      "your-credit-amount": "Your Credits <amount></amount>\n",
+      "your-credit-amount-mobile": "Credit {amount}"
     }
   },
   "contact-us": {
@@ -39,6 +48,7 @@
   },
   "creating-wallpaper": {
     "be-patient-information": "Since you can generate up to 4 wallpapers at a time, please be patient.",
+    "create-a-wallpaper": "Create a Wallpaper",
     "generate": "Generate",
     "generate-amount": "Generate Amount",
     "generating": "Generating",
@@ -46,6 +56,7 @@
     "preset-styles": "Preset Styles",
     "prompt": "Prompt",
     "prompt-placeholder": "Create a neon-lit cyberpunk cityscape at dusk",
+    "unlock-your-creativity": "Unlock your creative potential and experience the awesomeness of AI Wallpaper Gen right now!",
     "your-credit-left": "{amount, plural, one {Your credit #} other {Your credits #}}\n"
   },
   "landing-page": {

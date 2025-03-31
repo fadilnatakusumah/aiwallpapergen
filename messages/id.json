@@ -1,4 +1,12 @@
 {
+  "auth": {
+    "dont-have-permission": "Anda tidak memiliki izin untuk masuk.",
+    "error-authentication": "Error Otentikasi",
+    "error-callback": "Proses masuk dibatalkan atau mengalami masalah. <br />\nSilakan coba lagi.",
+    "return-to-login": "Balik ke Halaman Login",
+    "sorry": "Maaf!",
+    "unknown-error": "Terjadi kesalahan yang tidak diketahui."
+  },
   "common": {
     "already-have-an-account": "Sudah punya akun? Masuk <here>disini</here> ",
     "back-to-home": "Atau kembali ke <home>Beranda</home> ",
@@ -29,7 +37,8 @@
       "confirm-button": "Konfirmasi Pembelian",
       "description": "Beli kredit untuk membuat lebih banyak wallpaper AI.",
       "title": "Tambah Kredit",
-      "your-credit-amount": "Kredit Kamu <amount></amount>"
+      "your-credit-amount": "Kredit Kamu <amount></amount>",
+      "your-credit-amount-mobile": "Kredit {amount}"
     }
   },
   "contact-us": {
@@ -39,6 +48,7 @@
   },
   "creating-wallpaper": {
     "be-patient-information": "Karena Anda dapat membuat hingga 4 wallpaper sekaligus, harap bersabar.",
+    "create-a-wallpaper": "Buat Wallpaper",
     "generate": "Buat",
     "generate-amount": "Jumlah Pembuatan",
     "generating": "Sedang Membuat",
@@ -46,6 +56,7 @@
     "preset-styles": "Opsi Preset",
     "prompt": "Prompt",
     "prompt-placeholder": "Buat pemandangan kota cyberpunk dengan cahaya neon saat senja.",
+    "unlock-your-creativity": "Bebaskan potensi kreatif Anda dan rasakan kehebatan AI Wallpaper Gen sekarang juga!",
     "your-credit-left": "{amount, plural, one {Kreditmu #} other {Kreditmu #}}"
   },
   "landing-page": {

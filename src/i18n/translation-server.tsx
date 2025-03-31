@@ -31,7 +31,8 @@ export async function getMyTranslation(
   const isUseTolgee = env.SERVER_USE_TOLGEE === "true";
 
   const tTolgee = await getTranslate();
-  const tNextIntl = isUseTolgee ? tTolgee : await getTranslations(key);
+  const keyForNextIntl = isUseTolgee ? "common" : key;
+  const tNextIntl = await getTranslations(keyForNextIntl);
 
   const t: TranslateFunction = (
     keyTranslation: string,

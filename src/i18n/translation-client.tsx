@@ -202,7 +202,8 @@ export default function useMyTranslation(key: string): {
 } {
   const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE === "true";
   const { t: tTolgee } = useTranslate();
-  const tNextIntl = isUseTolgee ? tTolgee : useTranslations(key);
+  const keyForNextIntl = isUseTolgee ? "common" : key;
+  const tNextIntl = useTranslations(keyForNextIntl);
 
   // Start with either Tolgee or next‑intl translation function.
   let t: TranslateFunction = (

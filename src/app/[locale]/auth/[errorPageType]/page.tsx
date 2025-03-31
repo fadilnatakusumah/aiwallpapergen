@@ -13,7 +13,7 @@ import useMyTranslation from "~/i18n/translation-client";
 
 export default function ErrorPage() {
   const pageParams = useParams();
-  const errorPageType = pageParams.errorPageType || "error";
+  const errorPageType = pageParams.errorPageType ?? "error";
   const searchParams = useSearchParams();
   const errorType = searchParams.get("error");
 

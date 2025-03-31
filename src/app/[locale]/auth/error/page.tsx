@@ -6,8 +6,10 @@ import { Home } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { type ReactNode } from "react";
 
+import LanguageDropdown from "~/components/LanguageDropdown";
 import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
+
 import useMyTranslation from "~/i18n/translation-client";
 
 export default function ErrorSignin() {
@@ -15,7 +17,7 @@ export default function ErrorSignin() {
   const errorType = searchParams.get("error");
 
   const { t } = useMyTranslation("auth");
-  let errorMessage: ReactNode = t("unknown-error");
+  let errorMessage: ReactNode = t.rich("unknown-error");
   // "An unknown error occurred.";
 
   // Customize your error messages based on error type
@@ -75,9 +77,9 @@ export default function ErrorSignin() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
+            <LanguageDropdown />
             <Link href="/auth">
               <Button
-                size="lg"
                 variant="outline"
                 className="border-gray-300 text-gray-700 hover:bg-gray-100"
               >

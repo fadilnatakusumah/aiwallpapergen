@@ -270,5 +270,21 @@ export default function useMyTranslation(key: string): {
     ): ReactNode => tTolgee(`${key}.${keyTranslation}`, options);
   }
 
+  const oldT = t.rich;
+
+  t.rich = (keyTranslation: string, options: any, ...args): ReactNode => {
+    if (!options) {
+      // isThereOptions = false;
+      return (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: t(`${keyTranslation}`),
+          }}
+        ></span>
+      );
+    }
+    return oldT(`${keyTranslation}`, options, ...args);
+  };
+
   return { t };
 }

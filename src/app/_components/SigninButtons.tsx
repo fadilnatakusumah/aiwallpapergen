@@ -3,7 +3,7 @@
 import { SiGithub, SiGoogle } from "@icons-pack/react-simple-icons";
 import { Loader2 } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -40,7 +40,17 @@ function SigninButtons() {
         {t.rich(
           isSignin ? "signin-with-your-account" : "signup-with-your-account",
           {
-            strong: (chunks) => <strong>{chunks}</strong>,
+            strong: (chunks) => (
+              <Fragment
+                key={
+                  isSignin
+                    ? "signin-with-your-account"
+                    : "signup-with-your-account"
+                }
+              >
+                <strong>{chunks}</strong>,
+              </Fragment>
+            ),
           },
         )}
       </div>
@@ -85,12 +95,19 @@ function SigninButtons() {
           !isSignin ? "already-have-an-account" : "dont-have-an-account",
           {
             here: (chunks: React.ReactNode) => (
-              <span
-                onClick={() => setIsSignin(!isSignin)}
-                className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
+              <Fragment
+                key={
+                  !isSignin ? "already-have-an-account" : "dont-have-an-account"
+                }
               >
-                {chunks}
-              </span>
+                <span
+                  onClick={() => setIsSignin(!isSignin)}
+                  className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
+                >
+                  {chunks}
+                </span>
+                ``
+              </Fragment>
             ),
           },
         )}
@@ -98,12 +115,14 @@ function SigninButtons() {
       <p className="mt-1 text-center text-sm">
         {t.rich("back-to-home", {
           home: (chunks: React.ReactNode) => (
-            <Link
-              href="/"
-              className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
-            >
-              {chunks}
-            </Link>
+            <Fragment key={"back-to-home"}>
+              <Link
+                href="/"
+                className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"
+              >
+                {chunks}
+              </Link>
+            </Fragment>
           ),
         })}
       </p>

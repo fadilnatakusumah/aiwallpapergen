@@ -1,10 +1,11 @@
+import { CacheInternalRecord } from "@tolgee/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import React from "react";
 import { env } from "~/env";
-
 import { TolgeeNextProvider } from "~/tolgee/client";
+
 import { getTolgee } from "~/tolgee/server";
 import { ALL_LANGUAGES } from "~/tolgee/shared";
 
@@ -16,11 +17,17 @@ async function I18NProvider({ children }: { children: React.ReactNode }) {
     notFound();
   }
 
+  let records: CacheInternalRecord[] = [];
+
   const tolgee = await getTolgee();
-  const records = isUseTolgee
-    ? await tolgee.loadRequired().catch(() => {
-        return [];
-      })
+  records = isUseTolgee
+    ? await tolgee
+        .loadRequired({
+          language: locale,
+        })
+        .catch(() => {
+          return [];
+        })
     : [];
 
   return (

@@ -41,27 +41,27 @@ export const authConfig = {
     GoogleProvider({
       clientId: env.AUTH_GOOGLE_CLIENT_ID || "",
       clientSecret: env.AUTH_GOOGLE_CLIENT_SECRET || "",
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
-      allowDangerousEmailAccountLinking: true,
+      // authorization: {
+      //   params: {
+      //     prompt: "consent",
+      //     access_type: "offline",
+      //     response_type: "code",
+      //   },
+      // },
+      // allowDangerousEmailAccountLinking: true,
       // redirectProxyUrl
     }),
     GithubProvider({
       clientId: env.AUTH_GITHUB_CLIENT_ID || "",
       clientSecret: env.AUTH_GITHUB_CLIENT_SECRET || "",
-      allowDangerousEmailAccountLinking: true,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      // allowDangerousEmailAccountLinking: true,
+      // authorization: {
+      //   params: {
+      //     prompt: "consent",
+      //     access_type: "offline",
+      //     response_type: "code",
+      //   },
+      // },
     }),
 
     /**
@@ -89,42 +89,108 @@ export const authConfig = {
   },
 
   // Optional: JWT callback to include user ID in session
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     console.log("🚀 ~ jwt ~ token:", token);
+  //     if (user?.id) {
+  //       console.log("🚀 ~ jwt ~ user?.id:", user?.id);
+  //       // Ensure user.id is assigned to token only when user is defined
+  //       token.id = user.id;
+  //     }
+  //     return token;
+  //   },
+
+  //   async session({ session, user: _user, token }) {
+  //     // console.log("🚀 ~ session ~ token:", token)
+  //     // console.log("🚀 ~ session ~ session:", session)
+  //     // Ensure user is defined before accessing user.id
+  //     if (token?.id) {
+  //       session.user.id = token.id as string; // Add user id to the session
+  //     }
+  //     const userData = await db.user.findUnique({
+  //       where: { id: session.user.id },
+  //     });
+  //     if (userData) {
+  //       session.user = {
+  //         ...session.user,
+  //         image: userData.profile_picture,
+  //         credits: userData.credits,
+  //       };
+  //       // session.user.image = userData.profile_picture;
+  //       // session.user.image = userData.profile_picture;
+  //     }
+  //     return session;
+  //   },
+
+  //   async signIn({ user, account, profile, ...rest }) {
+  //     // Custom logic when a user signs in with Google
+  //     if (account && account.provider === "google" && user?.email) {
+  //       const existingUser = await db.user.findUnique({
+  //         where: { email: user.email },
+  //       });
+
+  //       if (existingUser && existingUser.google_id === "") {
+  //         await db.user.update({
+  //           where: { id: existingUser.id },
+  //           data: { google_id: profile?.sub as string | undefined },
+  //         });
+  //         return true;
+  //       }
+
+  //       // If the user doesn't exist, create a new user in the database
+  //       if (!existingUser) {
+  //         await db.user.create({
+  //           data: {
+  //             email: user.email,
+  //             google_id: profile?.sub ?? "",
+  //             profile_picture: profile?.picture as string | undefined,
+  //             name: profile!.name ?? user.email, // Can be modified to generate username
+  //             username: user.email.split("@")[0]!, // Can be modified to generate username
+  //           },
+  //         });
+  //       }
+  //     }
+
+  //     if (account && account.provider === "github" && profile) {
+  //       const existingUser = await db.user.findUnique({
+  //         where: { email: profile.email! },
+  //       });
+
+  //       if (existingUser && existingUser.github_id === "") {
+  //         await db.user.update({
+  //           where: { id: existingUser.id },
+  //           data: { github_id: profile.id as string | undefined },
+  //         });
+  //         return true;
+  //       }
+
+  //       if (!existingUser) {
+  //         await db.user.create({
+  //           data: {
+  //             email: profile.email,
+  //             github_id: String(profile?.id) ?? "", // Store GitHub ID
+  //             name: profile?.name, // Use GitHub login or email as the username
+  //             profile_picture: profile?.picture as string | undefined,
+  //             username: profile.email!.split("@")[0]!, // Can be modified to generate username
+  //             // email_verified: profile?.email_verified ?? null,
+  //           },
+  //         });
+  //       }
+  //     }
+  //     return true; // Allow sign-in
+  //   },
+  // },
   callbacks: {
-    async jwt({ token, user }) {
-      if (user?.id) {
-        // Ensure user.id is assigned to token only when user is defined
-        token.id = user.id;
+    async signIn(userDetail) {
+      if (Object.keys(userDetail).length === 0) {
+        return false;
       }
-      return token;
-    },
 
-    async session({ session, user: _user, token }) {
-      // Ensure user is defined before accessing user.id
-      if (token?.id) {
-        session.user.id = token.id as string; // Add user id to the session
-      }
-      const userData = await db.user.findUnique({
-        where: { id: session.user.id },
-      });
-      if (userData) {
-        session.user = {
-          ...session.user,
-          image: userData.profile_picture,
-          credits: userData.credits,
-        };
-        // session.user.image = userData.profile_picture;
-        // session.user.image = userData.profile_picture;
-      }
-      return session;
-    },
-
-    async signIn({ user, account, profile }) {
-      // Custom logic when a user signs in with Google
+      const { account, user, profile } = userDetail;
       if (account && account.provider === "google" && user?.email) {
         const existingUser = await db.user.findUnique({
           where: { email: user.email },
         });
-
         if (existingUser && existingUser.google_id === "") {
           await db.user.update({
             where: { id: existingUser.id },
@@ -145,6 +211,8 @@ export const authConfig = {
             },
           });
         }
+
+        return true;
       }
 
       if (account && account.provider === "github" && profile) {
@@ -172,11 +240,48 @@ export const authConfig = {
             },
           });
         }
+
+        return true;
       }
-      return true; // Allow sign-in
+
+      return false;
+    },
+    async redirect({ baseUrl }) {
+      return `${baseUrl}/c`;
+    },
+    async session({ session, token }) {
+      // if (session.user?.name) session.user.name = token.name;
+
+      if (token?.id) {
+        session.user.id = token.id as string; // Add user id to the session
+      }
+      const userData = await db.user.findUnique({
+        where: { id: session.user.id },
+      });
+      if (userData) {
+        session.user = {
+          ...session.user,
+          image: userData.profile_picture,
+          credits: userData.credits,
+        };
+        // session.user.image = userData.profile_picture;
+        // session.user.image = userData.profile_picture;
+      }
+
+      return session;
+    },
+    async jwt({ token, user }) {
+      let newUser = { ...user } as any;
+      if (newUser.first_name && newUser.last_name)
+        token.name = `${newUser.first_name} ${newUser.last_name}`;
+      if (user?.id) {
+        // Ensure user.id is assigned to token only when user is defined
+        token.id = user.id;
+      }
+      return token;
     },
   },
 
   // Security
-  secret: env.AUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
 } satisfies NextAuthConfig;

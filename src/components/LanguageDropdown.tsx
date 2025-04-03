@@ -10,6 +10,7 @@ import { Button } from "./ui/button";
 
 import { cn } from "~/lib/utils";
 import { usePathname, useRouter } from "~/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 type Language = {
   code: string;
@@ -40,6 +41,8 @@ export default function LanguageDropdown({
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  console.log("🚀 ~ searchParams:", searchParams);
   const [isPending, startTransition] = useTransition();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -69,7 +72,9 @@ export default function LanguageDropdown({
     setSelectedLanguage(language);
     setIsOpen(false);
     startTransition(() => {
-      router.replace(pathname, { locale: language.code });
+      router.replace(pathname, {
+        locale: language.code,
+      });
     });
     router.refresh();
     onLanguageChange?.(language);
@@ -86,7 +91,7 @@ export default function LanguageDropdown({
   return (
     <div
       ref={dropdownRef}
-      className={cn("relative block text-left w-min", className)}
+      className={cn("relative block w-min text-left", className)}
     >
       {/* Dropdown trigger button */}
       <Button

@@ -42,7 +42,6 @@ export default function LanguageDropdown({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  console.log("🚀 ~ searchParams:", searchParams);
   const [isPending, startTransition] = useTransition();
 
   const [isOpen, setIsOpen] = useState(false);

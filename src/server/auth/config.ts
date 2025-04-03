@@ -92,9 +92,7 @@ export const authConfig = {
   // Optional: JWT callback to include user ID in session
   callbacks: {
     async jwt({ token, user }) {
-      console.log("🚀 ~ jwt ~ token:", token);
       if (user?.id) {
-        console.log("🚀 ~ jwt ~ user?.id:", user?.id);
         // Ensure user.id is assigned to token only when user is defined
         token.id = user.id;
       }

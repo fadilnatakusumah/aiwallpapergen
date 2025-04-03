@@ -46,6 +46,15 @@ export const wallpaperRouter = createTRPCRouter({
                     id: input.chatId,
                   },
                 });
+
+                if (!currentChat?.id) {
+                  currentChat = await prisma.chat.create({
+                    data: {
+                      user_id: ctx.session.user.id,
+                      title: input.prompt.substring(0, 24),
+                    },
+                  });
+                }
               }
 
               // update the credits while checking if it has enough credits
@@ -144,7 +153,7 @@ export const wallpaperRouter = createTRPCRouter({
                   prompt_sent: sentPrompt,
                   user_id: ctx.session.user.id,
                   refined_prompt: generatedImages[0]!.data[0]!.revised_prompt!,
-                  chat_id: input.chatId ?? currentChat!.id ?? "", // Added default value for chat_id
+                  chat_id: currentChat.id, // Added default value for chat_id
                 },
               });
 
@@ -154,7 +163,7 @@ export const wallpaperRouter = createTRPCRouter({
                     data: {
                       user_id: ctx.session.user.id,
                       url: urlWallpaper,
-                      chat_id: currentChat?.id ?? "",
+                      chat_id: currentChat.id,
                       prompt_id: addedPrompt.id, // Added default value for prompt_id
                       type: input.type ?? "",
                     },
@@ -177,10 +186,10 @@ export const wallpaperRouter = createTRPCRouter({
             return {
               message: "success",
               data: {
-                chat_id: chat!.id,
-                chat_title: chat!.title,
+                chat_id: chat.id,
+                chat_title: chat.title,
                 wallpapers: wallpapers,
-                created_at: chat!.created_at,
+                created_at: chat.created_at,
                 prompt: addedPrompt.prompt,
                 user_id: ctx.session.user.id,
               },
@@ -216,7 +225,7 @@ export const wallpaperRouter = createTRPCRouter({
       const { limit, cursor, isExplore } = input;
       const wallpapers = await ctx.db.wallpaper.findMany({
         where: {
-          ...(isExplore ? { user_id: ctx.session.user.id } : {}),
+          ...(!isExplore ? { user_id: ctx.session.user.id } : {}),
         },
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,

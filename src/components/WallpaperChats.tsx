@@ -52,7 +52,7 @@ import useMyTranslation from "~/i18n/translation-client";
 
 export function WallpaperChats() {
   const session = useSession();
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
   const { t } = useMyTranslation("common.sidebar");
   const {
     data,
@@ -189,7 +189,7 @@ export function WallpaperChats() {
           >
             <Search />
           </Button>
-          <Button size={"icon"} variant={"ghost"}>
+          <Button size={"icon"} variant={"ghost"} onClick={toggleSidebar}>
             <Link href={"/c"}>
               <SquarePen />
             </Link>

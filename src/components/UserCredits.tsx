@@ -2,7 +2,7 @@
 import { AlertCircle, Check, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import useMyTranslation from "~/i18n/translation-client";
 import { ModalDialog } from "./Modal";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -157,9 +157,11 @@ function UserCredits() {
       <span className="hidden items-center gap-2 md:inline-flex">
         {t.rich("your-credit-amount", {
           amount: () => (
-            <span className="flex items-center justify-center rounded-full bg-slate-500 px-2 py-0.5 text-white">
-              {data?.user?.credits ?? 0}
-            </span>
+            <Fragment key={"your-credit-amount"}>
+              <span className="flex items-center justify-center rounded-full bg-slate-500 px-2 py-0.5 text-white">
+                {data?.user?.credits ?? 0}
+              </span>
+            </Fragment>
           ),
         })}
       </span>

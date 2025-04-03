@@ -50,7 +50,6 @@ export default function CreateWallpaper() {
     async onSuccess(data) {
       scrollToBottom();
       await session.update();
-      setShowModalCreate(false);
       if (params?.id) {
         setForm({ prompt: "", amount: 1 });
         await refetch?.().catch(console.error);
@@ -89,6 +88,11 @@ export default function CreateWallpaper() {
       amount: form.amount,
       chatId: params?.id || "",
     });
+
+    setTimeout(() => {
+      setShowModalCreate(false);
+      scrollToBottom();
+    }, 3000);
   }
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -384,7 +388,7 @@ export default function CreateWallpaper() {
             <div className="flex flex-1 flex-col-reverse border-none px-0 pt-10">
               <div ref={messagesEndRef} />
 
-              {generateWallpaperAPI.status === "pending" && (
+              {isSubmitting && (
                 <MotionWrapper
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -506,6 +510,22 @@ export default function CreateWallpaper() {
             </div>
           </div>
         </ScrollArea>
+      ) : isSubmitting ? (
+        <ScrollArea className="flex-1 border-r">
+          <div className="mx-auto max-w-screen-lg flex-col pl-4 pr-4 md:px-7">
+            <div className="flex flex-1 flex-col-reverse border-none px-0 pt-10">
+              <MotionWrapper
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 3 }}
+                className="aspect-video"
+              >
+                <GeneratingWallpaper />
+              </MotionWrapper>
+            </div>
+          </div>
+        </ScrollArea>
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center border-r px-4">
           {isLoading ? (
@@ -543,7 +563,7 @@ export default function CreateWallpaper() {
       </div>
 
       <ModalDialog
-        title="Create a wallpaper"
+        title={t("create-a-wallpaper")}
         isOpen={isShowModalCreate}
         onClose={() => setShowModalCreate(false)}
       >

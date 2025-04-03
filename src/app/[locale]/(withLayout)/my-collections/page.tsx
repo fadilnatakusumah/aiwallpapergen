@@ -72,14 +72,9 @@ function MyCollectionPage() {
             <div className="max-w-2xl px-4 text-center">
               <h1 className="text-2xl font-semibold text-slate-800">
                 {t("empty.title")}
-                {/* No Wallpapers Yet */}
               </h1>
               <p className="mt-2 text-sm text-slate-700">
                 {t("empty.description")}
-                {/* Start creating stunning AI-generated wallpapers! Simply enter a
-                prompt, and let AI bring your imagination to life. Try something
-                like "A futuristic city glowing under a neon sky" or "A serene
-                mountain landscape at sunrise." */}
               </p>
 
               <Link
@@ -92,9 +87,6 @@ function MyCollectionPage() {
                       ? "empty.authenticated"
                       : "empty.unauthenticated",
                   )}
-                  {/* {isAuthenticated
-                    ? `Create Your First Wallpaper`
-                    : `Sign in to Create Wallpapers`} */}
                 </Button>
               </Link>
             </div>
@@ -133,6 +125,7 @@ function MyCollectionPage() {
                       <p className="mb-2 line-clamp-2 text-sm text-white/90">
                         {wallpaper.prompt.prompt}
                       </p>
+                      {/* TODO: show likes */}
                       {/* <div className="flex items-center gap-1 text-sm text-white/90">
                   <Heart className="h-4 w-4 fill-pink-500 text-pink-500" />
                   <span>{wallpaper.likes}</span>

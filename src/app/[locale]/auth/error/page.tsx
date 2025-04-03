@@ -72,7 +72,7 @@ export default function ErrorSignin() {
 
           {/* Action buttons */}
           <motion.div
-            className="flex flex-col justify-center gap-4 sm:flex-row"
+            className="flex flex-col items-center justify-center gap-4 sm:flex-row"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}

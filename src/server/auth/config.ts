@@ -121,7 +121,7 @@ export const authConfig = {
       return session;
     },
 
-    async signIn({ user, account, profile, ...rest }) {
+    async signIn({ user, account, profile }) {
       // Custom logic when a user signs in with Google
       if (account && account.provider === "google" && user?.email) {
         const existingUser = await db.user.findUnique({

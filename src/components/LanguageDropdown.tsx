@@ -10,7 +10,6 @@ import { Button } from "./ui/button";
 
 import { cn } from "~/lib/utils";
 import { usePathname, useRouter } from "~/i18n/navigation";
-import { useSearchParams } from "next/navigation";
 
 type Language = {
   code: string;
@@ -41,7 +40,6 @@ export default function LanguageDropdown({
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   const [isOpen, setIsOpen] = useState(false);

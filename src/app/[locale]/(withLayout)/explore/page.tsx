@@ -14,6 +14,7 @@ import { WallpaperModal } from "~/components/WallpaperModal";
 import { Link } from "~/i18n/navigation";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
+import useMyTranslation from "~/i18n/translation-client";
 
 function ExplorePage() {
   const session = useSession();
@@ -32,6 +33,7 @@ function ExplorePage() {
     useState<WallpaperState | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { ref, inView } = useInView();
+  const { t } = useMyTranslation("explore");
 
   const openModal = (wallpaper: WallpaperState) => {
     setSelectedWallpaper(wallpaper);
@@ -57,36 +59,52 @@ function ExplorePage() {
     );
   }, [data?.pages]);
 
-  const isAuthenticated = session.data?.user.id;
+  const isAuthenticated = !!session.data?.user.id;
 
   return (
     <div className="container h-full w-full p-4">
-      {isLoading || !wallpapers?.length ? (
+      {isLoading ? (
         <div className="flex h-full w-full flex-grow items-center justify-center">
-          {isLoading ? (
-            <SpinnerGenerateWallpaper />
-          ) : (
-            <div className="max-w-2xl px-4 text-center">
-              <h1 className="text-2xl font-semibold text-slate-800">
-                Sign in first
-              </h1>
-              <p className="mt-2 text-sm text-slate-700">
-                You have to Sign in first before you can see other people`s
-                wallpapers.
-              </p>
+          <SpinnerGenerateWallpaper />
+        </div>
+      ) : !isAuthenticated ? (
+        <div className="flex h-full w-full flex-grow items-center justify-center">
+          <div className="max-w-2xl px-4 text-center">
+            <h1 className="text-2xl font-semibold text-slate-800">
+              {t("signin-first")}
+            </h1>
+            <p className="mt-2 text-sm text-slate-700">
+              {t("signin-first-description")}
+            </p>
 
-              <Link
-                href={isAuthenticated ? "/c/" : "/auth"}
-                className="mt-4 block"
-              >
-                <Button>
-                  {isAuthenticated
-                    ? `Create Your First Wallpaper`
-                    : `Sign in here`}
-                </Button>
-              </Link>
-            </div>
-          )}
+            <Link
+              href={isAuthenticated ? "/c/" : "/auth"}
+              className="mt-4 block"
+            >
+              <Button>
+                {t(
+                  isAuthenticated
+                    ? "empty.authenticated"
+                    : "empty.unauthenticated",
+                )}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      ) : !wallpapers?.length ? (
+        <div className="flex h-full w-full flex-grow items-center justify-center">
+          <div className="max-w-2xl px-4 text-center">
+            <h1 className="text-2xl font-semibold text-slate-800">
+              {t("no-wallpapers")}
+            </h1>
+            <p className="mt-2 text-sm text-slate-700">
+              {t("no-wallpapers-description")}
+            </p>
+
+            <Link href={"/c"} className="mt-4 block">
+              <Button>{t("empty-wallpapapers")}</Button>
+            </Link>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -123,9 +141,9 @@ function ExplorePage() {
 
                       {/* TODO Add Likes Feature */}
                       {/* <div className="flex items-center gap-1 text-sm text-white/90">
-                        <Heart className="h-4 w-4 fill-pink-500 text-pink-500" />
-                        <span>{wallpaper.likes.length}</span>
-                      </div> */}
+                <Heart className="h-4 w-4 fill-pink-500 text-pink-500" />
+                <span>{wallpaper.likes.length}</span>
+              </div> */}
                     </div>
                   </div>
                 </div>

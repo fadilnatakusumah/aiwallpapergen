@@ -271,7 +271,7 @@ export const authConfig = {
       return session;
     },
     async jwt({ token, user }) {
-      let newUser = { ...user } as any;
+      const newUser = { ...user } as any;
       if (newUser.first_name && newUser.last_name)
         token.name = `${newUser.first_name} ${newUser.last_name}`;
       if (user?.id) {

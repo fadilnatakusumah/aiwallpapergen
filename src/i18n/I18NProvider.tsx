@@ -1,4 +1,4 @@
-import { CacheInternalRecord } from "@tolgee/react";
+import { type CacheInternalRecord } from "@tolgee/react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { notFound } from "next/navigation";

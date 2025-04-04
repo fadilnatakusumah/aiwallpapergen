@@ -7,6 +7,14 @@
     "sorry": "Maaf!",
     "unknown-error": "Terjadi kesalahan yang tidak diketahui."
   },
+  "collection": {
+    "empty": {
+      "authenticated": "Buat Wallpaper Pertamamu",
+      "description": "Mulailah membuat wallpaper menakjubkan yang dihasilkan AI! Cukup masukkan perintah, dan biarkan AI menghidupkan imajinasi Anda. Cobalah sesuatu seperti \"Kota futuristik yang bersinar di bawah langit neon\" atau \"Pemandangan pegunungan yang tenang saat matahari terbit.",
+      "title": "Belum Ada Wallpaper",
+      "unauthenticated": "Masuk untuk Membuat Wallpaper"
+    }
+  },
   "common": {
     "already-have-an-account": "Sudah punya akun? Masuk <here>disini</here> ",
     "back-to-home": "Atau kembali ke <home>Beranda</home> ",
@@ -60,6 +68,17 @@
     "unlock-your-creativity": "Bebaskan potensi kreatif Anda dan rasakan kehebatan AI Wallpaper Gen sekarang juga!",
     "your-credit-left": "{amount, plural, one {Kreditmu #} other {Kreditmu #}}"
   },
+  "explore": {
+    "empty-wallpapapers": "Buat Wallpaper Pertama Anda",
+    "empty": {
+      "authenticated": "Buat Wallpaper Pertama Anda",
+      "unauthenticated": "Masuk Di Sini"
+    },
+    "no-wallpapers": "Tidak ada Wallpaper",
+    "no-wallpapers-description": "Tidak ada wallpaper yang dibuat. Kamu bisa menjadi orang pertama yang membuatnya.",
+    "signin-first": "Masuk terlebih dahulu",
+    "signin-first-description": "Anda harus masuk terlebih dahulu sebelum dapat melihat wallpaper orang lain."
+  },
   "landing-page": {
     "cta-section": {
       "description": "Bergabunglah dengan ribuan pengguna yang membuat wallpaper menakjubkan dengan AI untuk perangkat mereka.",
@@ -104,7 +123,7 @@
       "pricing-free": {
         "button-text": "Mulai Sekarang!",
         "description": "Cocok untuk pengguna santai:",
-        "feature-1": "15 kredit setelah pendaftaran pertama",
+        "feature-1": "10 kredit setelah pendaftaran pertama",
         "feature-2": "Resolusi standar",
         "feature-3": "Kustomisasi dasar",
         "feature-4": "Tanpa iklan",

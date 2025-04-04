@@ -7,6 +7,14 @@
     "sorry": "Sorry!",
     "unknown-error": "An unknown error occurred."
   },
+  "collection": {
+    "empty": {
+      "authenticated": "Create Your First Wallpaper",
+      "description": "Start creating stunning AI-generated wallpapers! Simply enter a prompt, and let AI bring your imagination to life. Try something like \"A futuristic city glowing under a neon sky\" or \"A serene mountain landscape at sunrise.",
+      "title": "No Wallpapers Yet",
+      "unauthenticated": "Sign in to Create Wallpapers"
+    }
+  },
   "common": {
     "already-have-an-account": "Already have an account? Login <here>here</here> ",
     "back-to-home": "Or go back to <home>Home</home> ",
@@ -60,6 +68,17 @@
     "unlock-your-creativity": "Unlock your creative potential and experience the awesomeness of AI Wallpaper Gen right now!",
     "your-credit-left": "{amount, plural, one {Your credit #} other {Your credits #}}\n"
   },
+  "explore": {
+    "empty-wallpapapers": "Create Your First Wallpaper",
+    "empty": {
+      "authenticated": "Create Your First Wallpaper",
+      "unauthenticated": "Sign In Here"
+    },
+    "no-wallpapers": "No Wallpapers",
+    "no-wallpapers-description": "No wallpapers are made. You can be the first to make them.",
+    "signin-first": "Sign in first",
+    "signin-first-description": "You have to sign in first before you can see other people's\nwallpapers."
+  },
   "landing-page": {
     "cta-section": {
       "description": "Join thousands of users creating stunning AI-generated wallpapers for their devices.",
@@ -104,7 +123,7 @@
       "pricing-free": {
         "button-text": "Get Started!",
         "description": "Perfect for casual users:",
-        "feature-1": "15 credits after first time registration",
+        "feature-1": "10 credits after first time registration",
         "feature-2": "Standard resolution",
         "feature-3": "Basic customization",
         "feature-4": "No Ads",

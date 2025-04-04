@@ -2,7 +2,7 @@
 import { AlertCircle, Check, InfoIcon, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-import { Fragment, useState } from "react";
+import { Fragment, ReactNode, useState } from "react";
 import useMyTranslation from "~/i18n/translation-client";
 import { ModalDialog } from "./Modal";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -202,7 +202,11 @@ function UserCredits() {
           <span>
             <InfoIcon size={"18px"} />
           </span>
-          <span>{t("payment-not-ready")}</span>
+          <span>
+            {t.rich("payment-not-ready", {
+              strong: (chunks: ReactNode) => <strong>{chunks}</strong>,
+            })}
+          </span>
         </Alert>
 
         <p className="my-2">{t("description")}</p>

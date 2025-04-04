@@ -241,7 +241,7 @@ export function WallpaperChats() {
           ) : (
             chats.map((chat) => (
               <SidebarMenuItem
-                className={cn(chat.id === params?.id && "bg-sidebar-accent")}
+                className={cn(chat.id === params?.id && "bg-sidebar-accent", "list-none")}
                 key={chat.id}
                 title={chat.title}
               >

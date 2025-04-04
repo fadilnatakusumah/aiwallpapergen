@@ -1,5 +1,5 @@
 "use client";
-import { AlertCircle, Check, Plus } from "lucide-react";
+import { AlertCircle, Check, InfoIcon, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { Fragment, useState } from "react";
@@ -8,6 +8,7 @@ import { ModalDialog } from "./Modal";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { Spinner } from "./ui/spinner";
 
 // Define the form schema with validation
 // const formSchema = z.object({
@@ -78,6 +79,7 @@ const creditPackages = [
 function UserCredits() {
   const { data } = useSession();
   const [showModal, setShowModal] = useState(false);
+  const [loadingModal, setLoadingModal] = useState(false);
   const { t } = useMyTranslation("common.user-credits");
   const handleOpenModal = () => setShowModal(true);
   // const [open, setOpen] = useState(false);
@@ -175,21 +177,34 @@ function UserCredits() {
       <Button
         size={"sm"}
         className="relative md:ml-4"
-        onClick={handleOpenModal}
+        disabled={loadingModal}
+        onClick={() => {
+          setLoadingModal(true);
+          setTimeout(() => {
+            handleOpenModal();
+            setLoadingModal(false);
+          }, 2000);
+        }}
       >
-        <Plus />
+        {loadingModal ? <Spinner className="text-white" /> : <Plus />}
         <span className="hidden md:inline">{t("add-credits")}</span>
       </Button>
-
-      {/* <div>
-        <pre>{JSON.stringify({ user: data?.user }, null, 2)}</pre>
-      </div> */}
 
       <ModalDialog
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         title={t("title")}
+        className="relative"
       >
+        <div className="absolute bottom-0 left-0 right-0 top-0 cursor-not-allowed grayscale" />
+
+        <Alert className="left-0 right-0 m-auto flex items-center gap-2 bg-gray-200">
+          <span>
+            <InfoIcon size={"18px"} />
+          </span>
+          <span>{t("payment-not-ready")}</span>
+        </Alert>
+
         <p className="my-2">{t("description")}</p>
 
         <form>
@@ -220,7 +235,6 @@ function UserCredits() {
                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                     >
                       {t("custom-amount")}
-                      {/* Custom Amount */}
                     </label>
                     <Input
                       id="custom-amount"
@@ -276,7 +290,7 @@ function UserCredits() {
 
               <div className="flex justify-end gap-2 py-5 text-right">
                 <Button
-                  // disabled
+                  disabled
                   type="button"
                   variant="outline"
                   onClick={() => setStep("input")}
@@ -285,8 +299,8 @@ function UserCredits() {
                   {/* Back */}
                 </Button>
                 <Button
-                // disabled
-                // onClick={form.handleSubmit(onSubmit)}
+                  disabled
+                  // onClick={form.handleSubmit(onSubmit)}
                 >
                   {t("confirm-button")}
                   {/* Confirm Purchase */}

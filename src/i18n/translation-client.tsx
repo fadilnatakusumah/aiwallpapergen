@@ -215,7 +215,7 @@ export default function useMyTranslation(key: string): {
     t = ((keyTranslation: string) =>
       tTolgee(`${key}.${keyTranslation}`)) as TranslateFunction;
 
-    t.rich = (keyTranslation: string, options: any): ReactNode => {
+    t.rich = (keyTranslation: string, options: any, ...args): ReactNode => {
       if (!options) {
         return (
           <span
@@ -261,7 +261,7 @@ export default function useMyTranslation(key: string): {
       // );
 
       // Pass the transformed options to tTolgee.
-      return tTolgee(`${key}.${keyTranslation}`, "", options);
+      return tTolgee(`${key}.${keyTranslation}`, "", options, ...args);
     };
 
     t.markup = (

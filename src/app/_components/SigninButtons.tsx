@@ -42,11 +42,11 @@ function SigninButtons() {
           {
             strong: (chunks) => (
               <Fragment
-                key={
-                  isSignin
-                    ? "signin-with-your-account"
-                    : "signup-with-your-account"
-                }
+              // key={
+              //   isSignin
+              //     ? "signin-with-your-account"
+              //     : "signup-with-your-account"
+              // }
               >
                 <strong>{chunks}</strong>,
               </Fragment>
@@ -96,9 +96,9 @@ function SigninButtons() {
           {
             here: (chunks: React.ReactNode) => (
               <Fragment
-                key={
-                  !isSignin ? "already-have-an-account" : "dont-have-an-account"
-                }
+              // key={
+              //   !isSignin ? "already-have-an-account" : "dont-have-an-account"
+              // }
               >
                 <span
                   onClick={() => setIsSignin(!isSignin)}
@@ -106,7 +106,6 @@ function SigninButtons() {
                 >
                   {chunks}
                 </span>
-                ``
               </Fragment>
             ),
           },
@@ -115,7 +114,9 @@ function SigninButtons() {
       <p className="mt-1 text-center text-sm">
         {t.rich("back-to-home", {
           home: (chunks: React.ReactNode) => (
-            <Fragment key={"back-to-home"}>
+            <Fragment
+            //  key={"back-to-home"}
+            >
               <Link
                 href="/"
                 className="cursor-pointer bg-gradient-to-r from-purple-500 via-violet-500 to-pink-500 bg-clip-text bg-no-repeat py-4 font-bold text-transparent [text-shadow:0_0_rgba(0,0,0,0.1)]"

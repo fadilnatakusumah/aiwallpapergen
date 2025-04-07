@@ -52,6 +52,8 @@ import useMyTranslation from "~/i18n/translation-client";
 
 export function WallpaperChats() {
   const session = useSession();
+  const params = useParams();
+  const isUserExist = !!session.data?.user;
   const { isMobile, toggleSidebar } = useSidebar();
   const { t } = useMyTranslation("common.sidebar");
   const {
@@ -63,7 +65,7 @@ export function WallpaperChats() {
 
     fetchNextPage,
     refetch,
-  } = useInfiniteChats();
+  } = useInfiniteChats({ enabled: isUserExist });
   const ctx = useSidebar();
 
   const [isShowSearchField, setShowSearchField] = useState(false);
@@ -77,8 +79,6 @@ export function WallpaperChats() {
     //  ref,
     inView,
   } = useInView();
-  const params = useParams();
-  const isUserExist = session.data?.user;
   const updateNameAPI = api.chat.updateChatName.useMutation();
 
   // Trigger fetching when the "load more" element is visible
@@ -241,7 +241,10 @@ export function WallpaperChats() {
           ) : (
             chats.map((chat) => (
               <SidebarMenuItem
-                className={cn(chat.id === params?.id && "bg-sidebar-accent", "list-none")}
+                className={cn(
+                  chat.id === params?.id && "bg-sidebar-accent",
+                  "list-none",
+                )}
                 key={chat.id}
                 title={chat.title}
               >

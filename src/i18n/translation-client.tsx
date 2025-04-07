@@ -168,9 +168,9 @@
 
 "use client";
 
-import { type DefaultParamType, useTranslate } from "@tolgee/react";
+import { useTranslate } from "@tolgee/react";
 import { type Formats, useTranslations } from "next-intl";
-import { Fragment, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { env } from "~/env";
 
 /**
@@ -200,7 +200,7 @@ type TranslateFunction = ((
 export default function useMyTranslation(key: string): {
   t: TranslateFunction;
 } {
-  const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE === "true";
+  const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE !== "true";
   const { t: tTolgee } = useTranslate();
   const keyForNextIntl = isUseTolgee ? "common" : key;
   const tNextIntl = useTranslations(keyForNextIntl);
@@ -228,21 +228,21 @@ export default function useMyTranslation(key: string): {
       }
 
       // Build a new combinedOptions object using Tolgee's CombinedOptions type.
-      const combinedOptions: any = {};
+      // const combinedOptions: any = {};
 
-      for (const optionKey of Object.keys(options)) {
-        const value = options[optionKey];
-        if (value === undefined) continue; // Skip undefined values
-        if (typeof value === "function") {
-          combinedOptions[optionKey] = (chunks: ReactNode) => (
-            <Fragment key={`${key}-${optionKey}-${keyTranslation}`}>
-              {value(chunks)}
-            </Fragment>
-          );
-        } else {
-          combinedOptions[optionKey] = value as DefaultParamType;
-        }
-      }
+      // for (const optionKey of Object.keys(options)) {
+      //   const value = options[optionKey];
+      //   if (value === undefined) continue; // Skip undefined values
+      //   if (typeof value === "function") {
+      //     combinedOptions[optionKey] = (chunks: ReactNode) => (
+      //       <Fragment key={`${key}-${optionKey}-${keyTranslation}`}>
+      //         {value(chunks)}
+      //       </Fragment>
+      //     );
+      //   } else {
+      //     combinedOptions[optionKey] = value as DefaultParamType;
+      //   }
+      // }
 
       // return tTolgee(
       //   `${key}.${keyTranslation}`,
@@ -273,16 +273,16 @@ export default function useMyTranslation(key: string): {
   const oldT = t.rich;
 
   t.rich = (keyTranslation: string, options: any, ...args): ReactNode => {
-    if (!options) {
-      // isThereOptions = false;
-      return (
-        <span
-          dangerouslySetInnerHTML={{
-            __html: t(`${keyTranslation}`),
-          }}
-        ></span>
-      );
-    }
+    // if (!options) {
+    //   // isThereOptions = false;
+    //   return (
+    //     <span
+    //       dangerouslySetInnerHTML={{
+    //         __html: t(`${keyTranslation}`),
+    //       }}
+    //     ></span>
+    //   );
+    // }
     return oldT(`${keyTranslation}`, options, ...args);
   };
 

@@ -29,6 +29,7 @@ export default function CreateWallpaper() {
   const params = useParams<{ id: string }>();
   const { isLoading, data, refetch } = useInfinitePrompt({
     id: params.id,
+    enabled: Boolean(params.id),
   });
 
   const trpcContext = api.useUtils();

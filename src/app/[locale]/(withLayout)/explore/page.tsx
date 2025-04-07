@@ -18,6 +18,8 @@ import useMyTranslation from "~/i18n/translation-client";
 
 function ExplorePage() {
   const session = useSession();
+  const isAuthenticated = !!session.data?.user.id;
+  const isLoadingUser = session.status === "loading";
   const {
     data,
     isLoading,
@@ -26,7 +28,7 @@ function ExplorePage() {
 
     fetchNextPage,
     // refetch,
-  } = useInfiniteMyWallpapers({ isExplore: true });
+  } = useInfiniteMyWallpapers({ isExplore: true, enabled: isAuthenticated });
   type WallpaperState = Wallpaper & { prompt: Prompt; user: User };
 
   const [selectedWallpaper, setSelectedWallpaper] =
@@ -59,11 +61,9 @@ function ExplorePage() {
     );
   }, [data?.pages]);
 
-  const isAuthenticated = !!session.data?.user.id;
-
   return (
     <div className="container h-full w-full p-4">
-      {isLoading ? (
+      {isLoading || isLoadingUser ? (
         <div className="flex h-full w-full flex-grow items-center justify-center">
           <SpinnerGenerateWallpaper />
         </div>

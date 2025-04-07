@@ -18,6 +18,8 @@ import useMyTranslation from "~/i18n/translation-client";
 
 function MyCollectionPage() {
   const session = useSession();
+  const isAuthenticated = !!session.data?.user.id;
+  const isLoadingUser = session.status === "loading";
   const {
     data,
     isLoading,
@@ -26,7 +28,7 @@ function MyCollectionPage() {
 
     fetchNextPage,
     // refetch,
-  } = useInfiniteMyWallpapers();
+  } = useInfiniteMyWallpapers({ enabled: isAuthenticated });
   const { t } = useMyTranslation("collection");
 
   type WallpaperState = Wallpaper & { prompt: Prompt; user: User };
@@ -60,13 +62,11 @@ function MyCollectionPage() {
     );
   }, [data?.pages]);
 
-  const isAuthenticated = session.data?.user.id;
-
   return (
     <div className="container h-full w-full p-4">
-      {isLoading || !wallpapers?.length ? (
+      {isLoading || !wallpapers?.length || isLoadingUser ? (
         <div className="flex h-full w-full flex-grow items-center justify-center">
-          {isLoading ? (
+          {isLoading || isLoadingUser ? (
             <SpinnerGenerateWallpaper />
           ) : (
             <div className="max-w-2xl px-4 text-center">

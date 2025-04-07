@@ -2,7 +2,7 @@
 import { AlertCircle, Check, InfoIcon, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-import { Fragment, ReactNode, useState } from "react";
+import { Fragment, type ReactNode, useState } from "react";
 import useMyTranslation from "~/i18n/translation-client";
 import { ModalDialog } from "./Modal";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -70,9 +70,12 @@ import { Spinner } from "./ui/spinner";
 
 // Define the credit packages
 const creditPackages = [
-  { value: "10", label: "10 Credits", price: "$5.99" },
-  { value: "50", label: "50 Credits", price: "$24.99" },
-  { value: "100", label: "100 Credits", price: "$44.99" },
+  { value: "10", label: "10 Credits", price: "$0" },
+  { value: "50", label: "50 Credits", price: "$0" },
+  { value: "100", label: "100 Credits", price: "$0" },
+  // { value: "10", label: "10 Credits", price: "$5.99" },
+  // { value: "50", label: "50 Credits", price: "$24.99" },
+  // { value: "100", label: "100 Credits", price: "$44.99" },
   { value: "custom", label: "Custom Amount", price: "Custom" },
 ];
 
@@ -194,10 +197,7 @@ function UserCredits() {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         title={t("title")}
-        className="relative"
       >
-        <div className="absolute bottom-0 left-0 right-0 top-0 cursor-not-allowed grayscale" />
-
         <Alert className="left-0 right-0 m-auto flex items-center gap-2 bg-gray-200">
           <span>
             <InfoIcon size={"18px"} />
@@ -211,7 +211,9 @@ function UserCredits() {
 
         <p className="my-2">{t("description")}</p>
 
-        <form>
+        <form className="relative">
+          <div className="absolute bottom-0 left-0 right-0 top-0 cursor-not-allowed grayscale" />
+
           {step === "input" && (
             <>
               <div className="grid grid-cols-2 gap-4">

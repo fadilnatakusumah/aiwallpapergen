@@ -45,6 +45,7 @@
       "back-button": "Back",
       "confirm-button": "Confirm Purchase",
       "description": "Purchase credits to generate more AI wallpapers.",
+      "payment-not-ready": "<strong>Hi!</strong> \uD83D\uDE01 Since this is only for showcase, this feature is not open for all users yet. If you want to try the app more, feel free to reach me at <strong>aiwallpapergen@gmail.com</strong>.",
       "title": "Add Credits",
       "your-credit-amount": "Your Credits <amount></amount>\n",
       "your-credit-amount-mobile": "Credit {amount}"

@@ -45,6 +45,7 @@
       "back-button": "Kembali",
       "confirm-button": "Konfirmasi Pembelian",
       "description": "Beli kredit untuk membuat lebih banyak wallpaper AI.",
+      "payment-not-ready": "<strong>Hai!</strong> \uD83D\uDE01 Karena ini masih dalam tahap uji coba, fitur ini belum tersedia untuk semua pengguna. Jika kamu ingin mencoba aplikasi lebih lanjut, jangan ragu untuk menghubungi kami di <strong>aiwallpapergen@gmail.com</strong>.",
       "title": "Tambah Kredit",
       "your-credit-amount": "Kredit Kamu <amount></amount>",
       "your-credit-amount-mobile": "Kredit {amount}"

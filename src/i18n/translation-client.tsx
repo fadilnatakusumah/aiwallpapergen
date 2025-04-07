@@ -200,7 +200,7 @@ type TranslateFunction = ((
 export default function useMyTranslation(key: string): {
   t: TranslateFunction;
 } {
-  const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE !== "true";
+  const isUseTolgee = env.NEXT_PUBLIC_USE_TOLGEE === "true";
   const { t: tTolgee } = useTranslate();
   const keyForNextIntl = isUseTolgee ? "common" : key;
   const tNextIntl = useTranslations(keyForNextIntl);

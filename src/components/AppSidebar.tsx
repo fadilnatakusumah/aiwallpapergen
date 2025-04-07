@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import * as React from "react";
@@ -34,16 +35,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             width={24}
             src="/og-image.png"
           />
-          <div className="bold inline-block overflow-hidden text-ellipsis whitespace-nowrap px-2 text-lg">
-            AI{" "}
-            {ctx.state === "expanded" && (
-              <span>
-                <strong className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text font-bold text-transparent">
-                  Wallpaper
-                </strong>{" "}
-                Gen
-              </span>
+          <div
+            className={clsx(
+              "bold inline-block overflow-hidden text-ellipsis whitespace-nowrap px-2 text-lg",
+              ctx.state !== "expanded" && "hidden",
             )}
+          >
+            AI{" "}
+            <span>
+              <strong className="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 bg-clip-text font-bold text-transparent">
+                Wallpaper
+              </strong>{" "}
+              Gen
+            </span>
           </div>
         </Link>
       </SidebarHeader>

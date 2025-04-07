@@ -189,7 +189,11 @@ export function WallpaperChats() {
           >
             <Search />
           </Button>
-          <Button size={"icon"} variant={"ghost"} onClick={toggleSidebar}>
+          <Button
+            size={"icon"}
+            variant={"ghost"}
+            onClick={isMobile ? toggleSidebar : () => {}}
+          >
             <Link href={"/c"}>
               <SquarePen />
             </Link>

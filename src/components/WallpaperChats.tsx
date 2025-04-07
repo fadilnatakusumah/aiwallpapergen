@@ -12,13 +12,13 @@ import {
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import {
-  type RefObject,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
   type KeyboardEvent,
+  type RefObject,
 } from "react";
 import { useInView } from "react-intersection-observer";
 import { useOnClickOutside } from "usehooks-ts";
@@ -45,10 +45,10 @@ import { Skeleton } from "./ui/skeleton";
 import { Spinner } from "./ui/spinner";
 
 import { useInfiniteChats } from "~/hooks/chat";
+import useMyTranslation from "~/i18n/translation-client";
 import { event } from "~/lib/gtag";
 import { cn } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import useMyTranslation from "~/i18n/translation-client";
 
 export function WallpaperChats() {
   const session = useSession();
@@ -192,7 +192,9 @@ export function WallpaperChats() {
           <Button
             size={"icon"}
             variant={"ghost"}
-            onClick={isMobile ? toggleSidebar : () => {}}
+            onClick={() => {
+              if (isMobile) toggleSidebar();
+            }}
           >
             <Link href={"/c"}>
               <SquarePen />

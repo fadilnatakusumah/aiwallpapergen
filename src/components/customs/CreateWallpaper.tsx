@@ -395,7 +395,7 @@ export default function CreateWallpaper() {
                   whileInView={{ opacity: 1 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 3 }}
-                  className="aspect-video"
+                  className="aspect-video mb-4"
                 >
                   <GeneratingWallpaper />
                 </MotionWrapper>

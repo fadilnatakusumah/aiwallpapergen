@@ -178,7 +178,7 @@ export const wallpaperRouter = createTRPCRouter({
               };
             },
             {
-              maxWait: 30000,
+              maxWait: 60000,
               timeout: 60000,
             },
           )

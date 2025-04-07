@@ -7,9 +7,8 @@ import { Button } from "~/components/ui/button";
 import { Link } from "~/i18n/navigation";
 import { getMyTranslation } from "~/i18n/translation-server";
 
-// app/layout.tsx
 export const metadata: Metadata = {
-  title: "AI Wallpaper Generator | Create Stunning AI-Generated Wallpapers",
+  title: "Privacy Policy | AI Wallpaper Gen",
   description:
     "Discover the ultimate AI-powered wallpaper generator. Create, customize, and share unique wallpapers generated with cutting-edge AI technology. Perfect for desktop and mobile backgrounds.",
   keywords: [

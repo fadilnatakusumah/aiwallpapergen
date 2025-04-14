@@ -1,10 +1,9 @@
 import "~/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
-import Script from "next/script";
 import { getLocale } from "next-intl/server";
-
+import { Geist } from "next/font/google";
+import Script from "next/script";
 import { env } from "~/env";
 
 import I18NProvider from "~/i18n/I18NProvider";
@@ -58,6 +57,11 @@ export const metadata: Metadata = {
   },
 };
 
+const GeistFont = Geist({
+  subsets: ["latin"],
+  variable: "--font-geist", // 👈 Add this line
+});
+
 async function RootLayout({
   children,
 }: Readonly<{
@@ -67,7 +71,7 @@ async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} className={`${GeistSans.variable}`}>
+    <html lang={locale} className={`${GeistFont.className}`}>
       <head>
         {/* Load gtag.js after the page is interactive */}
         <Script

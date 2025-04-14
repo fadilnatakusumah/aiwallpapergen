@@ -177,7 +177,10 @@ export function WallpaperChats() {
   }, [data?.pages, searchText]);
 
   return (
-    <SidebarGroup className="h-full group-data-[collapsible=icon]:hidden">
+    <SidebarGroup
+      id="wallpaper-chats"
+      className="h-full group-data-[collapsible=icon]:hidden"
+    >
       <SidebarGroupLabel className="flex justify-between">
         <div className="text-base">{t("wallpaper")}</div>
         <div>

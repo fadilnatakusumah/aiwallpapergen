@@ -21,9 +21,13 @@ import GeneratingWallpaper from "../ui/GeneratingWallpaper";
 
 import { SUGGESTION_TYPE_URL, WALLPAPERS_TYPE } from "~/data/prompt";
 import { useInfinitePrompt } from "~/hooks/prompt";
-import useMyTranslation from "~/i18n/translation-client";
+import useMyTranslation, {
+  getTranslationManually,
+} from "~/i18n/translation-client";
+import { appDriver } from "~/lib/driver";
 import { event } from "~/lib/gtag";
 import { api } from "~/trpc/react";
+import { useSidebar } from "../ui/sidebar";
 
 export default function CreateWallpaper() {
   const params = useParams<{ id: string }>();
@@ -40,12 +44,14 @@ export default function CreateWallpaper() {
   });
   const session = useSession();
   const router = useRouter();
+  const sidebar = useSidebar();
   const { t } = useMyTranslation("creating-wallpaper");
 
   const [wallpaperType, setWallpaperType] = useState<WALLPAPERS_TYPE>();
   const [isShowPreview, setShowPreview] = useState(false);
   const [isShowModalCreate, setShowModalCreate] = useState(false);
   const [index, setIndex] = useState(0);
+  // const { driver } = useDriver();
 
   const generateWallpaperAPI = api.wallpaper.generateWallpaper.useMutation({
     async onSuccess(data) {
@@ -122,7 +128,7 @@ export default function CreateWallpaper() {
   function createForm() {
     return (
       <form onSubmit={(evt) => evt.preventDefault()}>
-        <div className="rounded-lg bg-slate-100 p-4">
+        <div id="promptField" className="rounded-lg bg-slate-100 p-4">
           <div className="mb-1 font-semibold">{t("prompt")}</div>
           <Textarea
             className="h-12 min-h-24 w-full bg-white pe-9"
@@ -345,6 +351,138 @@ export default function CreateWallpaper() {
     );
   }
 
+  async function runDriver() {
+    const LS_DRIVER_KEY = "aiwallpapergen-isDriverAlreadyDone";
+    const isDriverAlreadyDone = localStorage.getItem(LS_DRIVER_KEY);
+
+    if (isDriverAlreadyDone === "true") return;
+
+    if (sidebar.isMobile) {
+      const driverObj = appDriver({
+        onCloseClick: () => {
+          driverObj.destroy();
+        },
+        popoverClass: "driverjs-theme",
+        showProgress: false,
+        nextBtnText: getTranslationManually("Selanjutnya", "Next"),
+        prevBtnText: getTranslationManually("Sebelumnya", "Prev"),
+        doneBtnText: getTranslationManually("Selesai", "Done"),
+        steps: [
+          {
+            element: "#create-wallpaper",
+            popover: {
+              title: getTranslationManually(
+                "Buat Wallpaper",
+                "Create a Wallpaper",
+              ),
+              description: getTranslationManually(
+                "Buat wallpaper kamu melalui tombol ini.",
+                "Create your wallpaper through this buttons.",
+              ),
+            },
+          },
+          {
+            element: "#wallpaper-result",
+            popover: {
+              title: getTranslationManually(
+                "Hasil Wallpaper",
+                "Wallpaper Result",
+              ),
+              description: getTranslationManually(
+                "Hasil wallpaper kamu yang telah di generate akan muncul disini.",
+                "Your generated wallpaper will appear here.",
+              ),
+            },
+          },
+          {
+            element: "#sidebar-trigger",
+            popover: {
+              onNextClick: () => {
+                localStorage.setItem(LS_DRIVER_KEY, "true");
+                driverObj.destroy();
+              },
+              title: getTranslationManually(
+                "Histori Wallpaper",
+                "History Wallpaper",
+              ),
+              description: getTranslationManually(
+                "Semua prompt wallpaper yang telah kamu buat akan muncul disini.",
+                "All your generated wallpapers will appear here.",
+              ),
+            },
+          },
+        ],
+      });
+
+      driverObj.drive();
+
+      return;
+    }
+
+    const driverObj = appDriver({
+      popoverClass: "driverjs-theme",
+      showProgress: false,
+      nextBtnText: getTranslationManually("Selanjutnya", "Next"),
+      prevBtnText: getTranslationManually("Sebelumnya", "Prev"),
+      doneBtnText: getTranslationManually("Selesai", "Done"),
+      steps: [
+        {
+          element: "#promptField",
+          popover: {
+            title: getTranslationManually("Input Prompt", "Prompt Field"),
+            description: getTranslationManually(
+              "Masukan prompt untuk wallpaper yang ingin kamu buat disini.",
+              "Type your prompt to generate your wallpaper here.",
+            ),
+            // "Here is the code example showing animated tour. Let's walk you through it.",
+            // side: "left",
+            // align: "start",
+          },
+        },
+        {
+          element: "#wallpaper-result",
+          popover: {
+            title: getTranslationManually(
+              "Hasil Wallpaper",
+              "Wallpaper Result",
+            ),
+            description: getTranslationManually(
+              "Hasil wallpaper kamu yang telah di generate akan muncul disini.",
+              "Your generated wallpaper will appear here.",
+            ),
+            // side: "left",
+            // align: "start",
+          },
+        },
+        {
+          element: "#wallpaper-chats",
+          popover: {
+            onNextClick: () => {
+              localStorage.setItem(LS_DRIVER_KEY, "true");
+              driverObj.destroy();
+            },
+            title: getTranslationManually(
+              "Histori Wallpaper",
+              "History Wallpaper",
+            ),
+            description: getTranslationManually(
+              "Semua prompt wallpaper yang telah kamu buat akan muncul disini.",
+              "All your generated wallpapers will appear here.",
+            ),
+            // side: "left",
+            // align: "start",
+          },
+        },
+      ],
+    });
+
+    driverObj.drive();
+  }
+
+  useEffect(() => {
+    runDriver();
+  }, [runDriver, sidebar.isMobile]);
+
   return (
     <div className="relative flex h-full bg-gradient-to-b from-blue-50 to-white">
       <PhotoSlider
@@ -395,7 +533,7 @@ export default function CreateWallpaper() {
                   whileInView={{ opacity: 1 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 3 }}
-                  className="aspect-video mb-4"
+                  className="mb-4 aspect-video"
                 >
                   <GeneratingWallpaper />
                 </MotionWrapper>
@@ -528,7 +666,10 @@ export default function CreateWallpaper() {
           </div>
         </ScrollArea>
       ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center border-r px-4">
+        <div
+          id="wallpaper-result"
+          className="flex h-full w-full flex-col items-center justify-center border-r px-4"
+        >
           {isLoading ? (
             <Spinner />
           ) : (
@@ -555,6 +696,7 @@ export default function CreateWallpaper() {
 
       <div className="fixed bottom-5 right-5 lg:hidden">
         <Button
+          id="create-wallpaper"
           className="rounded-full"
           onClick={() => setShowModalCreate(true)}
         >

@@ -288,3 +288,8 @@ export default function useMyTranslation(key: string): {
 
   return { t };
 }
+
+export function getTranslationManually(idText: string, enText: string): string {
+  const { pathname } = location;
+  return pathname.startsWith("/id") ? idText : enText;
+}

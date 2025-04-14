@@ -6,7 +6,7 @@ import { BanIcon, InfoIcon, MessageSquareCode, Stars } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { PhotoSlider } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import { toast } from "sonner";
@@ -351,7 +351,7 @@ export default function CreateWallpaper() {
     );
   }
 
-  async function runDriver() {
+  const runDriver = useCallback(() => {
     const LS_DRIVER_KEY = "aiwallpapergen-isDriverAlreadyDone";
     const isDriverAlreadyDone = localStorage.getItem(LS_DRIVER_KEY);
 
@@ -434,9 +434,6 @@ export default function CreateWallpaper() {
               "Masukan prompt untuk wallpaper yang ingin kamu buat disini.",
               "Type your prompt to generate your wallpaper here.",
             ),
-            // "Here is the code example showing animated tour. Let's walk you through it.",
-            // side: "left",
-            // align: "start",
           },
         },
         {
@@ -450,8 +447,6 @@ export default function CreateWallpaper() {
               "Hasil wallpaper kamu yang telah di generate akan muncul disini.",
               "Your generated wallpaper will appear here.",
             ),
-            // side: "left",
-            // align: "start",
           },
         },
         {
@@ -469,15 +464,13 @@ export default function CreateWallpaper() {
               "Semua prompt wallpaper yang telah kamu buat akan muncul disini.",
               "All your generated wallpapers will appear here.",
             ),
-            // side: "left",
-            // align: "start",
           },
         },
       ],
     });
 
     driverObj.drive();
-  }
+  }, [sidebar.isMobile]);
 
   useEffect(() => {
     runDriver();

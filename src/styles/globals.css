@@ -105,3 +105,11 @@
   width: 100%;
   z-index: 1031;
 }
+
+/* Class assigned to popover wrapper */
+/* .driver-popover.custom-driver-popover {
+} */
+
+.driver-popover.driverjs-theme > * {
+  font-family: var(--font-geist) !important;
+}

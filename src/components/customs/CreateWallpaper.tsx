@@ -256,7 +256,7 @@ export default function CreateWallpaper() {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      // if (!isAuthenticated || isSubmitting) return;
+                      if (!isAuthenticated || isSubmitting) return;
                       setWallpaperType(
                         wallpaperType === value ? undefined : value,
                       );

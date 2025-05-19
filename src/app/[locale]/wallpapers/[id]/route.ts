@@ -20,10 +20,10 @@ export async function GET(
 
   try {
     // Check Redis cache for the custom URL
-    const cachedUrl = await redis.get<string>(`wallpaper:${id}`);
-    if (cachedUrl) {
-      return NextResponse.redirect(cachedUrl);
-    }
+    // const cachedUrl = await redis.get<string>(`wallpaper:${id}`);
+    // if (cachedUrl) {
+    //   return NextResponse.redirect(cachedUrl);
+    // }
 
     // If not cached, fetch the wallpaper record from the database
     const wallpaper = await db.wallpaper.findUnique({
@@ -42,7 +42,7 @@ export async function GET(
     const customUrl = generateCDNURLWallpaper(wallpaper);
 
     // Cache the custom URL in Redis for 24 hours
-    await redis.set(`wallpaper:${id}`, customUrl, { ex: 60 * 60 * 24 });
+    // await redis.set(`wallpaper:${id}`, customUrl, { ex: 60 * 60 * 24 });
 
     return NextResponse.redirect(customUrl);
   } catch (error) {

@@ -1,29 +1,95 @@
-# Create T3 App
+# AIWallpaperGen
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+AIWallpaperGen is a web application that generates unique, AI-driven wallpapers. Built as a side project to explore the full-stack capabilities of the T3 Stack (by Theo Browne) and dive into the AI generative trend, this project blends modern frontend development with innovative AI techniques.
 
-## What's next? How do I make an app with this?
+## Table of Contents
+- Features
+- Tech Stack
+- Demo
+- Installation
+- Usage
+- Roadmap
+- Contributing
+- License
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Features
+- AI-Generated Wallpapers: Create custom wallpapers using advanced AI algorithms powered by OpenAI.
+- User Authentication: Secure login via Google and GitHub sign-in using NextAuth.
+- Responsive Design: Clean and simple UI built with TailwindCSS and Shadcn UI, enhanced with Framer Motion animations.
+- Internationalization: Multi-language support through Next-Intl & Tolgee.
+- Optimized Performance: Fast caching with Cloudflare & Redis and efficient deployment via AWS Amplify.
+  
+## Tech Stack
+The project leverages a modern, full-stack environment, including:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+  -  🧵 tRPC with T3 Stack
+  -  🔐 Auth.js (NextAuth v5) with Google & GitHub sign-in
+  -  🧬 Prisma
+  -  🤖 OpenAI
+  -  ☁️ AWS S3 for storage
+  -  🚀 AWS Amplify for deployment
+  -  🐘 PostgreSQL with Supabase
+  -  🎨 TailwindCSS, Shadcn UI, Framer Motion
+  -  🌍 Next-Intl & Tolgee for internationalization
+  -  ⚡ Cloudflare & Redis for fast caching
+  -  ...and more!
 
-## Learn More
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Demo
+<video controls src="public/demo.mp4" title="Demo - AIWallpaperGen"></video>
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
 
-## How do I deploy this?
+## Installation
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/your-username/aiwallpapergen.git
+cd aiwallpapergen
+npm install
+```
+
+Configure your environment variables as needed (for example, API keys for OpenAI, AWS credentials, etc.). See the .env.example file for more details.
+
+
+## Usage
+
+To run the project locally:
+
+
+Run Tolgee (make sure you have Docker installed):
+
+```bash
+npm run tolgee
+```
+
+Run the application:
+
+```bash
+npm run dev
+```
+
+Open your browser and navigate to http://localhost:3000 to explore AIWallpaperGen in action.
+For production builds:
+
+```bash
+npm run build
+npm start
+```
+
+
+## Roadmap
+Enhanced Customization: More options for users to tailor their wallpapers.
+
+Tutorial Series: Regular blog posts and video tutorials explaining the “what” and “how” of each technology used, along with challenges and lessons learned.
+
+Additional Integrations: New features and integrations to further enhance user experience.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your improvements. For major changes, please open an issue first to discuss what you would like to modify.
+License
+
+Distributed under the MIT License. See LICENSE for more information.

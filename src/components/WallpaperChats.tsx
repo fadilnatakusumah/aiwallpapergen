@@ -228,24 +228,25 @@ export function WallpaperChats() {
       </AnimatePresence>
 
       {/* TODO: refactor this so it can be better */}
-      {error?.message === "UNAUTHORIZED" || !isUserExist ? (
-        <div className="flex h-full items-center px-2 text-xs">
-          <span className="mr-3">
-            <BadgeInfoIcon />
-          </span>
-          {t("signup-to-see-history")}
-        </div>
-      ) : isLoading ? (
+      {isLoading ? (
         <SidebarMenu>
           <div className="mx-2.5 pt-6">
             <Spinner />
           </div>
         </SidebarMenu>
-      ) : session.status === "authenticated" ? (
+      ) : (
         <>
           {!chats?.length ? (
-            <div className="px-2 pt-4 text-center text-xs text-slate-500">
-              {t("create-your-wallpaper")}
+            <div className="flex items-center px-2 pt-4 text-center text-xs text-slate-500">
+              {error?.message === "UNAUTHORIZED" || !isUserExist ? (
+                <span className="mr-3 flex items-center justify-center gap-2">
+                  <BadgeInfoIcon />
+                  {t("create-your-wallpaper")}
+                  {/* {t("signup-to-see-history")} */}
+                </span>
+              ) : (
+                t("create-your-wallpaper")
+              )}
             </div>
           ) : (
             chats.map((chat) => (
@@ -319,7 +320,7 @@ export function WallpaperChats() {
             ))
           )}
         </>
-      ) : null}
+      )}
     </SidebarGroup>
   );
 }

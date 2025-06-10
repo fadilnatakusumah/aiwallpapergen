@@ -1,14 +1,17 @@
 "use client";
-import { AlertCircle, Check, InfoIcon, Plus } from "lucide-react";
+import { AlertCircle, Check, Info, InfoIcon, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { Fragment, type ReactNode, useState } from "react";
-import useMyTranslation from "~/i18n/translation-client";
+import useMyTranslation, {
+  getTranslationManually,
+} from "~/i18n/translation-client";
 import { ModalDialog } from "./Modal";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Spinner } from "./ui/spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 // Define the form schema with validation
 // const formSchema = z.object({
@@ -92,6 +95,28 @@ function UserCredits() {
   const [selectedPackage] = useState<string | null>(null);
   const [customAmount] = useState("");
 
+  if (!data?.user.id)
+    return (
+      <span className="hidden items-center gap-2 md:inline-flex">
+        <div className="bold">Dummy User</div>
+        <Tooltip>
+          <TooltipTrigger>
+            <span>
+              <Info />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              {getTranslationManually(
+                "Kamu saat ini sedang memakai Dummy User, silahkan login dengan Email kamu",
+                "You are currently using Dummy User, please login with your email",
+              )}
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </span>
+    );
+
   // Initialize form
   // const form = useForm<z.infer<typeof formSchema>>({
   //   resolver: zodResolver(formSchema),
@@ -164,7 +189,7 @@ function UserCredits() {
           amount: () => (
             <Fragment key={"your-credit-amount"}>
               <span className="flex items-center justify-center rounded-full bg-slate-500 px-2 py-0.5 text-white">
-                {data?.user?.credits ?? 0}
+                {data?.user?.credits ?? 1}
               </span>
             </Fragment>
           ),

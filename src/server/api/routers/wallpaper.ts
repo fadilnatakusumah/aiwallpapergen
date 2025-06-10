@@ -1,21 +1,31 @@
-import { type Chat } from "@prisma/client";
+import { User, type Chat } from "@prisma/client";
 import { type inferProcedureOutput, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { WALLPAPERS_PROMPT, WALLPAPERS_TYPE } from "~/data/prompt";
+import { faker } from "@faker-js/faker";
+import { serialize } from "cookie";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { uploadToS3 } from "~/server/utils/aws";
 import { optimizeImage } from "~/server/utils/image";
 import { openai } from "~/server/utils/openai";
 import { generateAccessURLWallpaper } from "~/server/utils/string";
+import { signJwt } from "~/lib/jwt";
 
 export const wallpaperRouter = createTRPCRouter({
-  generateWallpaper: protectedProcedure
+  generateWallpaper: publicProcedure
     .input(
       z.object({
         prompt: z.string(),
         type: z.nativeEnum(WALLPAPERS_TYPE).optional().nullable(),
         chatId: z.string().optional(),
+        userId: z.string().optional(),
+        deviceUuid: z.string().optional(),
+        deviceInfo: z.string().optional(),
         amount: z.number().optional().default(1),
       }),
     )
@@ -24,6 +34,52 @@ export const wallpaperRouter = createTRPCRouter({
         return ctx.db
           .$transaction(
             async (prisma) => {
+              let user = null;
+              if (!input.userId) {
+                if (input.deviceUuid) {
+                  user = await prisma.user.findFirst({
+                    where: {
+                      device_uuid: input.deviceUuid,
+                    },
+                  });
+                }
+
+                if (!user) {
+                  user = await prisma.user.create({
+                    data: {
+                      email: "",
+                      google_id: "",
+                      profile_picture: faker.image.avatar(),
+                      name: faker.person.fullName(), // Can be modified to generate username
+                      username: faker.internet.email().split("@")[0]!, // Can be modified to generate username
+                      credits: 10,
+                      device_uuid: input.deviceUuid,
+                      device_info: input.deviceInfo,
+                    },
+                  });
+                }
+
+                // Create a signed JWT (if session not exists)
+                if (!ctx.session) {
+                  const token = signJwt({
+                    sub: user.id,
+                    name: user.name,
+                    deviceUuid: input.deviceUuid,
+                  });
+
+                  const cookie = serialize("next-auth.session-token", token, {
+                    path: "/",
+                    httpOnly: true,
+                    sameSite: "lax",
+                    maxAge: 60 * 60 * 24 * 7, // 1 week
+                  });
+
+                  ctx.headers.set("Set-Cookie", cookie);
+                }
+
+                Object.assign(ctx, { session: { ...ctx.session, user } });
+              }
+
               if (input.amount > 4 || input.amount <= 0) {
                 throw new TRPCError({
                   code: "BAD_REQUEST",
@@ -196,9 +252,11 @@ export const wallpaperRouter = createTRPCRouter({
             };
           })
           .catch((err) => {
+            console.log("🚀 ~ .mutation ~ err:", err);
             throw err;
           });
       } catch (error) {
+        console.log("🚀 ~ .mutation ~ error:", error);
         if (error instanceof TRPCError) {
           throw error; // Re-throw TRPCErrors to ensure proper message propagation
         }
@@ -213,19 +271,29 @@ export const wallpaperRouter = createTRPCRouter({
       }
     }),
 
-  getAllMyWallpapers: protectedProcedure
+  getAllMyWallpapers: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(50).default(10), // Items per page
         cursor: z.string().optional(), // Cursor for pagination
+        deviceId: z.string().optional(), // Cursor for pagination
         isExplore: z.boolean().optional().default(false),
       }),
     )
     .query(async ({ ctx, input }) => {
       const { limit, cursor, isExplore } = input;
+
+      let user: Partial<User> | User =
+        ctx.session.user ??
+        (await ctx.db.user.findFirst({
+          where: {
+            device_uuid: input.deviceId,
+          },
+        }));
+
       const wallpapers = await ctx.db.wallpaper.findMany({
         where: {
-          ...(!isExplore ? { user_id: ctx.session.user.id } : {}),
+          ...(!isExplore ? { user_id: user.id } : {}),
         },
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,

@@ -8,6 +8,7 @@
  */
 
 import { initTRPC, TRPCError } from "@trpc/server";
+import { Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -108,7 +109,22 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
  * guarantee that a user querying is authorized, but you can still access user session data if they
  * are logged in.
  */
-export const publicProcedure = t.procedure.use(timingMiddleware);
+export const publicProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    // if (!ctx.session || !ctx.session.user) {
+    //   throw new TRPCError({ code: "UNAUTHORIZED" });
+    // }
+    return next({
+      ctx: {
+        // infers the `session` as non-nullable
+        session:
+          ctx.session && ctx.session.user
+            ? { ...ctx.session, user: ctx.session.user }
+            : ({} as Session),
+      },
+    });
+  });
 
 /**
  * Protected (authenticated) procedure

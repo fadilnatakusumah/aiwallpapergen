@@ -2,6 +2,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+// import CredentialsProvider from "next-auth/providers/credentials";
 import { env } from "~/env";
 
 import { db } from "~/server/db";
@@ -38,6 +39,27 @@ declare module "next-auth" {
 export const authConfig = {
   trustHost: true,
   providers: [
+    // TODO: Add credentials provider
+    // CredentialProvider({
+    //   name: "credentials",
+    //   credentials: {
+    //     email: {
+    //       label: "Email",
+    //       type: "email",
+    //       placeholder: "Email",
+    //     },
+    //     password: {
+    //       label: "Password",
+    //       type: "password",
+    //       placeholder: "Password",
+    //     },
+    //   },
+    //   async authorize(credentials) {
+    //     const user = await db.user.findUnique({
+    //       where: { email: credentials?.email },
+    //     });
+    // })
+
     // DiscordProvider,
     GoogleProvider({
       clientId: env.AUTH_GOOGLE_CLIENT_ID || "",
@@ -100,9 +122,6 @@ export const authConfig = {
     },
 
     async session({ session, user: _user, token }) {
-      // console.log("🚀 ~ session ~ token:", token)
-      // console.log("🚀 ~ session ~ session:", session)
-      // Ensure user is defined before accessing user.id
       if (token?.id) {
         session.user.id = token.id as string; // Add user id to the session
       }
@@ -115,8 +134,6 @@ export const authConfig = {
           image: userData.profile_picture,
           credits: userData.credits,
         };
-        // session.user.image = userData.profile_picture;
-        // session.user.image = userData.profile_picture;
       }
       return session;
     },

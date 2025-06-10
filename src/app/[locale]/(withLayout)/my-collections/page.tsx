@@ -14,7 +14,7 @@ import { WallpaperModal } from "~/components/WallpaperModal";
 import { Link } from "~/i18n/navigation";
 
 import { useInfiniteMyWallpapers } from "~/hooks/wallpapers";
-import useMyTranslation from "~/i18n/translation-client";
+import useMyTranslation, { getTranslationManually } from "~/i18n/translation-client";
 
 function MyCollectionPage() {
   const session = useSession();
@@ -84,11 +84,12 @@ function MyCollectionPage() {
                   className="mt-4 block"
                 >
                   <Button>
-                    {t(
+                    {getTranslationManually("Buat Wallpaper", "Create Wallpaper")}
+                    {/* {t(
                       isAuthenticated
                         ? "empty.authenticated"
                         : "empty.unauthenticated",
-                    )}
+                    )} */}
                   </Button>
                 </Link>
               </div>

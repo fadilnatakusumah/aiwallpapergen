@@ -1,22 +1,27 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { generateAccessURLWallpaper } from "~/server/utils/string";
 
 export const promptRouter = createTRPCRouter({
-  getPrompts: protectedProcedure
+  getPrompts: publicProcedure
     .input(
       z.object({
         id: z.string(),
         limit: z.number().min(1).max(50).default(10), // Items per page
         cursor: z.string().optional(), // C
+        deviceId: z.string().optional(), // C
       }),
     )
     .query(async ({ input, ctx }) => {
       const { id, limit, cursor } = input;
       const myPrompts = await ctx.db.prompt.findMany({
         where: {
-          user_id: ctx.session.user.id,
+          ...(ctx.session.user?.id
+            ? { user_id: ctx.session.user.id }
+            : input.deviceId
+              ? { user: { device_uuid: input.deviceId } }
+              : {}),
           chat_id: id,
         },
         take: limit + 1,

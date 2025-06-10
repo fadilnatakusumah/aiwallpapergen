@@ -1,20 +1,31 @@
+import { User } from "@prisma/client";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const chatRouter = createTRPCRouter({
-  myChats: protectedProcedure
+  myChats: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(50).default(10), // Items per page
+        deviceId: z.string().optional(), // Cursor for pagination
         cursor: z.string().optional(), // Cursor for pagination
       }),
     )
     .query(async ({ input, ctx }) => {
       const { limit, cursor } = input;
+
+      let user: Partial<User> | User =
+        ctx.session.user ??
+        (await ctx.db.user.findFirst({
+          where: {
+            device_uuid: input.deviceId,
+          },
+        }));
+
       const chats = await ctx.db.chat.findMany({
         where: {
-          user_id: ctx.session.user.id,
+          user_id: user?.id,
         },
         take: limit + 1,
         cursor: cursor ? { id: cursor } : undefined,
@@ -30,6 +41,7 @@ export const chatRouter = createTRPCRouter({
           },
         },
       });
+      console.log("🚀 ~ .query ~ chats:", chats);
 
       let nextCursor: string | null = null;
       if (chats.length > limit) {
@@ -42,7 +54,7 @@ export const chatRouter = createTRPCRouter({
         nextCursor,
       };
     }),
-  updateChatName: protectedProcedure
+  updateChatName: publicProcedure
     .input(
       z.object({
         chatId: z.string(), // Items per page

@@ -25,10 +25,12 @@ function ExplorePage() {
     isLoading,
     hasNextPage,
     isFetchingNextPage,
-
+    error,
     fetchNextPage,
     // refetch,
-  } = useInfiniteMyWallpapers({ isExplore: true, enabled: isAuthenticated });
+  } = useInfiniteMyWallpapers({
+    isExplore: true,
+  });
   type WallpaperState = Wallpaper & { prompt: Prompt; user: User };
 
   const [selectedWallpaper, setSelectedWallpaper] =
@@ -49,6 +51,8 @@ function ExplorePage() {
   // Trigger fetching when the "load more" element is visible
   useEffect(() => {
     (async () => {
+      if (!isAuthenticated) return;
+
       if (inView && hasNextPage) {
         await fetchNextPage?.();
       }
@@ -69,31 +73,32 @@ function ExplorePage() {
           <div className="flex h-full w-full flex-grow items-center justify-center">
             <SpinnerGenerateWallpaper />
           </div>
-        ) : !isAuthenticated ? (
-          <div className="flex h-full w-full flex-grow items-center justify-center">
-            <div className="max-w-2xl px-4 text-center">
-              <h1 className="text-2xl font-semibold text-slate-800">
-                {t("signin-first")}
-              </h1>
-              <p className="mt-2 text-sm text-slate-700">
-                {t("signin-first-description")}
-              </p>
+        ) : // : !isAuthenticated ? (
+        //   <div className="flex h-full w-full flex-grow items-center justify-center">
+        //     <div className="max-w-2xl px-4 text-center">
+        //       <h1 className="text-2xl font-semibold text-slate-800">
+        //         {t("signin-first")}
+        //       </h1>
+        //       <p className="mt-2 text-sm text-slate-700">
+        //         {t("signin-first-description")}
+        //       </p>
 
-              <Link
-                href={isAuthenticated ? "/c/" : "/auth"}
-                className="mt-4 block"
-              >
-                <Button>
-                  {t(
-                    isAuthenticated
-                      ? "empty.authenticated"
-                      : "empty.unauthenticated",
-                  )}
-                </Button>
-              </Link>
-            </div>
-          </div>
-        ) : !wallpapers?.length ? (
+        //       <Link
+        //         href={isAuthenticated ? "/c/" : "/auth"}
+        //         className="mt-4 block"
+        //       >
+        //         <Button>
+        //           {t(
+        //             isAuthenticated
+        //               ? "empty.authenticated"
+        //               : "empty.unauthenticated",
+        //           )}
+        //         </Button>
+        //       </Link>
+        //     </div>
+        //   </div>
+        // )
+        !wallpapers?.length ? (
           <div className="flex h-full w-full flex-grow items-center justify-center">
             <div className="max-w-2xl px-4 text-center">
               <h1 className="text-2xl font-semibold text-slate-800">
@@ -151,14 +156,25 @@ function ExplorePage() {
                   </div>
                 )),
 
-              <div ref={ref}>
-                {
-                  isFetchingNextPage ? (
-                    <Spinner size={"large"} />
-                  ) : hasNextPage ? null : null // <p>Scroll to load more</p>
-                }
-              </div>,
+              //
+              //  ,
             )}
+
+            {!isAuthenticated && (
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-slate-200 p-4 text-center">
+                <div className="flex items-center justify-center gap-2">
+                  Sign in to see more Wallpapers
+                </div>
+              </div>
+            )}
+
+            <div ref={ref}>
+              {
+                isFetchingNextPage ? (
+                  <Spinner size={"large"} />
+                ) : hasNextPage ? null : null // <p>Scroll to load more</p>
+              }
+            </div>
           </div>
         )}
 

@@ -60,6 +60,9 @@ model User {
     sessions        Session[]
     created_at      DateTime  @default(now())
     updated_at      DateTime  @updatedAt
+    role            String?   @default("USER") // e.g., "USER", "GUEST"
+    device_uuid     String?   @default("")
+    device_info     String?   @default("")
 
     chats        Chat[] // Relation to Chat
     wallpapers   Wallpaper[] // Relation to Wallpaper

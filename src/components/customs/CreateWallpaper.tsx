@@ -3,7 +3,7 @@
 import { TRPCClientError } from "@trpc/client";
 import clsx from "clsx";
 import { BanIcon, InfoIcon, MessageSquareCode, Stars } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -28,9 +28,18 @@ import { appDriver } from "~/lib/driver";
 import { event } from "~/lib/gtag";
 import { api } from "~/trpc/react";
 import { useSidebar } from "../ui/sidebar";
+import { getDeviceAgentInfo, getDeviceUUID } from "~/lib/device";
+import { useForm } from "react-hook-form";
 
 export default function CreateWallpaper() {
   const params = useParams<{ id: string }>();
+  const { register, handleSubmit, setValue, formState, getValues } = useForm({
+    defaultValues: {
+      prompt: "",
+      amount: 1,
+    },
+  });
+
   const { isLoading, data, refetch } = useInfinitePrompt({
     id: params.id,
     enabled: Boolean(params.id),
@@ -56,13 +65,18 @@ export default function CreateWallpaper() {
   const generateWallpaperAPI = api.wallpaper.generateWallpaper.useMutation({
     async onSuccess(data) {
       scrollToBottom();
-      await session.update();
-      if (params?.id) {
+      if (data.data.chat_id) {
+        await trpcContext.chat.myChats.invalidate().catch(console.error);
+        await session.update();
+        // after setting the cookie from the server, trigger signIn
+        router.push(`/c/${data.data.chat_id}`);
+        if (!session.data?.user) {
+          await signIn("credentials", { redirect: false });
+          window.location.reload();
+        }
+      } else if (params?.id) {
         setForm({ prompt: "", amount: 1 });
         await refetch?.().catch(console.error);
-      } else {
-        await trpcContext.chat.myChats.invalidate().catch(console.error);
-        router.push(`/c/${data.data.chat_id}`);
       }
     },
     onError(error) {
@@ -78,7 +92,7 @@ export default function CreateWallpaper() {
   const isAuthenticated = session.data?.user;
   const isDisabled = isSubmitting || !isAuthenticated;
 
-  function generate() {
+  function generate(data: { prompt: string; amount: number }) {
     scrollToBottom();
     event({
       action: "create_wallpaper",
@@ -89,11 +103,15 @@ export default function CreateWallpaper() {
       count: form.amount, // Number of wallpapers generated
       prompt_length: form.prompt.length, // Length of the prompt (number of characters)
     });
+
     generateWallpaperAPI.mutate({
-      prompt: form.prompt,
+      prompt: getValues("prompt"),
       type: wallpaperType! || null,
-      amount: form.amount,
+      amount: getValues("amount"),
       chatId: params?.id || "",
+      userId: session.data?.user.id || "",
+      deviceUuid: getDeviceUUID(),
+      deviceInfo: JSON.stringify(getDeviceAgentInfo()),
     });
 
     setTimeout(() => {
@@ -127,23 +145,45 @@ export default function CreateWallpaper() {
 
   function createForm() {
     return (
-      <form onSubmit={(evt) => evt.preventDefault()}>
+      <form onSubmit={handleSubmit(generate)}>
         <div id="promptField" className="rounded-lg bg-slate-100 p-4">
           <div className="mb-1 font-semibold">{t("prompt")}</div>
           <Textarea
             className="h-12 min-h-24 w-full bg-white pe-9"
             placeholder={t("prompt-placeholder")}
-            value={form.prompt}
-            disabled={isDisabled}
-            onChange={({ target }) =>
-              setForm((prev) => ({ ...prev, prompt: target.value }))
-            }
-            onKeyDown={(event) => {
-              if (event.key === "Enter") {
-                generate();
-              }
-            }}
+            // value={formState.}
+            // disabled={isDisabled}
+            // onChange={({ target }) =>
+            //   setForm((prev) => ({ ...prev, prompt: target.value }))
+            // }
+            {...register("prompt", {
+              required: {
+                value: true,
+                message: getTranslationManually(
+                  "Prompt harus diisi",
+                  "Prompt is required",
+                ),
+              },
+              minLength: {
+                value: 5,
+                message: getTranslationManually(
+                  "Prompt harus memiliki minimal 5 karakter",
+                  "Prompt must have at least 5 characters",
+                ),
+              },
+            })}
+            // onKeyDown={(event) => {
+            //   if (event.key === "Enter") {
+            //     generate();
+            //   }
+            // }}
           />
+
+          {formState.errors.prompt?.message && (
+            <div className="mt-1 text-xs text-red-500">
+              {formState.errors.prompt?.message}
+            </div>
+          )}
         </div>
 
         <div className="mt-4 rounded-lg bg-slate-100 p-4">
@@ -196,15 +236,15 @@ export default function CreateWallpaper() {
 
                 <div
                   onClick={() => {
-                    if (!isDisabled || isSubmitting) return;
+                    if (isSubmitting) return;
                     setWallpaperType(undefined);
                   }}
                   className={clsx(
                     "flex items-center justify-center",
                     "h-16 w-16 cursor-pointer overflow-hidden rounded-xl border-[3px] bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border text-center",
-                    (!isAuthenticated || isSubmitting) &&
-                      "!cursor-not-allowed grayscale",
-                    isAuthenticated && "hover:border-transparent",
+                    isSubmitting && "!cursor-not-allowed grayscale",
+                    // isAuthenticated &&
+                    "hover:border-transparent",
                   )}
                 >
                   <BanIcon size={50} opacity={0.3} />
@@ -214,7 +254,7 @@ export default function CreateWallpaper() {
 
               {Object.values(WALLPAPERS_TYPE).map((value, idx) => (
                 <div className="relative" key={value}>
-                  {wallpaperType === value && isAuthenticated && (
+                  {wallpaperType === value && (
                     <div className="icon absolute left-0 top-0 z-20 flex-none opacity-100">
                       <svg
                         width="65"
@@ -256,7 +296,7 @@ export default function CreateWallpaper() {
                   <div
                     className="cursor-pointer"
                     onClick={() => {
-                      if (!isAuthenticated || isSubmitting) return;
+                      if (isSubmitting) return;
                       setWallpaperType(
                         wallpaperType === value ? undefined : value,
                       );
@@ -266,9 +306,8 @@ export default function CreateWallpaper() {
                       className={clsx(
                         // "border-8",
                         "h-16 w-16 overflow-hidden rounded-xl border-[3px] bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border text-center",
-                        (!isAuthenticated || isSubmitting) &&
-                          "!cursor-not-allowed grayscale",
-                        isAuthenticated && "hover:border-transparent",
+                        isSubmitting && "!cursor-not-allowed grayscale",
+                        "hover:border-transparent",
                       )}
                       key={value}
                     >
@@ -297,14 +336,14 @@ export default function CreateWallpaper() {
                 key={idx}
                 onClick={() => {
                   if (!isAuthenticated) return;
-                  setForm((prev) => ({ ...prev, amount: idx + 1 }));
+                  setValue("amount", idx + 1);
+                  // setForm((prev) => ({ ...prev, amount: idx + 1 }));
                 }}
                 className={clsx(
                   "flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-2 bg-gray-200 text-center",
-                  (!isAuthenticated || isSubmitting) &&
-                    "!cursor-not-allowed grayscale",
-                  isAuthenticated && "hover:border-purple-300",
-                  form.amount === idx + 1 &&
+                  isSubmitting && "!cursor-not-allowed grayscale",
+                  "hover:border-purple-300",
+                  getValues("amount") === idx + 1 &&
                     "bg-gradient-to-r from-blue-500 to-purple-300 bg-clip-border",
                 )}
               >
@@ -321,28 +360,41 @@ export default function CreateWallpaper() {
               <span className="text-sm">{t("be-patient-information")}</span>
             </div>
           )}
+
+          {/* <pre>{JSON.stringify(formState.errors, null, 2)}</pre> */}
+          {/* {Object.values(formState.errors).length && (
+            <div className="mb-3 flex gap-2 rounded-lg bg-white p-2">
+              <InfoIcon size={32} />
+              <span className="text-sm">
+                {formState.errors.amount?.message ||
+                  formState.errors.prompt?.message}
+              </span>
+            </div>
+          )} */}
           <Button
             className="w-full"
-            onClick={generate}
+            type="submit"
+            // onClick={generate}
             aria-label="Generate"
-            disabled={isDisabled}
+            // disabled={isDisabled}
           >
             {isSubmitting ? (
               <>
                 <Spinner className="text-white" />{" "}
                 <span>{t("generating")}</span>
               </>
-            ) : !isAuthenticated ? (
-              <span>{t("login-to-generate")}</span>
             ) : (
+              //  : !isAuthenticated ? (
+              //   <span>{t("login-to-generate")}</span>
+              // )
               <>
                 <span>{t("generate")}</span>
-                <span className="ml-1 flex items-center gap-1 text-xs">
+                {/* <span className="ml-1 flex items-center gap-1 text-xs">
                   <Stars size={8} />
                   {t.rich("your-credit-left", {
-                    amount: session?.data?.user?.credits ?? 0,
+                    amount: session?.data?.user?.credits ?? 1,
                   })}
-                </span>
+                </span> */}
               </>
             )}
           </Button>

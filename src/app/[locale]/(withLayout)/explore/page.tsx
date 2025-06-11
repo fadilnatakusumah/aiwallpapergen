@@ -25,7 +25,7 @@ function ExplorePage() {
     isLoading,
     hasNextPage,
     isFetchingNextPage,
-    error,
+    // error,
     fetchNextPage,
     // refetch,
   } = useInfiniteMyWallpapers({
@@ -57,7 +57,7 @@ function ExplorePage() {
         await fetchNextPage?.();
       }
     })().catch(console.error);
-  }, [inView, hasNextPage, fetchNextPage]);
+  }, [inView, hasNextPage, fetchNextPage, isAuthenticated]);
 
   const wallpapers = useMemo(() => {
     return data?.pages.flatMap((page) =>

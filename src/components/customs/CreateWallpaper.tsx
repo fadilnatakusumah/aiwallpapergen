@@ -2,7 +2,7 @@
 
 import { TRPCClientError } from "@trpc/client";
 import clsx from "clsx";
-import { BanIcon, InfoIcon, MessageSquareCode, Stars } from "lucide-react";
+import { BanIcon, InfoIcon, MessageSquareCode } from "lucide-react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -19,17 +19,17 @@ import { ModalDialog } from "../Modal";
 import MotionWrapper from "../MotionWrapper";
 import GeneratingWallpaper from "../ui/GeneratingWallpaper";
 
+import { useForm } from "react-hook-form";
 import { SUGGESTION_TYPE_URL, WALLPAPERS_TYPE } from "~/data/prompt";
 import { useInfinitePrompt } from "~/hooks/prompt";
 import useMyTranslation, {
   getTranslationManually,
 } from "~/i18n/translation-client";
+import { getDeviceAgentInfo, getDeviceUUID } from "~/lib/device";
 import { appDriver } from "~/lib/driver";
 import { event } from "~/lib/gtag";
 import { api } from "~/trpc/react";
 import { useSidebar } from "../ui/sidebar";
-import { getDeviceAgentInfo, getDeviceUUID } from "~/lib/device";
-import { useForm } from "react-hook-form";
 
 export default function CreateWallpaper() {
   const params = useParams<{ id: string }>();
@@ -90,9 +90,9 @@ export default function CreateWallpaper() {
 
   const isSubmitting = generateWallpaperAPI.status === "pending";
   const isAuthenticated = session.data?.user;
-  const isDisabled = isSubmitting || !isAuthenticated;
+  // const isDisabled = isSubmitting || !isAuthenticated;
 
-  function generate(data: { prompt: string; amount: number }) {
+  function generate(_data: { prompt: string; amount: number }) {
     scrollToBottom();
     event({
       action: "create_wallpaper",
@@ -108,8 +108,8 @@ export default function CreateWallpaper() {
       prompt: getValues("prompt"),
       type: wallpaperType! || null,
       amount: getValues("amount"),
-      chatId: params?.id || "",
-      userId: session.data?.user.id || "",
+      chatId: params?.id ?? "",
+      userId: session.data?.user.id ?? "",
       deviceUuid: getDeviceUUID(),
       deviceInfo: JSON.stringify(getDeviceAgentInfo()),
     });

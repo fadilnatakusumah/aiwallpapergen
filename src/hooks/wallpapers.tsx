@@ -5,7 +5,7 @@ import { api } from "~/trpc/react";
 
 export function useInfiniteMyWallpapers({
   isExplore,
-  enabled,
+  // enabled,
 }: { isExplore?: boolean; enabled?: boolean } = {}) {
   return api.wallpaper.getAllMyWallpapers.useInfiniteQuery(
     {

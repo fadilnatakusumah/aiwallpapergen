@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { type User } from "@prisma/client";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -15,7 +15,7 @@ export const chatRouter = createTRPCRouter({
     .query(async ({ input, ctx }) => {
       const { limit, cursor } = input;
 
-      let user: Partial<User> | User =
+      const user: Partial<User> | User =
         ctx.session.user ??
         (await ctx.db.user.findFirst({
           where: {
@@ -41,7 +41,6 @@ export const chatRouter = createTRPCRouter({
           },
         },
       });
-      console.log("🚀 ~ .query ~ chats:", chats);
 
       let nextCursor: string | null = null;
       if (chats.length > limit) {

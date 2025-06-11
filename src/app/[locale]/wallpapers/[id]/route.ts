@@ -2,7 +2,6 @@
 import { NextResponse } from "next/server";
 
 import { db } from "~/server/db";
-import { redis } from "~/server/redis";
 import { generateCDNURLWallpaper } from "~/server/utils/string";
 
 export async function GET(

@@ -8,7 +8,7 @@
  */
 
 import { initTRPC, TRPCError } from "@trpc/server";
-import { Session } from "next-auth";
+import { type Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
 

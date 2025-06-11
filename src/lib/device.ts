@@ -1,6 +1,6 @@
 "use client";
 
-import { Agent, DeviceUUID } from "device-uuid";
+import { type Agent, DeviceUUID } from "device-uuid";
 
 export function getDeviceUUID(): string | undefined {
   if (typeof window === undefined) return;

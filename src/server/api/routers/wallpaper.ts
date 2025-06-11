@@ -1,20 +1,16 @@
-import { User, type Chat } from "@prisma/client";
+import { faker } from "@faker-js/faker";
+import { type Chat, type User } from "@prisma/client";
 import { type inferProcedureOutput, TRPCError } from "@trpc/server";
+import { serialize } from "cookie";
 import { z } from "zod";
 import { WALLPAPERS_PROMPT, WALLPAPERS_TYPE } from "~/data/prompt";
-import { faker } from "@faker-js/faker";
-import { serialize } from "cookie";
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { signJwt } from "~/lib/jwt";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { uploadToS3 } from "~/server/utils/aws";
 import { optimizeImage } from "~/server/utils/image";
 import { openai } from "~/server/utils/openai";
 import { generateAccessURLWallpaper } from "~/server/utils/string";
-import { signJwt } from "~/lib/jwt";
 
 export const wallpaperRouter = createTRPCRouter({
   generateWallpaper: publicProcedure
@@ -44,7 +40,7 @@ export const wallpaperRouter = createTRPCRouter({
                   });
                 }
 
-                if (!user) {
+                if (!user?.id) {
                   user = await prisma.user.create({
                     data: {
                       email: "",
@@ -266,8 +262,6 @@ export const wallpaperRouter = createTRPCRouter({
           code: "INTERNAL_SERVER_ERROR",
           message: "An unexpected error occurred during wallpaper generation.",
         });
-      } finally {
-        console.log("FINALLY");
       }
     }),
 
@@ -283,7 +277,7 @@ export const wallpaperRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const { limit, cursor, isExplore } = input;
 
-      let user: Partial<User> | User =
+      const user: Partial<User> | User =
         ctx.session.user ??
         (await ctx.db.user.findFirst({
           where: {

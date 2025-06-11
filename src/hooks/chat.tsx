@@ -4,7 +4,7 @@ import { getDeviceUUID } from "~/lib/device";
 import { api } from "~/trpc/react";
 
 export function useInfiniteChats({
-  enabled = true,
+  // enabled = true,
 }: { enabled?: boolean } = {}) {
   return api.chat.myChats.useInfiniteQuery(
     {

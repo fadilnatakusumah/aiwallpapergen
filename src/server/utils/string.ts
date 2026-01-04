@@ -6,10 +6,12 @@ export function generateCDNURLWallpaper(wallpaper: Wallpaper) {
   const lastTwo = url.slice(-2).join("/");
 
   // In production, use your custom domain (e.g., through Cloudflare)
-  return `${env.CLOUDFLARE_IMAGE_CDN}/wallpapers/${lastTwo}`;
+  // return `${env.CLOUDFLARE_IMAGE_CDN}/wallpapers/${lastTwo}`;
+  return wallpaper.url
 }
 
 export function generateAccessURLWallpaper(wallpaperID: string) {
   return `${env.NEXTAUTH_URL}/wallpapers/${wallpaperID}`;
+  // return `https://ai-wallpaper-generator.s3.ap-southeast-2.amazonaws.com/wallpapers/${wallpaperID}.jpg`;
 }
 // https://ai-wallpaper-generator.s3.ap-southeast-2.amazonaws.com/wallpapers/cm85iuppp0000yqb8dse5fcxz/1741769651811.jpg

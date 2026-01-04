@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { type Chat, type User } from "@prisma/client";
-import { type inferProcedureOutput, TRPCError } from "@trpc/server";
+import { TRPCError, type inferProcedureOutput } from "@trpc/server";
 import { serialize } from "cookie";
 import { z } from "zod";
 import { WALLPAPERS_PROMPT, WALLPAPERS_TYPE } from "~/data/prompt";
